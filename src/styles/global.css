@@ -7,20 +7,74 @@
   font-display: swap;
 }
 
-html,
-body,
-#root {
+@tailwind base; /* Preflight will be injected here */
+
+@tailwind components;
+
+@tailwind utilities;
+
+html, body, div, span, iframe,
+h1, h2, h3, h4, h5, h6, p,
+a, small, strike, strong, sub, sup, tt, var,
+b, u, i, center, ul, li,
+fieldset, form, label, legend {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+}
+
+html, body, .root {
   height: 100%;
-  width: 100%;
 }
 
 body {
-  font-family: "Montserrat-Bold";
-  margin: 0;
+  line-height: 1;
+  background: #fff;
+  font-family: 'Montserrat-Bold', "sans";
+  font-style: normal;
+  transition: font-size 0.3s ease-out;
+  font-weight: 700;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
 }
 
-*,
-*:after,
-*:before {
-  box-sizing: border-box;
+  /* width */
+*::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  border-radius: 1px;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background: #a9a2a2;
+  border-radius: 1px;
+}
+
+
+a {
+  text-decoration: none;
+  color: currentColor;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border: 0;
 }
