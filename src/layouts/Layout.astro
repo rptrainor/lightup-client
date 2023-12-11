@@ -16,7 +16,7 @@ const { title } = Astro.props;
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta name='generator' content={Astro.generator} />
     <title>{title}</title>
-    <script type="text/partytown" defer>
+    <script type='text/partytown' defer>
       !(function (t, e) {
         var o, n, p, r;
         e.__SV ||
@@ -70,6 +70,53 @@ const { title } = Astro.props;
   </head>
   <body>
     <slot />
+    <script type='text/partytown' defer>
+      window.intercomSettings = {
+        api_base: "https://api-iam.intercom.io",
+        app_id: "x6h1juuu",
+        name: user?.name, // Full name
+        user_id: user?.id, // User UUID
+        email: user?.email, // Email address
+        created_at: user?.createdAt, // Signup date as a Unix timestamp
+      };
+    </script>
+
+    <script type='text/partytown' defer>
+      // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/x6h1juuu'
+      (function () {
+        var w = window;
+        var ic = w.Intercom;
+        if (typeof ic === "function") {
+          ic("reattach_activator");
+          ic("update", w.intercomSettings);
+        } else {
+          var d = document;
+          var i = function () {
+            i.c(arguments);
+          };
+          i.q = [];
+          i.c = function (args) {
+            i.q.push(args);
+          };
+          w.Intercom = i;
+          var l = function () {
+            var s = d.createElement("script");
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = "https://widget.intercom.io/widget/x6h1juuu";
+            var x = d.getElementsByTagName("script")[0];
+            x.parentNode.insertBefore(s, x);
+          };
+          if (document.readyState === "complete") {
+            l();
+          } else if (w.attachEvent) {
+            w.attachEvent("onload", l);
+          } else {
+            w.addEventListener("load", l, false);
+          }
+        }
+      })();
+    </script>
   </body>
 </html>
 <style is:global>
