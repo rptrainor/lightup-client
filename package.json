@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^8.0.0",
-    "astro": "^4.0.3"
+    "@astrojs/solid-js": "^3.0.2",
+    "astro": "^4.0.3",
+    "solid-js": "^1.4.3"
   },
   "devDependencies": {
     "wrangler": "^3.19.0"
