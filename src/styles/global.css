@@ -34,13 +34,14 @@ html, body, .root {
 
 body {
   line-height: 1;
-  background: #fff;
+  background: #101214;
   font-family: 'Montserrat-Bold', "sans";
   font-style: normal;
   transition: font-size 0.3s ease-out;
   font-weight: 700;
-  color: #000;
+  color: #9FA0A3;
   -webkit-font-smoothing: antialiased;
+  font-size: 1.25rem;
 }
 
   /* width */
@@ -71,4 +72,29 @@ img {
   max-width: 100%;
   height: auto;
   border: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2.5rem;
+  line-height: 1.25;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+h2 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: center;
+  @media screen and (min-width: 768px) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  @media screen and (min-width: 1024px) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
 }
