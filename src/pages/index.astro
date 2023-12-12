@@ -1,10 +1,25 @@
 ---
-import Layout from '~/layouts/Layout.astro';
+import Layout from "~/layouts/Layout.astro";
+import Banner from "~/components/banner.astro";
 ---
 
-<Layout title="Lightup">
-	<main style="display: flex; flex-direction: column; padding: 1rem; gap: 1rem;">
-		<h2>Advancing Research, Advancing Ideas, Advancing Humanity</h2>
-		<h1>A Catalyst for Academic Breakthroughs</h1>
-	</main>
+<Layout title='Lightup'>
+  <main
+    style='
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+	gap: 1rem;
+	justify-content: center;
+	align-items: center;
+	'
+  >
+    <div>
+      <h2>Advancing Research, Advancing Ideas, Advancing Humanity</h2>
+      <h1>A Catalyst for Academic Breakthroughs</h1>
+    </div>
+    <div>
+      <Banner />
+    </div>
+  </main>
 </Layout>
