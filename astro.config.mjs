@@ -3,8 +3,6 @@ import cloudflare from "@astrojs/cloudflare";
 import solidJs from "@astrojs/solid-js";
 import sitemap from "@astrojs/sitemap";
 
-import partytown from "@astrojs/partytown";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://lightup-client.pages.dev/",
@@ -17,11 +15,6 @@ export default defineConfig({
   }),
   integrations: [
     solidJs(),
-    sitemap(),
-    partytown({
-      config: {
-        forward: ["dataLayer.push", "posthog", "intercomSettings"],
-      },
-    }),
+    sitemap()
   ],
 });
