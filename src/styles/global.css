@@ -7,6 +7,10 @@
   font-display: swap;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html, body, div, span, iframe,
 h1, h2, h3, h4, h5, h6, p,
 a, small, strike, strong, sub, sup, tt, var,
@@ -82,34 +86,12 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-.scroll-container {
-  display: flex;
-  overflow-x: auto;
-  padding: 10px;
-  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
-  scrollbar-width: none;  /* Hide scrollbar for Firefox */
+/* Optional: Add this CSS to hide the scrollbar aesthetically */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-.scroll-container::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
-}
-
-.thumbnail {
-  flex: 0 0 auto;
-  background-color: #333; /* Placeholder color */
-  border-radius: 8px;
-  margin-right: 10px;
-}
-
-/* Adjustments for smaller screens */
-@media (max-width: 768px) {
-  .thumbnail {
-    width: 45%;
-  }
-}
-
-@media (max-width: 480px) {
-  .thumbnail {
-    width: 80%;
-  }
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
