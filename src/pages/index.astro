@@ -4,27 +4,32 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
 ---
 
 <Layout title='Lightup'>
-  <div
-    style='
+  <div style='
 	display: flex;
 	flex-direction: column;
-	padding: 1rem;
-	gap: 1rem;
 	justify-content: center;
-	max-width: 800px;
-	margin: 2rem auto 6rem auto;
-	'
-  >
-    <div style='
+	'>
+    <!-- HERO SECTION -->
+    <div
+      style='
+		margin: 1rem auto;
+		display: flex;
+		flex-direction: column;
+		padding: 0 1rem;
+		gap: 1rem;
+		justify-content: center;
+		'
+    >
+      <div style='
 	display: flex;
 	flex-direction: column;
 	gap: 0;
 	'>
-      <h1>A Catalyst for Academic</h1>
-      <h1>Breakthroughs</h1>
-    </div>
-    <div
-      style='
+        <h1>A Catalyst for Academic</h1>
+        <h1>Breakthroughs</h1>
+      </div>
+      <div
+        style='
 	max-width: 800px;
 	display: flex;
 	flex-direction: column;
@@ -33,39 +38,69 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
 	margin: 0 auto;
 	align-items: baseline;
 	'
+      >
+        <div
+          style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
+        >
+          <img
+            src={Yellow_heart_100px.src}
+            alt='Yellow heart Lightup logo'
+            width='40px'
+            height='100%'
+          />
+          <h2>Advancing Research</h2>
+        </div>
+        <div
+          style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
+        >
+          <img
+            src={Yellow_heart_100px.src}
+            alt='Yellow heart Lightup logo'
+            width='40px'
+            height='100%'
+          />
+          <h2>Advancing Ideas</h2>
+        </div>
+        <div
+          style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
+        >
+          <img
+            src={Yellow_heart_100px.src}
+            alt='Yellow heart Lightup logo'
+            width='40px'
+            height='100%'
+          />
+          <h2>Advancing Humanity</h2>
+        </div>
+      </div>
+    </div>
+    <!-- FEATURED PROJECTS -->
+    <div
+      style='
+		background-color: #1BB3FF;
+		margin: 1rem 0;
+		display: flex;
+		flex-direction: column;
+		padding: 2rem 1rem;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+		'
     >
       <div
-        style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
+        style='
+			background-color: #ffffff;
+			max-width: fit-content;
+			padding: 0.5rem;
+			transform: rotate(-3deg);
+			'
       >
-        <img
-          src={Yellow_heart_100px.src}
-          alt='Yellow heart Lightup logo'
-          width='40px'
-          height='100%'
-        />
-        <h2>Advancing Research</h2>
-      </div>
-      <div
-        style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
-      >
-        <img
-          src={Yellow_heart_100px.src}
-          alt='Yellow heart Lightup logo'
-          width='40px'
-          height='100%'
-        />
-        <h2>Advancing Ideas</h2>
-      </div>
-      <div
-        style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
-      >
-        <img
-          src={Yellow_heart_100px.src}
-          alt='Yellow heart Lightup logo'
-          width='40px'
-          height='100%'
-        />
-        <h2>Advancing Humanity</h2>
+        <h3 style='
+			text-align: center;
+			color: #101214;
+			'>
+          What's happening on Lightup
+        </h3>
       </div>
     </div>
   </div>
@@ -93,6 +128,13 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
     @media screen and (min-width: 425px) {
       font-size: 3rem;
       line-height: 1.25;
+    }
+  }
+  h3 {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    @media screen and (min-width: 425px) {
+      font-size: 2rem;
     }
   }
 </style>
