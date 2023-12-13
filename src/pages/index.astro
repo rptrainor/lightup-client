@@ -1,6 +1,7 @@
 ---
 import Layout from "~/layouts/Layout.astro";
 import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
+import ProjectCard from "~/components/ProjectCard.astro";
 ---
 
 <Layout title='Lightup'>
@@ -10,23 +11,18 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
 	justify-content: center;
 	'>
     <!-- HERO SECTION -->
-    <div
-      style='
-		margin: 1rem auto;
-		display: flex;
-		flex-direction: column;
-		padding: 0 1rem;
-		gap: 1rem;
-		justify-content: center;
-		'
-    >
+    <div class='hero'>
       <div style='
 	display: flex;
 	flex-direction: column;
 	gap: 0;
 	'>
-        <h1>A Catalyst for Academic</h1>
-        <h1>Breakthroughs</h1>
+        <!-- <h1>A Catalyst for Academic</h1>
+        <h1>Breakthroughs</h1> -->
+        <!-- <h1>A community that changes the world</h1>
+        <h1>through science</h1> -->
+        <h1>A community that impowers science</h1>
+        <h1>to change the world</h1>
       </div>
       <div
         style='
@@ -40,7 +36,7 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
 	'
       >
         <div
-          style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
+          style='display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 1rem;'
         >
           <img
             src={Yellow_heart_100px.src}
@@ -51,7 +47,7 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
           <h2>Advancing Research</h2>
         </div>
         <div
-          style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
+          style='display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 1rem;'
         >
           <img
             src={Yellow_heart_100px.src}
@@ -62,7 +58,7 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
           <h2>Advancing Ideas</h2>
         </div>
         <div
-          style='display: flex; justify-content: center; flex-wrap: nowrap; gap: 1rem;'
+          style='display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 1rem;'
         >
           <img
             src={Yellow_heart_100px.src}
@@ -75,33 +71,45 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
       </div>
     </div>
     <!-- FEATURED PROJECTS -->
-    <div
-      style='
-		background-color: #1BB3FF;
-		margin: 1rem 0;
-		display: flex;
-		flex-direction: column;
-		padding: 2rem 1rem;
-		gap: 1rem;
-		justify-content: center;
-		align-items: center;
-		'
-    >
-      <div
-        style='
-			background-color: #ffffff;
-			max-width: fit-content;
-			padding: 0.5rem;
-			transform: rotate(-3deg);
-			'
-      >
-        <h3 style='
-			text-align: center;
-			color: #101214;
-			'>
-          What's happening on Lightup
-        </h3>
-      </div>
+    <div class='featured-projects'>
+      <h3>Happening on Lightup now</h3>
+      <div class="scroll-container">
+      <ProjectCard
+        title='Russell Lab community outreach and education'
+        bannerSrc='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small'
+        bannerAlt='Picture of Russell Lab members at a community outreach event'
+      />
+      <ProjectCard
+        title='Russell Lab community outreach and education'
+        bannerSrc='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small'
+        bannerAlt='Picture of Russell Lab members at a community outreach event'
+      />
+      <ProjectCard
+        title='Russell Lab community outreach and education'
+        bannerSrc='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small'
+        bannerAlt='Picture of Russell Lab members at a community outreach event'
+      />
+      <ProjectCard
+        title='Russell Lab community outreach and education'
+        bannerSrc='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small'
+        bannerAlt='Picture of Russell Lab members at a community outreach event'
+      />
+      <ProjectCard
+        title='Russell Lab community outreach and education'
+        bannerSrc='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small'
+        bannerAlt='Picture of Russell Lab members at a community outreach event'
+      />
+      <ProjectCard
+        title='Russell Lab community outreach and education'
+        bannerSrc='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small'
+        bannerAlt='Picture of Russell Lab members at a community outreach event'
+      />
+      <ProjectCard
+        title='Russell Lab community outreach and education'
+        bannerSrc='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small'
+        bannerAlt='Picture of Russell Lab members at a community outreach event'
+      />
+		</div>
     </div>
   </div>
 </Layout>
@@ -112,7 +120,7 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
     height: auto;
   }
   h1 {
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     line-height: 1.25;
     color: #ffffff;
     overflow-wrap: break-word;
@@ -123,18 +131,48 @@ import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
     }
   }
   h2 {
-    font-size: 2.25rem;
+    font-size: 1.5rem;
     line-height: 1;
+    color: #ffda00;
     @media screen and (min-width: 425px) {
-      font-size: 3rem;
+      font-size: 2rem;
       line-height: 1.25;
     }
   }
   h3 {
     font-size: 1.5rem;
     line-height: 1.5;
+    color: #FFFFFF;
     @media screen and (min-width: 425px) {
       font-size: 2rem;
     }
   }
+  .hero {
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 1rem;
+    gap: 1rem;
+    justify-content: center;
+    @media screen and (min-width: 425px) {
+      padding: 5.625rem 1rem;
+    }
+  }
+  .featured-projects {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0 auto 2rem 0.5rem;
+    @media screen and (min-width: 425px) {
+      gap: 2rem;
+      margin: 0 auto 2rem 2rem;
+    }
+  }
+	.row {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		overflow-y: scroll;
+		gap: 1rem;
+	}
 </style>

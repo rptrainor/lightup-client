@@ -21,8 +21,22 @@ import PostHog from "../components/posthog.astro";
     <PostHog />
   </head>
   <body>
+    <header>
+      <h1 class="logo">Lightup</h1>
+    </header>
     <main>
       <slot />
     </main>
   </body>
 </html>
+<style>
+  .logo {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #ffda00;
+    padding: 0.5rem 1rem;
+    @media screen and (min-width: 425px) {
+      margin: 0 2rem;
+    }
+  }
+</style>
