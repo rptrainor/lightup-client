@@ -4,6 +4,8 @@
   <!-- SVG Close Icon -->
   <button
     class='absolute top-2 right-2 h-6 w-6 flex items-center justify-center text-gray-700 hover:text-gray-800'
+    aria-label='Close'
+    title='Close'
   >
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -24,9 +26,9 @@
     alt="Ryan's profile image. Nice to meet you, let's chat! My email is ryan@lightup.fyi"
   />
   <div class='flex flex-col justify-center h-full gap-2 mt-16 sm:mt-20'>
-    <h4 class='text-sm sm:text-base'>
+    <p class='text-sm sm:text-base'>
       Hi! I'm Ryan, one of the Co-Founders of Lightup
-    </h4>
+    </p>
     <p class='text-xs sm:text-sm'>
       We would like to send you a gift, could you share your email and we will
       be in touch
@@ -34,7 +36,9 @@
 
     <!-- Google Auth Button -->
     <button
-      class='bg-red-500 text-white px-3 py-1 text-sm rounded hover:bg-red-600'
+      class='bg-red-600 text-brand_white px-3 py-1 text-sm rounded hover:bg-red-700'
+      aria-label='Sign in with Google'
+      title='Sign in with Google'
       autofocus
     >
       Sign in with Google
@@ -43,7 +47,7 @@
     <!-- Divider -->
     <div class='relative flex py-1 items-center'>
       <div class='flex-grow border-t border-gray-300'></div>
-      <span class='flex-shrink mx-2 text-gray-400 text-xs'>or</span>
+      <span class='flex-shrink mx-2 text-gray-600 text-xs'>or</span>
       <div class='flex-grow border-t border-gray-300'></div>
     </div>
 
@@ -56,6 +60,8 @@
       />
       <button
         type='submit'
+        aria-label='Submit'
+        title='Submit'
         class='bg-brand_black text-white px-3 py-1 text-sm rounded hover:bg-gray-800'
       >
         Submit
