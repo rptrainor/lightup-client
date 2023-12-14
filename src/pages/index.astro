@@ -89,7 +89,7 @@ const projects = [
       },
     },
   },
-	{
+  {
     title: "Russell Lab community outreach and education",
     banner: {
       src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
@@ -103,7 +103,7 @@ const projects = [
       },
     },
   },
-	{
+  {
     title: "Russell Lab community outreach and education",
     banner: {
       src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
@@ -117,7 +117,7 @@ const projects = [
       },
     },
   },
-	{
+  {
     title: "Russell Lab community outreach and education",
     banner: {
       src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
@@ -131,7 +131,7 @@ const projects = [
       },
     },
   },
-	{
+  {
     title: "Russell Lab community outreach and education",
     banner: {
       src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
@@ -145,90 +145,64 @@ const projects = [
       },
     },
   },
-];
+] as const;
 ---
 
 <Layout title='Lightup'>
-  <div style='
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	'>
+  <div class='flex flex-col justify-center sm:gap-8 gap-4'>
     <!-- HERO SECTION -->
-    <div class='hero'>
-      <div style='
-	display: flex;
-	flex-direction: column;
-	gap: 0;
-	'>
-        <!-- <h1>A Catalyst for Academic</h1>
-        <h1>Breakthroughs</h1> -->
-        <!-- <h1>A community that changes the world</h1>
-        <h1>through science</h1> -->
+    <div class='flex flex-col gap-4'>
+      <div class='flex flex-col gap-0'>
         <h1>A community that impowers science</h1>
         <h1>to change the world</h1>
       </div>
-      <div
-        style='
-	max-width: 800px;
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	justify-content: start;
-	margin: 0 auto;
-	align-items: baseline;
-	'
-      >
-        <div
-          style='display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 1rem;'
-        >
+      <div class='max-w-4xl flex flex-col gap-4 mx-auto items-baseline'>
+        <div class='flex justify-center items-center flex-nowrap sm:gap-4 gap-1'>
           <img
             src={Yellow_heart_100px.src}
             alt='Yellow heart Lightup logo'
+            class='h-10 w-10'
             width='40px'
-            height='100%'
+            height='40px'
           />
-          <h2>Advancing Research</h2>
+          <h4 class="text-brand_yellow">Advancing Research</p>
         </div>
-        <div
-          style='display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 1rem;'
-        >
+        <div class='flex justify-center items-center flex-nowrap sm:gap-4 gap-1'>
           <img
             src={Yellow_heart_100px.src}
             alt='Yellow heart Lightup logo'
+            class='h-10 w-10'
             width='40px'
-            height='100%'
+            height='40px'
           />
-          <h2>Advancing Ideas</h2>
+          <h4 class="text-brand_yellow">Advancing Ideas</p>
         </div>
-        <div
-          style='display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 1rem;'
-        >
+        <div class='flex justify-center items-center flex-nowrap sm:gap-4 gap-1'>
           <img
             src={Yellow_heart_100px.src}
             alt='Yellow heart Lightup logo'
+            class='h-10 w-10'
             width='40px'
-            height='100%'
+            height='40px'
           />
-          <h2>Advancing Humanity</h2>
+          <h4 class="text-brand_yellow">Advancing Humanity</p>
+
         </div>
       </div>
     </div>
-<!-- FEATURED PROJECTS NETFLIX STYLE HORIZONTAL SCROLL -->
-<div class="featured-projects">
-  <h3>Happening on Lightup now</h3>
-	<div class="container">
-    <div class="flex overflow-x-auto no-scrollbar space-x-4 pr-[60vw]">
-      {projects.map((project) => (
-        <ProjectCardLarge project={project} />
-      ))}
+    <!-- FEATURED PROJECTS NETFLIX STYLE HORIZONTAL SCROLL -->
+    <div class='flex flex-col gap-4'>
+      <h3 class="text-brand_white mx-4">Happening on Lightup</h3>
+      <div class='container'>
+        <div class='flex overflow-x-auto no-scrollbar space-x-4 pr-[60vw]'>
+          {projects.map((project) => <ProjectCardLarge project={project} />)}
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-		
+
     <!-- RECENT PROJECTS -->
     <div class='recent-projects mx-0 sm:mx-4 my-4 flex flex-col gap-4'>
-      <h3>Recent projects</h3>
+      <h3 class="text-brand_white mx-4">Recent projects</h3>
       <ul
         role='list'
         class='grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8'
@@ -238,78 +212,3 @@ const projects = [
     </div>
   </div>
 </Layout>
-<style>
-  img {
-    width: 100%;
-    max-width: 40px;
-    height: auto;
-  }
-  h1 {
-    font-size: 2.5rem;
-    line-height: 1.25;
-    color: #ffffff;
-    overflow-wrap: break-word;
-    text-align: center;
-    @media screen and (min-width: 425px) {
-      font-size: 3rem;
-      line-height: 1.25;
-    }
-  }
-  h2 {
-    font-size: 1.5rem;
-    line-height: 1;
-    color: #ffda00;
-    @media screen and (min-width: 425px) {
-      font-size: 2rem;
-      line-height: 1.25;
-    }
-  }
-  h3 {
-    font-size: 1.5rem;
-    line-height: 1.5;
-    color: #ffffff;
-    @media screen and (min-width: 425px) {
-      font-size: 2rem;
-    }
-  }
-  .hero {
-    margin: 1rem auto;
-    display: flex;
-    flex-direction: column;
-    padding: 2.5rem 1rem;
-    gap: 1rem;
-    justify-content: center;
-    @media screen and (min-width: 425px) {
-      padding: 5.625rem 1rem;
-    }
-  }
-  .featured-projects {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin: 0;
-    @media screen and (min-width: 425px) {
-      gap: 2rem;
-      margin: 0 auto 2rem 2rem;
-    }
-  }
-  .row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-y: scroll;
-    gap: 1rem;
-  }
-
-  .horizontal-scroll-container {
-    display: flex;
-    flex-wrap: nowrap; /* Prevents cards from wrapping onto multiple lines */
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .horizontal-scroll-container::-webkit-scrollbar {
-    display: none;
-  }
-</style>

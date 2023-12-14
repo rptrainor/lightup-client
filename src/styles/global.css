@@ -1,7 +1,7 @@
 /* Register your custom font family and tell the browser where to find it. */
 @font-face {
-  font-family: 'Montserrat-Bold';
-  src: url('/fonts/Montserrat-Bold.woff2') format('woff2');
+  font-family: "Montserrat-Bold";
+  src: url("/fonts/Montserrat-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -11,11 +11,36 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, div, span, iframe,
-h1, h2, h3, h4, h5, h6, p,
-a, small, strike, strong, sub, sup, tt, var,
-b, u, i, center, ul, li,
-fieldset, form, label, legend {
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+ul,
+li,
+fieldset,
+form,
+label,
+legend {
   margin: 0;
   padding: 0;
   border: 0;
@@ -23,16 +48,21 @@ fieldset, form, label, legend {
   vertical-align: baseline;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -42,8 +72,8 @@ body, html {
 
 body {
   line-height: 1;
-  background: #0F7CC0;
-  font-family: 'Montserrat-Bold', "sans";
+  background: #0f7cc0;
+  font-family: "Montserrat-Bold", "sans";
   font-style: normal;
   transition: font-size 0.3s ease-out;
   font-weight: 700;
@@ -52,11 +82,11 @@ body {
   font-size: 1.25rem;
 }
 
-  /* width */
+/* width */
 *::-webkit-scrollbar {
   display: none;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Track */
@@ -70,7 +100,6 @@ body {
   border-radius: 1px;
 }
 
-
 a {
   text-decoration: none;
   color: currentColor;
@@ -82,7 +111,12 @@ img {
   border: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
 }
 
@@ -92,6 +126,31 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
+
+h1 {
+  @apply scroll-m-20 text-4xl lg:text-5xl font-extrabold tracking-tight text-brand_white break-words text-center;
+}
+
+h2 {
+  @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 text-brand_yellow;
+}
+
+h3 {
+  @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+}
+
+h4 {
+  @apply scroll-m-20 text-xl font-semibold tracking-tight;
+}
+
+p {
+  @apply leading-7 [&:not(:first-child)]:mt-6;
+}
+
+blockquote {
+  @apply mt-6 border-l-2 pl-6 italic;
+}
+
