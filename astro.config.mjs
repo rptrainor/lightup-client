@@ -9,6 +9,7 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   site: "https://lightup-client.pages.dev/",
   output: "server",
+  prefetch: true,
   image: {
     service: passthroughImageService()
   },

@@ -1,5 +1,5 @@
 ---
-export const prerender = true;
+export const prerender = true
 
 import { ViewTransitions } from "astro:transitions";
 
@@ -26,17 +26,15 @@ import SciComModel from "~/components/SciComModel";
   <body>
     <header>
       <nav class='flex flex-nowrap p-4 sm:py-6 sm:px-8 mx-auto max-w-6xl z-50'>
-        <a href='/' class='relative opacity-100 group-hover:opacity-100 z-50'>
+        <a href='/' class='relative opacity-100 group-hover:opacity-100 z-50' data-astro-prefetch>
           <h2
             class='py-2 px-4 bg-brand_pink text-4xl text-brand_white font-brand_white absolute translate-x-8 translate-y-8 h-fit w-max'
           >
             Go back
           </h2>
         </a>
-        <a href='/' class='z-50 bg-brand_black'>
-          <h1
-            class='text-start text-4xl font-black text-brand_yellow px-3 py-0 lg:py-0.5'
-          >
+        <a href='/' class="z-50 bg-brand_black" data-astro-prefetch>
+          <h1 class='text-start text-4xl font-black text-brand_yellow'>
             Lightup
           </h1>
         </a>

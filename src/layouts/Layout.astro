@@ -29,12 +29,12 @@ import ProfileButton from "~/components/ProfileButton";
       <nav
         class='flex justify-between flex-nowrap p-4 sm:py-6 sm:px-8 mx-auto max-w-6xl z-50'
       >
-        <a href='/'>
+        <a href='/' data-astro-prefetch>
           <h1 class='text-start text-4xl font-black text-brand_yellow'>
             Lightup
           </h1>
         </a>
-        <a href='/profile'>
+        <a href='/profile' data-astro-prefetch>
           <ProfileButton client:only /> 
         </a>
       </nav>

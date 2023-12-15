@@ -5,7 +5,7 @@ const ProfileButton = () => {
   return (
     <Show when={userState().status === "loggedIn"} fallback={null}>
       <div class="flex justify-center items-center z-10">
-        <a class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-brand_pink flex items-center justify-center overflow-hidden border-solid border-brand_black border-2">
+        <a class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-brand_pink flex items-center justify-center overflow-hidden border-solid border-brand_black border-2" data-astro-prefetch>
           <Show when={userState().user?.avatar_url} fallback={
             <p class="text-3xl uppercase">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#101214" class="w-4 h-4 sm:w-8 sm:h-8">
