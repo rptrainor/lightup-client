@@ -28,12 +28,16 @@ import SciComModel from "~/components/SciComModel";
   <body>
     <header>
       <nav
-        class='flex justify-between flex-nowrap p-4 sm:py-6 sm:px-8 mx-auto max-w-6xl'
+        class='flex justify-between flex-nowrap p-4 sm:py-6 sm:px-8 mx-auto max-w-6xl z-50'
       >
-        <h1 class='text-start text-4xl font-black text-brand_yellow'>
-          Lightup
-        </h1>
-        <ProfileButton client:load />
+        <a href='/'>
+          <h1 class='text-start text-4xl font-black text-brand_yellow'>
+            Lightup
+          </h1>
+        </a>
+        <a href='/profile'>
+          <ProfileButton /> 
+        </a>
       </nav>
     </header>
     <main>

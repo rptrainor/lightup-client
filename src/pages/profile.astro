@@ -1,4 +1,48 @@
 ---
-import LayoutProfilePage from "~/layouts/LayoutProfilePage.astro";
+export const prerender = true
+
+import { ViewTransitions } from "astro:transitions";
+
+import "~/styles/global.css";
+interface Props {
+  title: string;
+}
+
+import PostHog from "~/components/posthog.astro";
+import SciComModel from "~/components/SciComModel";
 ---
-<LayoutProfilePage title='Profile - Lightup' />
+
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='description' content='Astro description' />
+    <meta name='viewport' content='width=device-width' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='generator' content={Astro.generator} />
+    <title>Profile - Lightup</title>
+    <ViewTransitions />
+    <PostHog />
+  </head>
+  <body>
+    <header>
+      <nav
+        class='flex flex-nowrap p-4 sm:py-6 sm:px-8 mx-auto max-w-6xl z-50'
+      >
+        <a href='/' class="z-50">
+          <h1 class='text-start text-4xl font-black text-brand_yellow'>
+            Lightup
+          </h1>
+        </a>
+      </nav>
+    </header>
+    <main>
+      <iframe
+        name='sci-hub'
+        title='sci-hub'
+        src='https://sci-hub.se/'
+        class='absolute top-0 left-0 w-screen h-screen border-none z-0'
+      ></iframe>
+    </main>
+    <SciComModel client:only />
+  </body>
+</html>
