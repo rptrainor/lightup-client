@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js";
 
 import Button from "~/components/Button";
 import { user } from "~/stores/auth_store";
@@ -9,6 +9,11 @@ import handleSignInWithEmailAuth from "~/utilities/handleSignInWithEmail";
 const AuthModel = () => {
   const [dismissed, setDismissed] = createSignal<boolean>(false);
   const [email, setEmail] = createSignal<string>("");
+
+  // If user is logged in or the modal has been dismissed, do not render the component
+  if (user() !== null || dismissed() !== null) {
+    return null;
+  }
 
   // Validate email format
   const isValidEmail = (email: string) =>
@@ -21,10 +26,6 @@ const AuthModel = () => {
       handleSignInWithEmailAuth(email());
     }
   };
-
-  if (user() || dismissed()) {
-    return null;
-  }
 
   return (
     <div
