@@ -30,7 +30,7 @@ const SciComModel = () => {
     <Show when={!dismissed()} fallback={null}>
       <div class="fixed inset-0 bg-black/30 z-10" onClick={handleClose}>
         <div
-          class='w-full sm:w-64 md:w-72 border-4 border-solid border-brand_black fixed inset-x-0 mx-auto bottom-0 sm:bottom-[50vh] bg-brand_white pt-8 sm:pt-12 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-50'
+          class='w-full sm:min-w-min sm:max-w-2xl text-brand_black border-4 border-solid border-brand_black fixed inset-x-0 mx-auto bottom-0 sm:bottom-[40vh] bg-brand_white pt-8 sm:pt-12 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-50'
           onClick={stopPropagation}  // Prevents click inside the modal from closing it
         >
           {/* <!-- SVG Close Icon --> */}
@@ -54,17 +54,17 @@ const SciComModel = () => {
             </svg>
           </button>
           <div class='flex flex-col justify-center items-end h-full gap-2 text-xl font-bold'>
-            <div class="flex flex-nowrap gap-2">
-              
+            <div class="flex flex-nowrap gap-2 w-full">
+
               {/* //TODO: Add links to manage subscription */}
-              <button class="bg-brand_pink text-brand_black border-4 border-brand_black">
+              <button class="bg-brand_pink text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
                 Manage Lightup subscription
               </button>
-              <button onClick={handleLogout} class="bg-brand_blue text-brand_black border-4 border-brand_black">
+              <button onClick={handleLogout} class="bg-brand_blue text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
                 Log out of Lightup
               </button>
             </div>
-            <button onClick={handleEmailClick} class="bg-brand_yellow text-brand_black w-full text-center border-4 border-brand_black">
+            <button onClick={handleEmailClick} class="bg-brand_yellow text-brand_black text-center border-4 border-brand_black px-4 py-2 w-full">
               Email Ryan
             </button>
             <p>

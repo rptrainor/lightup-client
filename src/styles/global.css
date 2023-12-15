@@ -1,3 +1,13 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .container {
+        @apply max-w-5xl;
+    }
+} */
+
 /* Register your custom font family and tell the browser where to find it. */
 @font-face {
   font-family: "Montserrat-Bold";
@@ -71,7 +81,7 @@ body {
   font-style: normal;
   transition: font-size 0.3s ease-out;
   font-weight: 700;
-  color: #101214;
+  color: #FFFFFF;
   -webkit-font-smoothing: antialiased;
   font-size: 1.25rem;
 }

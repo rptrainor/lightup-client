@@ -1,0 +1,129 @@
+---
+import ProjectLikeButton from "~/components/ProjectLikeButton";
+import Layout from "~/layouts/Layout.astro";
+
+const PROJECT = {
+  title: "Russell Lab community outreach and education",
+  description:
+    "Community engagement is integral to our science. We frequently enjoy sharing our passion for entomology, botany, microbiology, pollination ecology, and natural history with the public.",
+  header:
+    "Transform Lives and the Planet: Your Support Empowers Tomorrow’s Innovators at Russell Lab to Lead the Climate Change Battle",
+  slug: "russelllab",
+  tags: [
+    "Climate Action Now",
+    "Green Tomorrow",
+    "Learn for All",
+    "Access to Education",
+    "Change Innovators",
+    "Empower Youth",
+    "Leaders of Tomorrow",
+    "Inspire Young Minds",
+  ],
+  banner: {
+    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
+    alt: "Picture of Russell Lab members at a community outreach event",
+  },
+  creator: {
+    name: "Dr. Russell, Avery",
+    avatar: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d72c54b9-7680-4686-d66f-04b678cd1800/avatar",
+      alt: "Profile image of Dr. Russell, Avery",
+    },
+  },
+};
+---
+<Layout title={PROJECT.title}>
+  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
+    <div class="flex gap-2 flex-wrap">
+      {PROJECT.tags.map((tag) => (
+        <span class='inline-flex items-center gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
+          {tag}
+        </span>
+      ))
+    </div>
+    <img src={PROJECT.banner.src} alt={PROJECT.banner.alt} class="w-full object-cover" />
+
+    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
+    <ProjectLikeButton project={PROJECT} client:load />
+    <blockquote class='mx-4'>
+      <p class='pointer-events-none text-brand_white'>
+        {PROJECT.description}
+      </p>
+    </blockquote>
+    <div class='flex gap-4 mx-4'>
+      <img
+        src={PROJECT.creator.avatar.src}
+        alt={PROJECT.creator.avatar.alt}
+        loading='lazy'
+        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+      />
+      <h2 class='pointer-events-none block font-black text-brand_yellow'>
+        {PROJECT.creator.name}
+      </h2>
+    </div>
+    <h2 class='px-4'>Outreach Events</h2>
+    <ul class='list-disc pl-5 flex flex-col gap-4 mx-4'>
+      <li>
+        2023 Jarrett Middle School: 7th grade students in entomology and
+        pollination activities. 180 students.
+      </li>
+      <li>
+        2023 Nixa John Thomas Magnet School: 6th grade students in entomology
+        and pollination activities. 23 students.
+      </li>
+      <li>
+        2022 Skype a Scientist: Elementary school students in bee anatomy and
+        dissection virtual activity. ~20 students.
+      </li>
+      <li>
+        2023 Missouri State University Wildlife Society. Bee sociobiology,
+        conservation, and biodiversity talk. ~30 attendees.
+      </li>
+      <li>
+        2022 Skype a Scientist. Led by lab member Maggie Mayberry: elementary
+        school students in 60 minute bee anatomy and dissection virtual
+        activity. ~20 students.
+      </li>
+      <li>
+        2022 Missouri State University Wildlife Society. Bee sociobiology and
+        biodiversity talk. ~15 attendees.
+      </li>
+      <li>
+        2021 Entomology outreach at Ozark Middle School (2x). Co-led by lab
+        members Maggie Mayberry, Faith Dall, & Kate Trebing: 6th-8th grade
+        students in two 80 minute entomology activities. 16 attendees.
+      </li>
+      <li>
+        2021 Beekeepers Association of the Ozarks. Gave bee and buzz pollination
+        talk (with lab member Maggie Mayberry) to ~30 beekeepers.
+      </li>
+      <li>
+        2020 Springfield Conservation Nature Center. Gave two
+        plant-pollinator-microbe talks (with lab member Parker Campbell) to 26
+        Nature Center volunteers.
+      </li>
+      <li>
+        2020 Entomology outreach at Ozark Middle School. Co-led (with lab member
+        Maggie Mayberry) 6th-8th grade students in two 60 minute entomology
+        activities. ~40 attendees.
+      </li>
+      <li>
+        2020 PBS and KQEDscience Deep Look. Panelist (1 of 3) and interview with
+        Josh Cassidy and livestream; xx livestream attendees.
+      </li>
+      <li>
+        2020 Discovery Center Springfield, Springfield, MO. Led 3rd-8th grade
+        students in two 30 minute pollination activities; 21 students.
+      </li>
+      <li>
+        2020 Missouri State University Bee-Keeping Club, Springfield, MO. Bee
+        sociobiology and health talk. ~10 attendees.
+      </li>
+      <li>
+        2020 Nature Conservancy Western Ozark Water Coordinator, Sierra Club.
+        Church of Unity, Springfield, MO. Panelist (1 of 6) giving expertise on
+        pollination ecology. ~100 attendees.
+      </li>
+    </ul>
+  </div>
+</Layout>
