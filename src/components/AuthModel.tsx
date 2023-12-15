@@ -1,6 +1,5 @@
 import { createSignal, Show, createEffect } from "solid-js";
 
-import Button from "~/components/Button";
 import { userState } from "~/stores/auth_store";
 import handleSignInWithGoogleAuth from "~/utilities/handleSignInWithGoogle";
 import handleSignInWithEmailAuth from "~/utilities/handleSignInWithEmail";
@@ -38,7 +37,7 @@ const AuthModel = () => {
         class='w-64 sm:w-72 border-4 border-solid border-brand_black fixed right-1 bottom-2 sm:bottom-4 sm:right-2 bg-brand_white pt-16 sm:pt-20 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-20'
       >
         {/* <!-- SVG Close Icon --> */}
-        <Button
+        <button
           class='absolute top-2 right-2 h-6 w-6 flex items-center justify-center text-gray-700 hover:text-gray-800'
           aria-label='Close'
           title='Close'
@@ -56,7 +55,7 @@ const AuthModel = () => {
               stroke-width='2'
               d='M6 18L18 6M6 6l12 12'></path>
           </svg>
-        </Button>
+        </button>
         <img
           class='object-cover rounded-full border-solid border-4 border-brand_black h-32 sm:h-40 w-32 sm:w-40 absolute -mt-16 sm:-mt-20 top-0'
           src='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/b9e35925-14a2-4eab-3732-750c68910c00/small'
@@ -64,15 +63,16 @@ const AuthModel = () => {
         />
         <div class='flex flex-col justify-center h-full gap-2 mt-16 sm:mt-20'>
           <p class='text-sm sm:text-base'>
-            Hi! I'm Ryan, one of the Co-Founders of Lightup
+          Hi! I'm Ryan, one of the Co-Founders of Lightup
+
           </p>
           <p class='text-xs sm:text-sm'>
-            We would like to send you a gift, could you share your email and we will
+          We would like to send you a gift, could you share your email and we will
             be in touch
           </p>
 
           {/* <!-- Google Auth Button --> */}
-          <Button
+          <button
             class='bg-red-600 text-brand_white px-3 py-1 text-sm rounded hover:bg-red-700'
             aria-label='Sign in with Google'
             title='Sign in with Google'
@@ -80,7 +80,7 @@ const AuthModel = () => {
             autofocus
           >
             Sign in with Google
-          </Button>
+          </button>
 
           {/* <!-- Divider --> */}
           <div class='relative flex py-1 items-center'>
@@ -98,7 +98,7 @@ const AuthModel = () => {
               value={email()}
               onInput={(e) => setEmail(e.currentTarget.value)}
             />
-            <Button
+            <button
               type='submit'
               aria-label='Submit'
               title='Submit'
@@ -106,7 +106,7 @@ const AuthModel = () => {
               disabled={!email() || !isValidEmail(email())}
             >
               Submit
-            </Button>
+            </button>
           </form>
         </div>
       </div>

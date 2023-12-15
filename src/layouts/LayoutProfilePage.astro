@@ -3,15 +3,14 @@ export const prerender = true;
 
 import { ViewTransitions } from "astro:transitions";
 
-import "~/styles/global.css";
+// import "~/styles/global.css";
 interface Props {
   title: string;
 }
 
 import PostHog from "~/components/posthog.astro";
-import AuthModel from "~/components/AuthModel.tsx";
-import ProfileButton from "~/components/ProfileButton";
 import SciComModel from "~/components/SciComModel";
+import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
 ---
 
 <html lang='en'>
@@ -30,21 +29,18 @@ import SciComModel from "~/components/SciComModel";
       <nav
         class='flex justify-between flex-nowrap p-4 sm:py-6 sm:px-8 mx-auto max-w-6xl'
       >
-        <h1 class='text-start text-4xl font-black text-brand_yellow'>
-          Lightup
-        </h1>
-        <ProfileButton client:load />
+        <img
+          src={Yellow_heart_100px.src}
+          alt='Yellow heart Lightup logo'
+          class='sm:h-24 sm:w-24 h-16 w-16 z-10'
+          width='40px'
+          height='40px'
+        />
       </nav>
     </header>
     <main>
       <slot />
     </main>
-    {
-      Astro.url.pathname !== "/profile" ? (
-        <AuthModel client:load />
-      ) : (
-        <SciComModel client:load />
-      )
-    }
+    <SciComModel client:load />
   </body>
 </html>
