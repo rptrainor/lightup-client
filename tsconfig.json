@@ -11,6 +11,10 @@
     },
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "module": "ESNext"
+    "module": "ESNext",
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ]
   }
 }

@@ -1,8 +1,11 @@
+---
+import Button from "~/components/Button";
+---
 <div
   class='w-64 sm:w-72 border-4 border-solid border-brand_black fixed right-1 bottom-2 sm:bottom-4 sm:right-2 bg-brand_white pt-16 sm:pt-20 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-20'
 >
   <!-- SVG Close Icon -->
-  <button
+  <Button
     class='absolute top-2 right-2 h-6 w-6 flex items-center justify-center text-gray-700 hover:text-gray-800'
     aria-label='Close'
     title='Close'
@@ -19,7 +22,7 @@
         stroke-width='2'
         d='M6 18L18 6M6 6l12 12'></path>
     </svg>
-  </button>
+  </Button>
   <img
     class='object-cover rounded-full border-solid border-4 border-brand_black h-32 sm:h-40 w-32 sm:w-40 absolute -mt-16 sm:-mt-20 top-0'
     src='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/b9e35925-14a2-4eab-3732-750c68910c00/small'
@@ -35,14 +38,14 @@
     </p>
 
     <!-- Google Auth Button -->
-    <button
+    <Button
       class='bg-red-600 text-brand_white px-3 py-1 text-sm rounded hover:bg-red-700'
       aria-label='Sign in with Google'
       title='Sign in with Google'
       autofocus
     >
       Sign in with Google
-    </button>
+    </Button>
 
     <!-- Divider -->
     <div class='relative flex py-1 items-center'>
@@ -58,14 +61,14 @@
         placeholder='Your email address'
         class='px-3 py-1 border border-gray-300 rounded focus:outline-none focus:border-brand_black text-sm'
       />
-      <button
+      <Button
         type='submit'
         aria-label='Submit'
         title='Submit'
         class='bg-brand_black text-white px-3 py-1 text-sm rounded hover:bg-gray-800'
       >
         Submit
-      </button>
+      </Button>
     </form>
   </div>
 </div>
