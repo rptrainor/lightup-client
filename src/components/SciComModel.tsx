@@ -5,7 +5,6 @@ const SciComModel = () => {
   const [dismissed, setDismissed] = createSignal<boolean>(false);
 
   const handleClose = () => {
-    console.log("close")
     setDismissed(true);
   }
 

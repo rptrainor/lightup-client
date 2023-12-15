@@ -8,9 +8,6 @@ async function handleSignInWithEmailAuth(email: string) {
       emailRedirectTo: window.location.href,
     },
   })
-  if (data) {
-    console.log({ data });
-  }
   if (error) {
     throw new Error(error.message);
   }

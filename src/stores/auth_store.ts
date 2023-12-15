@@ -36,7 +36,6 @@ const handleCheckUser = async () => {
 }
 
 createEffect(async () => {
-  console.log('auth store effect');
   handleCheckUser();
 });
 

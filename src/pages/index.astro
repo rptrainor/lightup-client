@@ -2,6 +2,7 @@
 import Layout from "~/layouts/Layout.astro";
 import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
 import ProjectCard from "~/components/ProjectCard.astro";
+import DesktopOnlyFeaturedBanner from "~/components/DesktopOnlyFeaturedBanner.astro";
 
 const interests = [
   "End Gun Harm",
@@ -24,25 +25,6 @@ const interests = [
   "Inspire Young Minds",
   "Traditions Alive",
 ] as const;
-
-const FEATURED_PROJECT = {
-  title: "Russell Lab community outreach and education",
-  header: "Transform Lives and the Planet: Your Support Empowers Tomorrow’s Innovators at Russell Lab to Lead the Climate Change Battle",
-  tags: ["Science", "Education", "Outreach", "Climate Change"],
-  description:
-    "Community engagement is integral to our science. We frequently enjoy sharing our passion for entomology, botany, microbiology, pollination ecology, and natural history with the public.",
-  banner: {
-    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
-    alt: "Picture of Russell Lab members at a community outreach event",
-  },
-  creator: {
-    name: "Dr. Russell, Avery",
-    avatar: {
-      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d72c54b9-7680-4686-d66f-04b678cd1800/avatar",
-      alt: "Profile image of Dr. Russell, Avery",
-    },
-  },
-};
 
 const PROJECTS = [
   {
@@ -193,53 +175,7 @@ const PROJECTS = [
     </div>
 
     <!-- DESKTOP ONLY FEATURED BANNER - START -->
-    <section class='hidden lg:flex flex-nowrap max-w-5xl mx-auto gap-4 group'>
-      <div class='relative opacity-100 group-hover:opacity-100 z-10'>
-        <h2
-          class='py-2 px-4 bg-brand_pink text-4xl text-brand_white font-brand_white absolute translate-x-8 -translate-y-8 h-fit w-max'
-        >
-          Today's win
-        </h2>
-      </div>
-      <img
-        src={FEATURED_PROJECT.banner.src}
-        alt={FEATURED_PROJECT.banner.alt}
-        class='pointer-events-none object-cover group-hover:opacity-75 w-full'
-        loading='eager'
-      />
-      <div>
-        <div class='flex flex-col gap-4 p-4'>
-          <h1
-            class='pointer-events-none mt-2 block font-black text-brand_white text-start'
-          >
-            {FEATURED_PROJECT.title}
-          </h1>
-          <blockquote>
-            <p class='pointer-events-none text-brand_white'>
-              {FEATURED_PROJECT.description}
-            </p>
-          </blockquote>
-          <div class='flex gap-4'>
-            <img
-              src={FEATURED_PROJECT.creator.avatar.src}
-              alt={FEATURED_PROJECT.creator.avatar.alt}
-              loading='lazy'
-              class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-            />
-            <p
-              class='pointer-events-none block text-xl font-black text-brand_white'
-            >
-              {FEATURED_PROJECT.creator.name}
-            </p>
-          </div>
-        </div>
-        <button
-          class='bg-brand_pink py-2 px-6 text-brand_white w-full mt-2 uppercase'
-        >
-          <h1>Get the win</h1>
-        </button>
-      </div>
-    </section>
+    <DesktopOnlyFeaturedBanner />
     <!-- DESKTOP ONLY FEATURED BANNER - END -->
 
 <!-- MOBILE AND TABLET ONLY INTERESTS HORIZONTAL CAROUSEL - START -->

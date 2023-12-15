@@ -1,4 +1,4 @@
-import { createSignal, Show, createEffect } from "solid-js";
+import { createSignal, Show } from "solid-js";
 
 import { userState } from "~/stores/auth_store";
 import handleSignInWithGoogleAuth from "~/utilities/handleSignInWithGoogle";
@@ -10,7 +10,6 @@ const AuthModel = () => {
   const [email, setEmail] = createSignal<string>("");
 
   const handleClose = () => {
-    console.log("close")
     setDismissed(true);
   }
 
@@ -25,11 +24,6 @@ const AuthModel = () => {
       handleSignInWithEmailAuth(email());
     }
   };
-
-  createEffect(() => {
-    console.log("dismissed", dismissed())
-    console.log("userState", userState())
-  });
 
   return (
     <Show when={userState().status === "loggedOut" && !dismissed()} fallback={null}>
