@@ -10,8 +10,8 @@ interface Props {
 
 const { title } = Astro.props;
 
-import PostHog from "../components/posthog.astro";
-import AuthModel from "~/components/AuthModel.astro";
+import PostHog from "~/components/posthog.astro";
+import AuthModel from "~/components/AuthModel.tsx";
 ---
 
 <html lang='en'>
@@ -36,6 +36,6 @@ import AuthModel from "~/components/AuthModel.astro";
     <main>
       <slot />
     </main>
-    <AuthModel />
+    <AuthModel client:load />
   </body>
 </html>
