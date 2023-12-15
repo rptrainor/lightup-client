@@ -12,6 +12,7 @@ const { title } = Astro.props;
 
 import PostHog from "~/components/posthog.astro";
 import AuthModel from "~/components/AuthModel.tsx";
+import ProfileButton from "~/components/ProfileButton";
 ---
 
 <html lang='en'>
@@ -27,11 +28,12 @@ import AuthModel from "~/components/AuthModel.tsx";
   </head>
   <body>
     <header>
-      <h1
-        class='text-start text-4xl font-black text-brand_yellow py-2 px-4 sm:py-0 sm:px-8 mx-auto max-w-6xl'
-      >
-        Lightup
-      </h1>
+      <nav class='flex justify-between flex-nowrap p-4 sm:py-6 sm:px-8 mx-auto max-w-6xl'>
+        <h1 class='text-start text-4xl font-black text-brand_yellow'>
+          Lightup
+        </h1>
+        <ProfileButton client:load />
+      </nav>
     </header>
     <main>
       <slot />

@@ -1,12 +1,12 @@
 // User Table
 export interface User {
   id: string;
-  created_at: string | Date;
-  updated_at: string | Date;
-  email: string | null;
+  created_at: string | undefined;
+  updated_at: string | undefined;
+  email: string | undefined;
   is_active: boolean;
-  name: string | null;
-  avatar_url: string | null;
-  picture: string | null;
-  full_name: string | null;
+  name: string | undefined;
+  avatar_url: string | undefined;
+  picture: string | undefined;
+  full_name: string | undefined;
 }
