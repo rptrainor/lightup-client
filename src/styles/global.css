@@ -176,3 +176,7 @@ blockquote {
   padding-left: 1.5rem /* 24px */;
   font-style: italic;
 }
+
+::selection {
+  @apply bg-brand_yellow text-brand_black;
+}

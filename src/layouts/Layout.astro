@@ -11,7 +11,6 @@ interface Props {
 import PostHog from "~/components/posthog.astro";
 import AuthModel from "~/components/AuthModel.tsx";
 import ProfileButton from "~/components/ProfileButton";
-import SciComModel from "~/components/SciComModel";
 ---
 
 <html lang='en'>
@@ -36,19 +35,13 @@ import SciComModel from "~/components/SciComModel";
           </h1>
         </a>
         <a href='/profile'>
-          <ProfileButton /> 
+          <ProfileButton client:only /> 
         </a>
       </nav>
     </header>
     <main>
       <slot />
     </main>
-    {
-      Astro.url.pathname !== "/profile" ? (
-        <AuthModel client:load />
-      ) : (
-        <SciComModel client:load />
-      )
-    }
+    <AuthModel client:load />
   </body>
 </html>
