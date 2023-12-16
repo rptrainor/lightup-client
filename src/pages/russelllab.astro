@@ -20,7 +20,7 @@ const PROJECT = {
     "Inspire Young Minds",
   ],
   banner: {
-    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
+    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/public",
     alt: "Picture of Russell Lab members at a community outreach event",
   },
   creator: {
@@ -32,43 +32,43 @@ const PROJECT = {
   },
 };
 ---
+
 <Layout title={PROJECT.title}>
   <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
-    <div class='flex gap-2 flex-wrap'>
-      {
-        PROJECT.tags.map((tag) => (
-          <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
-            {tag}
-          </span>
-        ))
-      }
-      <img
-        src={PROJECT.banner.src}
-        alt={PROJECT.banner.alt}
-        class='w-full object-cover'
-      />
+    {
+      PROJECT.tags.map((tag) => (
+        <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
+          {tag}
+        </span>
+      ))
+    }
+    <img
+      src={PROJECT.banner.src}
+      alt={PROJECT.banner.alt}
+      class='w-full object-cover'
+    />
 
-      <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
-      <ProjectLikeButton project={PROJECT} client:load />
-      <blockquote class='mx-4 sm:mx-0'>
-        <p class='pointer-events-none text-brand_white'>
-          {PROJECT.description}
-        </p>
-      </blockquote>
-      <div class='flex gap-4 mx-4 sm:mx-0'>
-        <img
-          src={PROJECT.creator.avatar.src}
-          alt={PROJECT.creator.avatar.alt}
-          loading='lazy'
-          class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-        />
-        <h2 class='pointer-events-none block font-black text-brand_yellow'>
-          {PROJECT.creator.name}
-        </h2>
-      </div>
+    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
+    <ProjectLikeButton project={PROJECT} client:load />
+    <blockquote class='mx-4 sm:mx-0'>
+      <p class='pointer-events-none text-brand_white'>
+        {PROJECT.description}
+      </p>
+    </blockquote>
+    <div class='flex gap-4 mx-4 sm:mx-0'>
+      <img
+        src={PROJECT.creator.avatar.src}
+        alt={PROJECT.creator.avatar.alt}
+        loading='lazy'
+        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+      />
+      <h2 class='pointer-events-none block font-black text-brand_yellow'>
+        {PROJECT.creator.name}
+      </h2>
+    </div>
 
     <h2 class='px-4'>Outreach Events</h2>
-    <ul class='list-disc pl-5 flex flex-col gap-4  leading-tight'>
+    <ul class='list-disc pl-5 flex flex-col gap-4 leading-tight'>
       <li>
         2023 Jarrett Middle School: 7th grade students in entomology and
         pollination activities. 180 students.

@@ -1,0 +1,97 @@
+---
+import ProjectLikeButton from "~/components/ProjectLikeButton";
+import Layout from "~/layouts/Layout.astro";
+
+const PROJECT = {
+  title:
+    "Inspiring Action for Our Planet: Support Dr. Katharine Hayhoe's Climate Advocacy",
+  description:
+    "Dr. Katharine Hayhoe is not just a renowned climate scientist; she's a leading voice in climate communication. At Texas Tech University, her work transcends traditional research, focusing on bridging the gap between scientific knowledge and public understanding. By contributing to Dr. Hayhoe's initiatives, you're not just funding research; you're investing in a movement to educate, engage, and empower communities and decision-makers to take meaningful action against climate change.",
+  header: "Empower Change with Science: Dr. Hayhoe's Climate Mission",
+  slug: "dr-katharine-hayhoe-climate-communication",
+  tags: ["Climate Advocacy", "Science Communication", "Sustainable Future"],
+  banner: {
+    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/ca071033-2393-445b-74f3-1bf804046200/public",
+    alt: "Dr. Katharine Hayhoe engaging in climate communication",
+  },
+  creator: {
+    name: "Dr. Hayhoe, Katharine",
+    avatar: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/58a8b4b7-5281-443a-f3bd-a79c506aaf00/avatar",
+      alt: "Photo of Dr. Katharine Hayhoe, a champion in climate science communication",
+    },
+  },
+};
+---
+
+<Layout title={PROJECT.title}>
+  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
+    <!-- Tags and Banner -->
+    {
+      PROJECT.tags.map((tag) => (
+        <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
+          {tag}
+        </span>
+      ))
+    }
+    <img
+      src={PROJECT.banner.src}
+      alt={PROJECT.banner.alt}
+      class='w-full object-cover'
+    />
+
+    <!-- Title and Like Button -->
+    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
+    <ProjectLikeButton project={PROJECT} client:load />
+
+    <!-- Description -->
+    <blockquote class='mx-4 sm:mx-0'>
+      <p class='pointer-events-none text-brand_white'>
+        {PROJECT.description}
+      </p>
+    </blockquote>
+
+    <!-- Creator Info -->
+    <div class='flex gap-4 mx-4 sm:mx-0'>
+      <img
+        src={PROJECT.creator.avatar.src}
+        alt={PROJECT.creator.avatar.alt}
+        loading='lazy'
+        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+      />
+      <h2 class='pointer-events-none block font-black text-brand_yellow'>
+        {PROJECT.creator.name}
+      </h2>
+    </div>
+
+    <!-- Impact Areas -->
+    <h2>Effective Climate Communication:</h2>
+    <p>
+      Dr. Hayhoe excels in making complex climate science accessible and
+      relatable, helping people understand the urgency and relevance of climate
+      change to their daily lives.
+    </p>
+    <h2>Policy Influence and Public Engagement:</h2>
+    <p>
+      Her work significantly impacts policy development and public discourse on
+      climate action, making her efforts pivotal in shaping informed climate
+      policies.
+    </p>
+    <h2>Educational Initiatives:</h2>
+    <p>
+      Dr. Hayhoe's focus on education aims to create a well-informed citizenry,
+      equipped to make decisions and advocate for climate solutions.
+    </p>
+
+    <!-- Call to Action -->
+    <blockquote>
+      <p class='pointer-events-none text-brand_white'>
+        Your support for Dr. Katharine Hayhoe's work is a step towards a more
+        informed and proactive society in the face of climate change. Help us
+        amplify this crucial message and turn understanding into action. Donate
+        today and join a community committed to making a real difference for our
+        planet's future.
+      </p>
+    </blockquote>
+  </div>
+</Layout>

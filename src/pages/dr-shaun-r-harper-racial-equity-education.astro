@@ -1,0 +1,108 @@
+---
+import ProjectLikeButton from "~/components/ProjectLikeButton";
+import Layout from "~/layouts/Layout.astro";
+
+const PROJECT = {
+  title:
+    "Lead the Change with Dr. Shaun R. Harper: Advancing Racial Equity in Education",
+  description:
+    "Embark on a transformative journey with Dr. Shaun R. Harper, a leading voice and a catalyst for change in the realm of racial equity in education. At the University of Southern California and through his founding of the USC Race and Equity Center, Dr. Harper's insightful research uncovers and confronts the deep-rooted racial disparities within our educational systems. His dedication to dismantling systemic barriers has ignited nationwide initiatives, reshaping policies and classroom practices to create equitable and inclusive learning environments. Supporting Dr. Harper is not just a donation—it's an active stand against racial injustice in education, a step towards nurturing diverse, equitable, and empowered learning communities.",
+  header: "Be a Part of Educational Transformation",
+  slug: "dr-shaun-r-harper-racial-equity-education",
+  tags: ["Racial Equity", "Educational Reform", "Inclusive Pedagogy"],
+  banner: {
+    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/4718ede4-d2de-4c76-97c9-fe7b07c24600/public",
+    alt: "Dr. Shaun R. Harper discussing educational equity",
+  },
+  creator: {
+    name: "Dr. Harper, Shaun",
+    avatar: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d840116a-45c9-4bf3-c881-aa44702e5800/avatar",
+      alt: "Portrait of Dr. Shaun R. Harper, an advocate for racial equity in education",
+    },
+  },
+};
+---
+
+<Layout title={PROJECT.title}>
+  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
+    <!-- Tags and Banner -->
+    {
+      PROJECT.tags.map((tag) => (
+        <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
+          {tag}
+        </span>
+      ))
+    }
+    <img
+      src={PROJECT.banner.src}
+      alt={PROJECT.banner.alt}
+      class='w-full object-cover'
+    />
+
+    <!-- Title and Like Button -->
+    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
+    <ProjectLikeButton project={PROJECT} client:load />
+
+    <!-- Description -->
+    <blockquote class='mx-4 sm:mx-0'>
+      <p class='pointer-events-none text-brand_white'>
+        {PROJECT.description}
+      </p>
+    </blockquote>
+
+    <!-- Creator Info -->
+    <div class='flex gap-4 mx-4 sm:mx-0'>
+      <img
+        src={PROJECT.creator.avatar.src}
+        alt={PROJECT.creator.avatar.alt}
+        loading='lazy'
+        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+      />
+      <h2 class='pointer-events-none block font-black text-brand_yellow'>
+        {PROJECT.creator.name}
+      </h2>
+    </div>
+
+    <!-- Impact Areas -->
+    <h2>Dissecting Systemic Inequities:</h2>
+    <p>
+      Dr. Harper's profound research meticulously documents how systemic racism
+      infiltrates our schools and universities, creating uneven playing fields
+      for students of color. His work, grounded in years of rigorous study and
+      data, shines a spotlight on hidden biases and institutional practices that
+      perpetuate racial inequalities, providing a roadmap for meaningful and
+      lasting change in our educational landscape.
+    </p>
+    <h2>Influencing Educational Policy and Leadership:</h2>
+    <p>
+      Through his extensive research, Dr. Harper has become a pivotal figure in
+      redefining educational policy and leadership. His insights and
+      recommendations are not just academic musings; they are powerful tools
+      that have reshaped how educators and policymakers approach racial equity.
+      From local school boards to national educational frameworks, Dr. Harper's
+      influence ensures that equity is at the core of decision-making.
+    </p>
+    <h2>Fostering Inclusive Educational Environments:</h2>
+    <p>
+      Dr. Harper's work transcends beyond the theoretical, creating palpable
+      changes in classrooms and campuses. He advocates for an educational system
+      where every student, regardless of their race, is seen, heard, and valued.
+      His strategies for inclusive teaching and culturally responsive pedagogy
+      have empowered educators to embrace diversity, fostering environments
+      where all students can excel and feel a sense of belonging.
+    </p>
+
+    <!-- Call to Action -->
+    <blockquote>
+      <p class='pointer-events-none text-brand_white'>
+        Align with Dr. Shaun R. Harper in his mission to revolutionize our
+        education systems. Your support amplifies the voice of equity, driving
+        actionable change across schools and universities nationwide. Every
+        contribution you make is a step towards a future where education is a
+        bridge, not a barrier, to racial equality. Donate now and be part of
+        crafting a more just and equitable educational world.
+      </p>
+    </blockquote>
+  </div>
+</Layout>
