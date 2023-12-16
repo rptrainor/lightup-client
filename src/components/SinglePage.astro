@@ -1,7 +1,10 @@
 ---
-const { project } = Astro.props;
+import type { Project } from "~/components/ProjectLikeButton";
+const { project } = Astro.props as Project;
 import Layout from "~/layouts/Layout.astro";
 import ProjectLikeButton from "~/components/ProjectLikeButton";
+
+console.log({ areas: project.areas });
 ---
 
 <Layout title={project.title}>

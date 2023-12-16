@@ -1,6 +1,5 @@
 ---
-import ProjectLikeButton from "~/components/ProjectLikeButton";
-import Layout from "~/layouts/Layout.astro";
+import SinglePage from "~/components/SinglePage.astro";
 
 const PROJECT = {
   title:
@@ -23,94 +22,20 @@ const PROJECT = {
   },
   areas: [
     {
-      header: "",
-      body: "",
+      header: "Transforming Cancer Treatment",
+      body: "Dr. June's CAR T cell therapies have shown remarkable results in treating acute leukemia in children and adults, and lymphoma in adults. Supporting this research contributes to developing more effective, targeted treatments for these devastating diseases.",
     },
     {
-      header: "",
-      body: "",
+      header: "Advancing Gene Therapy",
+      body: "The technology developed in the June Laboratory has been pivotal in progressing cancer gene therapy. This approach offers a new paradigm in treating cancers that have been resistant to traditional therapies.",
     },
     {
-      header: "",
-      body: "",
+      header: "Wider Application and Accessibility",
+      body: "With ongoing development and anticipated FDA approval, the therapies pioneered by Dr. June are set to become more widely available, potentially benefiting a vast number of patients globally.",
     },
   ],
-  callToAction: "",
+  callToAction: "Your support is not just a donation; it's an investment in a future where cancer can be effectively combated through advanced gene therapy. Join us in backing Dr. Carl June’s transformative work, paving the way for new horizons in cancer treatment and giving hope to millions around the world.",
 };
 ---
 
-<Layout title={PROJECT.title}>
-  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
-    <!-- Tags and Banner -->
-    <div class='flex flex-wrap gap-2 mx-4 sm:mx-0'>
-      {
-        PROJECT.tags.map((tag) => (
-          <span class='inline-flex items-center gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
-            {tag}
-          </span>
-        ))
-      }
-    </div>
-    <img
-      src={PROJECT.banner.src}
-      alt={PROJECT.banner.alt}
-      class='w-full object-cover'
-    />
-
-    <!-- Title and Like Button -->
-    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
-    <ProjectLikeButton project={PROJECT} client:load />
-
-    <!-- Description -->
-    <blockquote class='mx-4 sm:mx-0'>
-      <p class='pointer-events-none text-brand_white'>
-        {PROJECT.description}
-      </p>
-    </blockquote>
-
-    <!-- Creator Info -->
-    <div class='flex flex-col gap-4 mx-4 sm:mx-0'>
-      <img
-        src={PROJECT.creator.avatar.src}
-        alt={PROJECT.creator.avatar.alt}
-        loading='lazy'
-        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-      />
-      <h2 class='pointer-events-none block font-black text-brand_yellow'>
-        {PROJECT.creator.name}
-      </h2>
-
-      <!-- Impact Areas -->
-      <h2>Transforming Cancer Treatment</h2>
-      <p>
-        Dr. June's CAR T cell therapies have shown remarkable results in
-        treating acute leukemia in children and adults, and lymphoma in adults.
-        Supporting this research contributes to developing more effective,
-        targeted treatments for these devastating diseases.
-      </p>
-      <h2>Advancing Gene Therapy</h2>
-      <p>
-        The technology developed in the June Laboratory has been pivotal in
-        progressing cancer gene therapy. This approach offers a new paradigm in
-        treating cancers that have been resistant to traditional therapies.
-      </p>
-      <h2>Wider Application and Accessibility</h2>
-      <p>
-        With ongoing development and anticipated FDA approval, the therapies
-        pioneered by Dr. June are set to become more widely available,
-        potentially benefiting a vast number of patients globally.
-      </p>
-
-      <!-- Call to Action -->
-      <blockquote>
-        <p class='pointer-events-none text-brand_white'>
-          Your support is not just a donation; it's an investment in a future
-          where cancer can be effectively combated through advanced gene
-          therapy. Join us in backing Dr. Carl June’s transformative work,
-          paving the way for new horizons in cancer treatment and giving hope to
-          millions around the world.
-        </p>
-      </blockquote>
-    </div>
-  </div>
-</Layout>
+<SinglePage project={PROJECT} />
