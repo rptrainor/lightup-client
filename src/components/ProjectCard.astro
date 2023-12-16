@@ -3,49 +3,47 @@ export const prerender = true;
 const { project } = Astro.props;
 ---
 
-<div class='relative aspect-[3/2] my-8 lg:my-12'>
-  <div class='group aspect-video block w-full overflow-hidden bg-brand_white'>
-    <img
-      src={project.banner.src}
-      alt={project.banner.alt}
-      class='pointer-events-none object-cover group-hover:opacity-75 w-full'
-      loading='lazy'
-    />
-    <a
-      href={`/${project.slug}`}
-      class='absolute inset-0 focus:outline-none'
-      data-astro-prefetch
-    >
-      <span class='sr-only'>{`View details  ${project.title}`}</span>
-    </a>
-  </div>
-
-  <div class='flex flex-col gap-4 p-4'>
-    <h1
-      class='pointer-events-none mt-2 block font-black text-brand_white text-start'
-    >
-      {project.title}
-    </h1>
-    <blockquote>
-      <p class='pointer-events-none text-brand_white'>
-        {project.description}
-      </p>
-    </blockquote>
-    <div class='flex gap-4'>
+<a href={`/${project.slug}`} class='block no-underline' data-astro-prefetch>
+  <span class='sr-only'>{`View details ${project.title}`}</span>
+  <div class='relative aspect-[3/2] my-8 lg:my-12'>
+    <div class='group aspect-video block w-full overflow-hidden bg-brand_white'>
       <img
-        src={project.creator.avatar.src}
-        alt={project.creator.avatar.alt}
+        src={project.banner.src}
+        alt={project.banner.alt}
+        class='pointer-events-none object-cover group-hover:opacity-75 w-full'
         loading='lazy'
-        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
       />
-      <p class='pointer-events-none block text-xl font-black text-brand_white'>
-        {project.creator.name}
-      </p>
+    </div>
+
+    <div class='flex flex-col gap-4 p-4'>
+      <h1
+        class='pointer-events-none mt-2 block font-black text-brand_white text-start'
+      >
+        {project.title}
+      </h1>
+      <blockquote>
+        <p class='pointer-events-none text-brand_white'>
+          {project.description}
+        </p>
+      </blockquote>
+      <div class='flex gap-4'>
+        <img
+          src={project.creator.avatar.src}
+          alt={project.creator.avatar.alt}
+          loading='lazy'
+          class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+        />
+        <p
+          class='pointer-events-none block text-xl font-black text-brand_white'
+        >
+          {project.creator.name}
+        </p>
+      </div>
+    </div>
+    <div
+      class='bg-brand_pink animate-breath sm:px-6 border-solid border-4 border-brand_black text-brand_white w-full mt-2 uppercase'
+    >
+      <h1 class='text-brand_black'>Learn more</h1>
     </div>
   </div>
-  <div
-    class='bg-brand_pink animate-breath sm:px-6 border-solid border-4 border-brand_black text-brand_white w-full mt-2 uppercase'
-  >
-    <h1 class='text-brand_black'>Learn more</h1>
-  </div>
-</div>
+</a>
