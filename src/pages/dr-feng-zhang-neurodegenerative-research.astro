@@ -27,6 +27,7 @@ const PROJECT = {
 
 <Layout title={PROJECT.title}>
   <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
+    <!-- Tags and Banner -->
     {
       PROJECT.tags.map((tag) => (
         <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
@@ -40,13 +41,18 @@ const PROJECT = {
       class='w-full object-cover'
     />
 
+    <!-- Title and Like Button -->
     <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
     <ProjectLikeButton project={PROJECT} client:load />
+
+    <!-- Description -->
     <blockquote class='mx-4 sm:mx-0'>
       <p class='pointer-events-none text-brand_white'>
         {PROJECT.description}
       </p>
     </blockquote>
+
+    <!-- Creator Info -->
     <div class='flex gap-4 mx-4 sm:mx-0'>
       <img
         src={PROJECT.creator.avatar.src}
@@ -57,36 +63,35 @@ const PROJECT = {
       <h2 class='pointer-events-none block font-black text-brand_yellow'>
         {PROJECT.creator.name}
       </h2>
-      <blockquote>
-        <p class='pointer-events-none text-brand_white'>
-          Join us in supporting Dr. Zhang's pioneering research to transform our
-          understanding and treatment of neurodegenerative diseases. Your
-          donation is more than support; it's a beacon of hope for millions.
-        </p>
-      </blockquote>
-      <h2>Revolutionizing Disease Understanding:</h2>
-      <p>
-        Dr. Zhang's innovative use of CRISPR in neurodegenerative diseases is
-        paving the way for groundbreaking therapies, offering new hope in the
-        battle against Alzheimer's and Parkinson's.
-      </p>
-      <h2>Driving Towards Effective Treatments:</h2>
-      <p>
-        His deep dive into the genetic underpinnings of these conditions is
-        crucial for developing next-generation treatments, potentially changing
-        the lives of those affected.
-      </p>
-      <h2>Shaping the Future of Healthcare:</h2>
-      <p>
-        The advancements from Dr. Zhang's lab could significantly alter the
-        landscape of healthcare, setting the stage for more effective, targeted,
-        and sustainable treatments for neurodegenerative diseases.
-      </p>
-      <p>
-        Your contribution to Dr. Feng Zhang's research represents a commitment
-        to a world where diseases like Alzheimer’s and Parkinson’s are no longer
-        life sentences. Stand with us in this vital endeavor.
-      </p>
     </div>
+
+    <!-- Impact Areas -->
+    <h2>Revolutionizing Disease Understanding:</h2>
+    <p>
+      Dr. Zhang's innovative use of CRISPR in neurodegenerative diseases is
+      paving the way for groundbreaking therapies, offering new hope in the
+      battle against Alzheimer's and Parkinson's.
+    </p>
+    <h2>Driving Towards Effective Treatments:</h2>
+    <p>
+      His deep dive into the genetic underpinnings of these conditions is
+      crucial for developing next-generation treatments, potentially changing
+      the lives of those affected.
+    </p>
+    <h2>Shaping the Future of Healthcare:</h2>
+    <p>
+      The advancements from Dr. Zhang's lab could significantly alter the
+      landscape of healthcare, setting the stage for more effective, targeted,
+      and sustainable treatments for neurodegenerative diseases.
+    </p>
+
+    <!-- Call to Action -->
+    <blockquote>
+      <p class='pointer-events-none text-brand_white'>
+        Join us in supporting Dr. Zhang's pioneering research to transform our
+        understanding and treatment of neurodegenerative diseases. Your
+        donation is more than support; it's a beacon of hope for millions.
+      </p>
+    </blockquote>
   </div>
 </Layout>
