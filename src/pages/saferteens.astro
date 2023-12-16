@@ -1,0 +1,120 @@
+---
+import ProjectLikeButton from "~/components/ProjectLikeButton";
+import Layout from "~/layouts/Layout.astro";
+
+const PROJECT = {
+  title:
+    "Join SafERteens: Combat Youth Gun Violence at Trinity Health Muskegon",
+  description:
+    "SafERteens at Trinity Health Muskegon Hospital, a University of Michigan initiative, urgently addresses the surge of youth gun violence. Driven by Dr. Brian Stork's groundbreaking research on firearm injuries among young Black men, this program offers a proactive solution through early detection and intervention. Launched in May 2023, SafERteens is already making strides in protecting Muskegon's youth. Your support is vital in expanding this critical effort to save lives and break the cycle of violence.",
+  header:
+    "Your Support is their Safety: SafERteens’ Mission to End Youth Gun Violence",
+  slug: "saferteens",
+  tags: [
+    "Health Horizons",
+    "Empower Youth",
+    "End Gun Harm",
+    "Change Innovators",
+    "Leaders of Tomorrow",
+    "Community Safety",
+    "Inspire Young Minds",
+  ],
+  banner: {
+    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/3e9cc64e-c7a8-4f15-848f-d97830afc800/small",
+    alt: "A snapshot of SafERteens’ vital role in the ER of Trinity Health Muskegon Hospital, as featured on FOX 17 news",
+  },
+  creator: {
+    name: "Dr. Stork, Brian",
+    avatar: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/da31f920-4472-460e-fe7e-ff9ad927bd00/avatar",
+      alt: "Dr. Stork, a dedicated advocate for youth safety, spearheads the SafERteens initiative with a commitment to ending the cycle of gun violence in our community.",
+    },
+  },
+};
+---
+
+<Layout title={PROJECT.title}>
+  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
+    <div class='flex gap-2 flex-wrap'>
+      {
+        PROJECT.tags.map((tag) => (
+          <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
+            {tag}
+          </span>
+        ))
+      }
+      <img
+        src={PROJECT.banner.src}
+        alt={PROJECT.banner.alt}
+        class='w-full object-cover'
+      />
+
+      <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
+      <ProjectLikeButton project={PROJECT} client:load />
+      <blockquote class='mx-4 sm:mx-0'>
+        <p class='pointer-events-none text-brand_white'>
+          {PROJECT.description}
+        </p>
+      </blockquote>
+      <div class='flex gap-4 mx-4 sm:mx-0'>
+        <img
+          src={PROJECT.creator.avatar.src}
+          alt={PROJECT.creator.avatar.alt}
+          loading='lazy'
+          class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+        />
+        <h2 class='pointer-events-none block font-black text-brand_yellow'>
+          {PROJECT.creator.name}
+        </h2>
+      </div>
+      <h2 class='mx-4 sm:mx-0'>
+        SafERteens Muskegon: Pioneering Youth Violence Prevention in Healthcare
+        Settings
+      </h2>
+      <h3 class='mx-4 sm:mx-0'>About SafERteens</h3>
+      <p class='mx-4 sm:mx-0'>
+        SafERteens is an evidence-based intervention focused on preventing youth
+        violence, particularly gun-related injuries. The program, which operates
+        in various healthcare settings including emergency rooms, was awarded a
+        five-year grant from the Centers for Disease Control in 2021. This
+        funding supports the implementation of SafERteens in five different
+        healthcare sites in Muskegon and Kent counties.
+      </p>
+      <h3 class='mx-4 sm:mx-0'>The Need for Intervention</h3>
+      <p class='mx-4 sm:mx-0'>
+        A recent partnership with Trinity Health Muskegon highlights the urgent
+        need for such interventions. Dr. Brian Stork, a urologist at Trinity
+        Health, observed a distressing number of gun violence victims,
+        particularly among young Black men, who represent the majority of
+        firearm injuries in the area. Nearly 70% of these injuries were due to
+        attempted murder or bodily harm, and 25% were self-inflicted or
+        accidental​​.
+      </p>
+      <h3 class='mx-4 sm:mx-0'>Impact and Approach</h3>
+      <p class='mx-4 sm:mx-0'>
+        SafERteens takes a proactive approach to prevent youth violence. The
+        program, successfully implemented in May 2023, screens every young
+        person at Trinity Health Muskegon Hospital. Those flagged undergo a
+        one-on-one conversation with an interventionist, who then provides
+        community resources and alternative solutions to deter violence​​. This
+        approach is already showing promise, with tangible results expected by
+        May 2024​​.
+      </p>
+      <h3 class='mx-4 sm:mx-0'>The Economic Perspective</h3>
+      <p class='mx-4 sm:mx-0'>
+        Dr. Stork's research revealed that Medicaid spends over a million
+        dollars annually in Muskegon on gun violence injuries​​. This economic
+        impact, alongside the personal trauma experienced by victims and their
+        communities, underscores the critical need for programs like SafERteens.
+      </p>
+      <h3 class='mx-4 sm:mx-0'>How You Can Help</h3>
+      <p class='mx-4 sm:mx-0'>
+        By supporting SafERteens, donors can contribute to a safer future for
+        the youth of Muskegon and beyond. Your donation will help expand this
+        life-saving program, creating a model that can be implemented in other
+        communities facing similar challenges. Join us at LightUp in making a
+        meaningful difference.
+      </p>
+    </div>
+  </div>
+</Layout>
