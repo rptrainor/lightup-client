@@ -1,6 +1,5 @@
 ---
-import ProjectLikeButton from "~/components/ProjectLikeButton";
-import Layout from "~/layouts/Layout.astro";
+import SinglePage from "~/components/SinglePage.astro";
 
 const PROJECT = {
   title: "SafERteens Muskegon: A Bold Stand Against Youth Gun Violence",
@@ -20,77 +19,19 @@ const PROJECT = {
       alt: "Portrait of Dr. Brian Stork, a dedicated advocate for youth safety in Muskegon",
     },
   },
+  areas: [
+    {
+      header: "Proactive Intervention in the ER",
+      body: "SafERteens operates at the critical juncture of emergency care, deploying a unique screening process to identify and support youths involved in gun violence, offering immediate interventions and alternative pathways.",
+    },
+    {
+      header: "Addressing a Critical Community Need",
+      body: "Focused on the startling statistics of firearm injuries, especially among young Black men, SafERteens addresses a dire community need, underscoring the importance of targeted, culturally sensitive intervention strategies.",
+    },
+  ],
+  callToAction:
+    "Your support for SafERteens is more than a donation; it's a commitment to youth safety and a brighter future for our community. Join us in this vital mission to curb youth gun violence. Together, we can create lasting change and save lives. Donate now to make a difference.",
 };
 ---
 
-<Layout title={PROJECT.title}>
-  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
-    <!-- Tags and Banner -->
-    {
-      PROJECT.tags.map((tag) => (
-        <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
-          {tag}
-        </span>
-      ))
-    }
-    <img
-      src={PROJECT.banner.src}
-      alt={PROJECT.banner.alt}
-      class='w-full object-cover'
-    />
-
-    <!-- Title and Like Button -->
-    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
-    <ProjectLikeButton project={PROJECT} client:load />
-
-    <!-- Description -->
-    <blockquote class='mx-4 sm:mx-0'>
-      <p class='pointer-events-none text-brand_white'>
-        {PROJECT.description}
-      </p>
-    </blockquote>
-
-    <!-- Creator Info -->
-    <div class='flex gap-4 mx-4 sm:mx-0'>
-      <img
-        src={PROJECT.creator.avatar.src}
-        alt={PROJECT.creator.avatar.alt}
-        loading='lazy'
-        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-      />
-      <h2 class='pointer-events-none block font-black text-brand_yellow'>
-        {PROJECT.creator.name}
-      </h2>
-    </div>
-
-    <!-- Impact Areas -->
-    <h2>Proactive Intervention in the ER</h2>
-    <p>
-      SafERteens operates at the critical juncture of emergency care, deploying
-      a unique screening process to identify and support youths involved in gun
-      violence, offering immediate interventions and alternative pathways.
-    </p>
-    <h2>Addressing a Critical Community Need</h2>
-    <p>
-      Focused on the startling statistics of firearm injuries, especially among
-      young Black men, SafERteens addresses a dire community need, underscoring
-      the importance of targeted, culturally sensitive intervention strategies.
-    </p>
-    <h2>Cost-Effective Solutions for Long-Term Impact</h2>
-    <p>
-      Beyond saving lives, SafERteens is a cost-effective solution, reducing the
-      financial burden of gun violence on healthcare systems and the community
-      while fostering a safer environment for Muskegon's youth.
-    </p>
-
-    <!-- Call to Action -->
-    <blockquote>
-      <p class='pointer-events-none text-brand_white'>
-        Your support for SafERteens is more than a donation; it's a commitment
-        to youth safety and a brighter future for our community. Join us in this
-        vital mission to curb youth gun violence. Together, we can create
-        lasting change and save lives. Donate now to make a difference.
-      </p>
-    </blockquote>
-  </div>
-</Layout>
+<SinglePage project={PROJECT} />;

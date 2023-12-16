@@ -1,6 +1,5 @@
 ---
-import ProjectLikeButton from "~/components/ProjectLikeButton";
-import Layout from "~/layouts/Layout.astro";
+import SinglePage from "~/components/SinglePage.astro";
 
 const PROJECT = {
   title: "Innovating for Health: Support Dr. Regina Barzilay's AI Research",
@@ -8,7 +7,11 @@ const PROJECT = {
     "Embark on a journey of innovation and impact with Dr. Regina Barzilay, a leading AI researcher at MIT. Dr. Barzilay is revolutionizing healthcare through artificial intelligence, focusing on early detection of diseases like breast cancer and advancing drug discovery processes. Her work harnesses the power of machine learning to analyze patterns in vast data, leading to more accurate diagnoses and personalized treatment options. By supporting Dr. Barzilay, you're contributing to the cutting edge of medical technology, where AI meets healthcare to create a healthier future for all.",
   header: "Pioneering AI for Better Health Outcomes",
   slug: "dr-regina-barzilay-ai-healthcare",
-  tags: ["AI Innovation", "Healthcare Transformation", "Life-Saving Technology"],
+  tags: [
+    "AI Innovation",
+    "Healthcare Transformation",
+    "Life-Saving Technology",
+  ],
   banner: {
     src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/63885d06-17fa-4a87-1f7f-06dbacd64900/public",
     alt: "Dr. Regina Barzilay working on AI-driven healthcare solutions",
@@ -20,69 +23,24 @@ const PROJECT = {
       alt: "Portrait of Dr. Regina Barzilay, innovator in AI and healthcare",
     },
   },
+  areas: [
+    {
+      header: "Revolutionizing Cancer Detection",
+      body: "Dr. Barzilay's AI algorithms are transforming the fight against breast cancer by identifying signs earlier than ever before. This pioneering research means earlier treatment, better survival rates, and hope for millions.",
+    },
+    {
+      header: "Accelerating Drug Discovery",
+      body: "Leveraging AI, Dr. Barzilay is expediting the discovery of new drugs, reducing development times from years to months. This acceleration has immense potential to respond rapidly to global health crises.",
+    },
+    {
+      header: "Creating Tailored Treatment Plans",
+      body: "Through advanced AI analysis, Dr. Barzilay's work enables personalized healthcare, adapting treatments to individual patient profiles, greatly enhancing the effectiveness of medical interventions.",
+    },
+  ],
+  callToAction:
+    "Your support for Dr. Barzilay’s groundbreaking AI research in healthcare is a step towards a future where advanced technology and medicine converge for the betterment of humanity. This is your opportunity to be part of a revolution in healthcare. Donate today and join us in this noble cause of saving lives and transforming healthcare.",
 };
 ---
 
-<Layout title={PROJECT.title}>
-  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
-    <!-- Tags and Banner -->
-    {
-      PROJECT.tags.map((tag) => (
-        <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
-          {tag}
-        </span>
-      ))
-    }
-    <img
-      src={PROJECT.banner.src}
-      alt={PROJECT.banner.alt}
-      class='w-full object-cover'
-    />
-
-    <!-- Title and Like Button -->
-    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
-    <ProjectLikeButton project={PROJECT} client:load />
-
-    <!-- Description -->
-    <blockquote class='mx-4 sm:mx-0'>
-      <p class='pointer-events-none text-brand_white'>
-        {PROJECT.description}
-      </p>
-    </blockquote>
-
-    <!-- Creator Info -->
-    <div class='flex gap-4 mx-4 sm:mx-0'>
-      <img
-        src={PROJECT.creator.avatar.src}
-        alt={PROJECT.creator.avatar.alt}
-        loading='lazy'
-        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-      />
-      <h2 class='pointer-events-none block font-black text-brand_yellow'>
-        {PROJECT.creator.name}
-      </h2>
-    </div>
-
-    <!-- Impact Areas -->
-    <h2>Revolutionizing Cancer Detection:</h2>
-    <p>
-      Dr. Barzilay's AI algorithms are transforming the fight against breast cancer by identifying signs earlier than ever before. This pioneering research means earlier treatment, better survival rates, and hope for millions.
-    </p>
-    <h2>Accelerating Drug Discovery:</h2>
-    <p>
-      Leveraging AI, Dr. Barzilay is expediting the discovery of new drugs, reducing development times from years to months. This acceleration has immense potential to respond rapidly to global health crises.
-    </p>
-    <h2>Creating Tailored Treatment Plans:</h2>
-    <p>
-      Through advanced AI analysis, Dr. Barzilay's work enables personalized healthcare, adapting treatments to individual patient profiles, greatly enhancing the effectiveness of medical interventions.
-    </p>
-
-    <!-- Call to Action -->
-    <blockquote>
-      <p class='pointer-events-none text-brand_white'>
-        Your support for Dr. Barzilay’s groundbreaking AI research in healthcare is a step towards a future where advanced technology and medicine converge for the betterment of humanity. This is your opportunity to be part of a revolution in healthcare. Donate today and join us in this noble cause of saving lives and transforming healthcare.
-      </p>
-    </blockquote>
-  </div>
-</Layout>
-
+<SinglePage project={PROJECT} />
+ ```

@@ -1,6 +1,5 @@
 ---
-import ProjectLikeButton from "~/components/ProjectLikeButton";
-import Layout from "~/layouts/Layout.astro";
+import SinglePage from "~/components/SinglePage.astro";
 
 const PROJECT = {
   title: "Inspiring Future Scientists: Support Russell Lab's Outreach Mission",
@@ -20,68 +19,23 @@ const PROJECT = {
       alt: "Portrait of Dr. Avery Russell, dedicated to expanding the frontiers of science education",
     },
   },
+  areas: [
+    {
+      header: "Engaging Young Minds in Science",
+      body: "From classrooms to community events, our lab members lead interactive sessions on entomology and pollination, igniting a spark of curiosity and a love for science in students of all ages.",
+    },
+    {
+      header: "Breaking Barriers, Building Inclusivity",
+      body: "We're committed to making science accessible to all. Our outreach initiatives focus on inclusive education, striving to recruit future scientists from diverse backgrounds and tackle complex social issues.",
+    },
+    {
+      header: "Connecting Science with Society",
+      body: "Our efforts go beyond the lab – we're humanizing scientists and breaking stereotypes, fostering a stronger connection between scientific institutions and the community they serve.",
+    },
+  ],
+  callToAction:
+    "Be a part of this transformative journey. Your support enables the Russell Lab to expand its outreach and deepen its impact, inspiring future generations and nurturing a diverse scientific community. Donate today and join us in shaping a brighter, more inclusive future in science.",
 };
 ---
 
-<Layout title={PROJECT.title}>
-  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
-    <!-- Tags and Banner -->
-    {
-      PROJECT.tags.map((tag) => (
-        <span class='inline-flex items-center mx-2 sm:mx-0 gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
-          {tag}
-        </span>
-      ))
-    }
-    <img
-      src={PROJECT.banner.src}
-      alt={PROJECT.banner.alt}
-      class='w-full object-cover'
-    />
-
-    <!-- Title and Like Button -->
-    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{PROJECT.title}</h1>
-    <ProjectLikeButton project={PROJECT} client:load />
-
-    <!-- Description -->
-    <blockquote class='mx-4 sm:mx-0'>
-      <p class='pointer-events-none text-brand_white'>
-        {PROJECT.description}
-      </p>
-    </blockquote>
-
-    <!-- Creator Info -->
-    <div class='flex gap-4 mx-4 sm:mx-0'>
-      <img
-        src={PROJECT.creator.avatar.src}
-        alt={PROJECT.creator.avatar.alt}
-        loading='lazy'
-        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-      />
-      <h2 class='pointer-events-none block font-black text-brand_yellow'>
-        {PROJECT.creator.name}
-      </h2>
-    </div>
-
-    <!-- Impact Areas -->
-    <h2>Engaging Young Minds in Science</h2>
-    <p>
-      From classrooms to community events, our lab members lead interactive sessions on entomology and pollination, igniting a spark of curiosity and a love for science in students of all ages.
-    </p>
-    <h2>Breaking Barriers, Building Inclusivity</h2>
-    <p>
-      We're committed to making science accessible to all. Our outreach initiatives focus on inclusive education, striving to recruit future scientists from diverse backgrounds and tackle complex social issues.
-    </p>
-    <h2>Connecting Science with Society</h2>
-    <p>
-      Our efforts go beyond the lab – we're humanizing scientists and breaking stereotypes, fostering a stronger connection between scientific institutions and the community they serve.
-    </p>
-
-    <!-- Call to Action -->
-    <blockquote>
-      <p class='pointer-events-none text-brand_white'>
-        Be a part of this transformative journey. Your support enables the Russell Lab to expand its outreach and deepen its impact, inspiring future generations and nurturing a diverse scientific community. Donate today and join us in shaping a brighter, more inclusive future in science.
-      </p>
-    </blockquote>
-  </div>
-</Layout>
+<SinglePage project={PROJECT} />;
