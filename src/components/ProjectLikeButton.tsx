@@ -1,5 +1,10 @@
 import { createSignal } from "solid-js";
 
+type Area = {
+  header: string,
+  body: string
+}
+
 export type Project = {
   project: {
     title: string;
@@ -18,11 +23,7 @@ export type Project = {
         alt: string;
       };
     };
-    areas:
-      {
-        header: string,
-        body: string,
-      }[],
+    areas: Area[],
     callToAction: string,
   };
 }

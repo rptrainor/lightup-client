@@ -1,0 +1,118 @@
+---
+type Interest = {
+  name: string;
+  slug: string;
+};
+
+export const INTERESTS: Interest[] = [
+  {
+    name: "Health Horizons",
+    slug: "dr-carl-june-cancer-immunotherapy",
+  },
+  {
+    name: "Cure Discovery",
+    slug: "dr-carl-june-cancer-immunotherapy",
+  },
+  {
+    name: "Vital Research",
+    slug: "dr-carl-june-cancer-immunotherapy",
+  },
+  {
+    name: "Neurodegenerative",
+    slug: "dr-feng-zhang-neurodegenerative-research",
+  },
+  {
+    name: "Alzheimer’s",
+    slug: "dr-feng-zhang-neurodegenerative-research",
+  },
+  {
+    name: "CRISPR",
+    slug: "dr-feng-zhang-neurodegenerative-research",
+  },
+  {
+    name: "Parkinson’s",
+    slug: "dr-feng-zhang-neurodegenerative-research",
+  },
+  {
+    name: "Climate Advocacy",
+    slug: "dr-katharine-hayhoe-climate-communication",
+  },
+  {
+    name: "Science Communication",
+    slug: "dr-katharine-hayhoe-climate-communication",
+  },
+  {
+    name: "Sustainable Future",
+    slug: "dr-katharine-hayhoe-climate-communication",
+  },
+  {
+    name: "AI Innovation",
+    slug: "dr-regina-barzilay-ai-healthcare",
+  },
+  {
+    name: "Healthcare Transformation",
+    slug: "dr-regina-barzilay-ai-healthcare",
+  },
+  {
+    name: "Life-Saving Technology",
+    slug: "dr-regina-barzilay-ai-healthcare",
+  },
+  {
+    name: "Racial Equity",
+    slug: "dr-shaun-r-harper-racial-equity-education",
+  },
+  {
+    name: "Educational Reform",
+    slug: "dr-shaun-r-harper-racial-equity-education",
+  },
+  {
+    name: "Inclusive Pedagogy",
+    slug: "dr-shaun-r-harper-racial-equity-education",
+  },
+  {
+    name: "Youth Empowerment",
+    slug: "saferteens",
+  },
+  {
+    name: "Violence Prevention",
+    slug: "saferteens",
+  },
+  {
+    name: "Community Health",
+    slug: "saferteens",
+  },
+  {
+    name: "Science Education",
+    slug: "russelllab",
+  },
+  {
+    name: "Community Engagement",
+    slug: "russelllab",
+  },
+  {
+    name: "Diversity in Science",
+    slug: "russelllab",
+  },
+];
+---
+
+<div class='flex flex-wrap gap-4 p-2'>
+  {
+    INTERESTS.map((interest) => (
+      <a
+        data-astro-prefetch
+        href={`${Astro.url.origin}/${interest.slug}`}
+        
+      >
+        <div class='relative h-24'>
+          <div class='absolute bg-brand_pink w-full h-full -translate-x-2 -translate-y-2' />
+          <div class='relative flex items-center justify-center p-2 border-brand_pink bg-brand_white w-full border-4 z-10 h-full'>
+            <p class='text-brand_pink uppercase text-center truncate'>
+              {interest.name}
+            </p>
+          </div>
+        </div>
+      </a>
+    ))
+  }
+</div>

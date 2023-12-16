@@ -3,12 +3,11 @@ import type { Project } from "~/components/ProjectLikeButton";
 const { project } = Astro.props as Project;
 import Layout from "~/layouts/Layout.astro";
 import ProjectLikeButton from "~/components/ProjectLikeButton";
-
-console.log({ areas: project.areas });
+import InterestsBox from "~/components/InterestsBox.astro";
 ---
 
 <Layout title={project.title}>
-  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
+  <div class='flex flex-col items-start gap-4 max-w-6xl mx-auto mb-28'>
     <!-- Tags and Banner -->
     <div class='flex flex-wrap gap-2 mx-4 sm:mx-0'>
       {
@@ -30,14 +29,14 @@ console.log({ areas: project.areas });
     <ProjectLikeButton project={project} client:load />
 
     <!-- Description -->
-    <blockquote class='mx-4 sm:mx-0'>
+    <blockquote class='mx-4'>
       <p class='pointer-events-none text-brand_white'>
         {project.description}
       </p>
     </blockquote>
 
     <!-- Creator Info -->
-    <div class='flex flex-col gap-4 mx-4 sm:mx-0'>
+    <div class='flex flex-col gap-4 mx-4'>
       <img
         src={project.creator.avatar.src}
         alt={project.creator.avatar.alt}
@@ -65,5 +64,6 @@ console.log({ areas: project.areas });
         </p>
       </blockquote>
     </div>
+    <InterestsBox />
   </div>
 </Layout>

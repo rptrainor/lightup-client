@@ -3,132 +3,223 @@ import Layout from "~/layouts/Layout.astro";
 import Yellow_heart_100px from "~/svgs/Yellow_heart_100px.svg";
 import ProjectCard from "~/components/ProjectCard.astro";
 import DesktopOnlyFeaturedBanner from "~/components/DesktopOnlyFeaturedBanner.astro";
-
-const interests = [
-  {
-    name: "Health Horizons",
-    slug: "dr-carl-june-cancer-immunotherapy",
-  },
-  {
-    name: "Cure Discovery",
-    slug: "dr-carl-june-cancer-immunotherapy",
-  },
-  {
-    name: "Vital Research",
-    slug: "dr-carl-june-cancer-immunotherapy",
-  },
-  {
-    name: "Neurodegenerative",
-    slug: "dr-feng-zhang-neurodegenerative-research",
-  },
-  {
-    name: "Alzheimer’s",
-    slug: "dr-feng-zhang-neurodegenerative-research",
-  },
-  {
-    name: "CRISPR",
-    slug: "dr-feng-zhang-neurodegenerative-research",
-  },
-  {
-    name: "Parkinson’s",
-    slug: "dr-feng-zhang-neurodegenerative-research",
-  },
-  {
-    name: "Climate Advocacy",
-    slug: "dr-katharine-hayhoe-climate-communication",
-  },
-  {
-    name: "Science Communication",
-    slug: "dr-katharine-hayhoe-climate-communication",
-  },
-  {
-    name: "Sustainable Future",
-    slug: "dr-katharine-hayhoe-climate-communication",
-  },
-  {
-    name: "AI Innovation",
-    slug: "dr-regina-barzilay-ai-healthcare",
-  },
-  {
-    name: "Healthcare Transformation",
-    slug: "dr-regina-barzilay-ai-healthcare",
-  },
-  {
-    name: "Life-Saving Technology",
-    slug: "dr-regina-barzilay-ai-healthcare",
-  },
-  {
-    name: "Racial Equity",
-    slug: "dr-shaun-r-harper-racial-equity-education",
-  },
-  {
-    name: "Educational Reform",
-    slug: "dr-shaun-r-harper-racial-equity-education",
-  },
-  {
-    name: "Inclusive Pedagogy",
-    slug: "dr-shaun-r-harper-racial-equity-education",
-  },
-] as const;
+import { INTERESTS } from "~/components/InterestsBox.astro";
 
 const PROJECTS = [
   {
     title:
-      "SafERteen: Trinity Health Muskegon Hospital launches violence reduction program housed in ER",
+      "Inspiring Future Scientists: Support Russell Lab's Outreach Mission",
     description:
-      "SafERteens at Trinity Health Muskegon Hospital, a vital initiative of the University of Michigan's Institute for Firearm Injury Prevention, is tackling the urgent crisis of youth gun violence. Driven by Dr. Brian Stork's alarming findings of the high incidence of firearm injuries among young Black men, the majority linked to violent incidents, this program addresses a deeply concerning and costly issue. SafERteens’ innovative approach, implemented since May 2023, involves early identification and intervention for at-risk youths through a targeted screening process. This proactive strategy is not just a response to a staggering problem; it's a community's commitment to safeguarding its children and a call to action for those dedicated to ending the cycle of youth gun violence in Muskegon.",
-    header:
-      "SafERteens Muskegon: Your Action Can Prevent the Next Child's Gun Injury",
-    slug: "saferteens",
-    tags: [
-      "Health Horizons",
-      "Empower Youth",
-      "End Gun Harm",
-      "Change Innovators",
-      "Leaders of Tomorrow",
-      "Community Safety",
-      "Inspire Young Minds",
-    ],
-    banner: {
-      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/3e9cc64e-c7a8-4f15-848f-d97830afc800/small",
-      alt: "Frame from a recent FOX 17 news story about SafERteens' violence reduction program housed in ER of Trinity Health Muskegon Hospital",
-    },
-    creator: {
-      name: "Dr. Stork, Brian",
-      avatar: {
-        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/da31f920-4472-460e-fe7e-ff9ad927bd00/avatar",
-        alt: "Profile image of Dr. Stork, Brian",
-      },
-    },
-  },
-  {
-    title: "Russell Lab community outreach and education",
-    description:
-      "Community engagement is integral to our science. We frequently enjoy sharing our passion for entomology, botany, microbiology, pollination ecology, and natural history with the public.",
-    header:
-      "Transform Lives and the Planet: Your Support Empowers Tomorrow’s Innovators at Russell Lab to Lead the Climate Change Battle",
+      "Discover the Russell Lab at Missouri State University, a beacon of scientific exploration and education. Our team passionately engages in outreach activities, bringing the wonders of entomology, botany, and natural history to life for students and the community. Through hands-on activities and public talks, we're nurturing the next generation of scientists and fostering a diverse, inclusive scientific community. Your support empowers us to expand our reach, inspiring more young minds and addressing crucial social issues through science education.",
+    header: "Nurturing Curiosity, Building a Scientific Community",
     slug: "russelllab",
-    tags: [
-      "Climate Action Now",
-      "Green Tomorrow",
-      "Learn for All",
-      "Access to Education",
-      "Change Innovators",
-      "Empower Youth",
-      "Leaders of Tomorrow",
-      "Inspire Young Minds",
-    ],
+    tags: ["Science Education", "Community Engagement", "Diversity in Science"],
     banner: {
-      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
-      alt: "Picture of Russell Lab members at a community outreach event",
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/public",
+      alt: "Russell Lab team engaging with students during an outreach event",
     },
     creator: {
       name: "Dr. Russell, Avery",
       avatar: {
         src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d72c54b9-7680-4686-d66f-04b678cd1800/avatar",
-        alt: "Profile image of Dr. Russell, Avery",
+        alt: "Portrait of Dr. Avery Russell, dedicated to expanding the frontiers of science education",
       },
     },
+    areas: [
+      {
+        header: "Engaging Young Minds in Science",
+        body: "From classrooms to community events, our lab members lead interactive sessions on entomology and pollination, igniting a spark of curiosity and a love for science in students of all ages.",
+      },
+      {
+        header: "Breaking Barriers, Building Inclusivity",
+        body: "We're committed to making science accessible to all. Our outreach initiatives focus on inclusive education, striving to recruit future scientists from diverse backgrounds and tackle complex social issues.",
+      },
+      {
+        header: "Connecting Science with Society",
+        body: "Our efforts go beyond the lab – we're humanizing scientists and breaking stereotypes, fostering a stronger connection between scientific institutions and the community they serve.",
+      },
+    ],
+    callToAction:
+      "Be a part of this transformative journey. Your support enables the Russell Lab to expand its outreach and deepen its impact, inspiring future generations and nurturing a diverse scientific community. Donate today and join us in shaping a brighter, more inclusive future in science.",
+  },
+  {
+    title:
+      "Unlocking Hope: Support Dr. Feng Zhang's Quest to Cure Neurodegenerative Diseases",
+    description:
+      "Step into the future of medicine with Dr. Feng Zhang at the Broad Institute of MIT and Harvard. His groundbreaking work harnessing CRISPR technology is redefining our approach to neurodegenerative diseases like Alzheimer’s and Parkinson’s. By supporting Dr. Zhang, you're investing in innovative research that holds the key to unlocking new treatments, directly impacting millions of lives affected by these debilitating conditions.",
+    header:
+      "Join a Revolution in Medical Science: Dr. Zhang's Neurodegenerative Disease Research",
+    slug: "dr-feng-zhang-neurodegenerative-research",
+    tags: ["Neurodegenerative", "Alzheimer’s", "Parkinson’s"],
+    banner: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d7bb9853-1f05-42f4-c85c-47157bbc0c00/public",
+      alt: "Dr. Feng Zhang with his laboratory, pushing the boundaries of neurodegenerative disease research",
+    },
+    creator: {
+      name: "Dr. Zhang, Feng",
+      avatar: {
+        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/7bd7ca17-f7c6-4324-41c2-b1409b6d1700/avatar",
+        alt: "Portrait of Dr. Feng Zhang, a visionary in neurodegenerative disease research",
+      },
+    },
+    areas: [
+      {
+        header: "Revolutionizing Disease Understanding:",
+        body: "Dr. Zhang's innovative use of CRISPR in neurodegenerative diseases is paving the way for groundbreaking therapies, offering new hope in the battle against Alzheimer's and Parkinson's.",
+      },
+      {
+        header: "Driving Towards Effective Treatments:",
+        body: "His deep dive into the genetic underpinnings of these conditions is crucial for developing next-generation treatments, potentially changing the lives of those affected.",
+      },
+      {
+        header: "Shaping the Future of Healthcare:",
+        body: "The advancements from Dr. Zhang's lab could significantly alter the landscape of healthcare, setting the stage for more effective, targeted, and sustainable treatments for neurodegenerative diseases.",
+      },
+    ],
+    callToAction:
+      "Join us in supporting Dr. Zhang's pioneering research to transform our understanding and treatment of neurodegenerative diseases. Your donation is more than support; it's a beacon of hope for millions.",
+  },
+  {
+    title: "SafERteens Muskegon: A Bold Stand Against Youth Gun Violence",
+    description:
+      "SafERteens, a transformative program at Trinity Health Muskegon Hospital, spearheaded by Dr. Brian Stork of the University of Michigan, is making pivotal strides in addressing youth gun violence. With a focus on early intervention in ER settings, the program identifies at-risk youth, offering critical support and resources. This proactive approach, grounded in extensive research, specifically targets the startling rise in firearm injuries among young Black men in Muskegon. By supporting SafERteens, you're investing in a safer, more hopeful future for our community's youth.",
+    header: "Be the Change: Support Youth Violence Prevention",
+    slug: "saferteens",
+    tags: ["Youth Empowerment", "Violence Prevention", "Community Health"],
+    banner: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/3e9cc64e-c7a8-4f15-848f-d97830afc800/public",
+      alt: "A snapshot of SafERteens’ vital role in the ER of Trinity Health Muskegon Hospital, as featured on FOX 17 news",
+    },
+    creator: {
+      name: "Dr. Stork, Brian",
+      avatar: {
+        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/da31f920-4472-460e-fe7e-ff9ad927bd00/avatar",
+        alt: "Portrait of Dr. Brian Stork, a dedicated advocate for youth safety in Muskegon",
+      },
+    },
+    areas: [
+      {
+        header: "Proactive Intervention in the ER",
+        body: "SafERteens operates at the critical juncture of emergency care, deploying a unique screening process to identify and support youths involved in gun violence, offering immediate interventions and alternative pathways.",
+      },
+      {
+        header: "Addressing a Critical Community Need",
+        body: "Focused on the startling statistics of firearm injuries, especially among young Black men, SafERteens addresses a dire community need, underscoring the importance of targeted, culturally sensitive intervention strategies.",
+      },
+    ],
+    callToAction:
+      "Your support for SafERteens is more than a donation; it's a commitment to youth safety and a brighter future for our community. Join us in this vital mission to curb youth gun violence. Together, we can create lasting change and save lives. Donate now to make a difference.",
+  },
+  {
+    title:
+      "Inspiring Action for Our Planet: Support Dr. Katharine Hayhoe's Climate Advocacy",
+    description:
+      "Dr. Katharine Hayhoe is not just a renowned climate scientist; she's a leading voice in climate communication. At Texas Tech University, her work transcends traditional research, focusing on bridging the gap between scientific knowledge and public understanding. By contributing to Dr. Hayhoe's initiatives, you're not just funding research; you're investing in a movement to educate, engage, and empower communities and decision-makers to take meaningful action against climate change.",
+    header: "Empower Change with Science: Dr. Hayhoe's Climate Mission",
+    slug: "dr-katharine-hayhoe-climate-communication",
+    tags: ["Climate Advocacy", "Science Communication", "Sustainable Future"],
+    banner: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/ca071033-2393-445b-74f3-1bf804046200/public",
+      alt: "Dr. Katharine Hayhoe engaging in climate communication",
+    },
+    creator: {
+      name: "Dr. Hayhoe, Katharine",
+      avatar: {
+        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/58a8b4b7-5281-443a-f3bd-a79c506aaf00/avatar",
+        alt: "Photo of Dr. Katharine Hayhoe, a champion in climate science communication",
+      },
+    },
+    areas: [
+      {
+        header: "Effective Climate Communication:",
+        body: "Dr. Hayhoe excels in making complex climate science accessible and relatable, helping people understand the urgency and relevance of climate change to their daily lives.",
+      },
+      {
+        header: "Policy Influence and Public Engagement:",
+        body: "Her work significantly impacts policy development and public discourse on climate action, making her efforts pivotal in shaping informed climate policies.",
+      },
+      {
+        header: "Educational Initiatives:",
+        body: "Dr. Hayhoe's focus on education aims to create a well-informed citizenry, equipped to make decisions and advocate for climate solutions.",
+      },
+    ],
+    callToAction:
+      "Your support for Dr. Katharine Hayhoe's work is a step towards a more informed and proactive society in the face of climate change. Help us amplify this crucial message and turn understanding into action. Donate today and join a community committed to making a real difference for our planet's future.",
+  },
+  {
+    title: "Innovating for Health: Support Dr. Regina Barzilay's AI Research",
+    description:
+      "Embark on a journey of innovation and impact with Dr. Regina Barzilay, a leading AI researcher at MIT. Dr. Barzilay is revolutionizing healthcare through artificial intelligence, focusing on early detection of diseases like breast cancer and advancing drug discovery processes. Her work harnesses the power of machine learning to analyze patterns in vast data, leading to more accurate diagnoses and personalized treatment options. By supporting Dr. Barzilay, you're contributing to the cutting edge of medical technology, where AI meets healthcare to create a healthier future for all.",
+    header: "Pioneering AI for Better Health Outcomes",
+    slug: "dr-regina-barzilay-ai-healthcare",
+    tags: [
+      "AI Innovation",
+      "Healthcare Transformation",
+      "Life-Saving Technology",
+    ],
+    banner: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/63885d06-17fa-4a87-1f7f-06dbacd64900/public",
+      alt: "Dr. Regina Barzilay working on AI-driven healthcare solutions",
+    },
+    creator: {
+      name: "Dr. Barzilay, Regina",
+      avatar: {
+        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/c8d54e95-b018-4018-ee5d-37228a3c3400/avatar",
+        alt: "Portrait of Dr. Regina Barzilay, innovator in AI and healthcare",
+      },
+    },
+    areas: [
+      {
+        header: "Revolutionizing Cancer Detection",
+        body: "Dr. Barzilay's AI algorithms are transforming the fight against breast cancer by identifying signs earlier than ever before. This pioneering research means earlier treatment, better survival rates, and hope for millions.",
+      },
+      {
+        header: "Accelerating Drug Discovery",
+        body: "Leveraging AI, Dr. Barzilay is expediting the discovery of new drugs, reducing development times from years to months. This acceleration has immense potential to respond rapidly to global health crises.",
+      },
+      {
+        header: "Creating Tailored Treatment Plans",
+        body: "Through advanced AI analysis, Dr. Barzilay's work enables personalized healthcare, adapting treatments to individual patient profiles, greatly enhancing the effectiveness of medical interventions.",
+      },
+    ],
+    callToAction:
+      "Your support for Dr. Barzilay’s groundbreaking AI research in healthcare is a step towards a future where advanced technology and medicine converge for the betterment of humanity. This is your opportunity to be part of a revolution in healthcare. Donate today and join us in this noble cause of saving lives and transforming healthcare.",
+  },
+  {
+    title:
+      "Lead the Change with Dr. Shaun R. Harper: Advancing Racial Equity in Education",
+    description:
+      "Embark on a transformative journey with Dr. Shaun R. Harper, a leading voice and a catalyst for change in the realm of racial equity in education. At the University of Southern California and through his founding of the USC Race and Equity Center, Dr. Harper's insightful research uncovers and confronts the deep-rooted racial disparities within our educational systems. His dedication to dismantling systemic barriers has ignited nationwide initiatives, reshaping policies and classroom practices to create equitable and inclusive learning environments. Supporting Dr. Harper is not just a donation—it's an active stand against racial injustice in education, a step towards nurturing diverse, equitable, and empowered learning communities.",
+    header: "Be a Part of Educational Transformation",
+    slug: "dr-shaun-r-harper-racial-equity-education",
+    tags: ["Racial Equity", "Educational Reform", "Inclusive Pedagogy"],
+    banner: {
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/4718ede4-d2de-4c76-97c9-fe7b07c24600/public",
+      alt: "Dr. Shaun R. Harper discussing educational equity",
+    },
+    creator: {
+      name: "Dr. Harper, Shaun",
+      avatar: {
+        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d840116a-45c9-4bf3-c881-aa44702e5800/avatar",
+        alt: "Portrait of Dr. Shaun R. Harper, an advocate for racial equity in education",
+      },
+    },
+    areas: [
+      {
+        header: "Dissecting Systemic Inequities:",
+        body: "Dr. Harper's profound research meticulously documents how systemic racism infiltrates our schools and universities, creating uneven playing fields for students of color. His work, grounded in years of rigorous study and data, shines a spotlight on hidden biases and institutional practices that perpetuate racial inequalities, providing a roadmap for meaningful and lasting change in our educational landscape.",
+      },
+      {
+        header: "Influencing Educational Policy and Leadership:",
+        body: "Through his extensive research, Dr. Harper has become a pivotal figure in redefining educational policy and leadership. His insights and recommendations are not just academic musings; they are powerful tools that have reshaped how educators and policymakers approach racial equity. From local school boards to national educational frameworks, Dr. Harper's influence ensures that equity is at the core of decision-making.",
+      },
+      {
+        header: "Fostering Inclusive Educational Environments:",
+        body: "Dr. Harper's work transcends beyond the theoretical, creating palpable changes in classrooms and campuses. He advocates for an educational system where every student, regardless of their race, is seen, heard, and valued. His strategies for inclusive teaching and culturally responsive pedagogy have empowered educators to embrace diversity, fostering environments where all students can excel and feel a sense of belonging.",
+      },
+    ],
+    callToAction:
+      "Align with Dr. Shaun R. Harper in his mission to revolutionize our education systems. Your support amplifies the voice of equity, driving actionable change across schools and universities nationwide. Every contribution you make is a step towards a future where education is a bridge, not a barrier, to racial equality. Donate now and be part of crafting a more just and equitable educational world.",
   },
   {
     title:
@@ -139,97 +230,34 @@ const PROJECTS = [
     slug: "dr-carl-june-cancer-immunotherapy",
     tags: ["Health Horizons", "Cure Discovery", "Vital Research"],
     banner: {
-      src: "https://example.com/dr-june-banner.jpg",
-      alt: "Dr. Carl June in his laboratory, pioneering cancer immunotherapy research",
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/291da074-701a-4df7-9cbe-e53737e14000/public",
+      alt: "Dr. Carl June with his laboratory, pioneering cancer immunotherapy research",
     },
     creator: {
       name: "Dr. June, Carl",
       avatar: {
-        src: "https://example.com/dr-june-avatar.jpg",
-        alt: "Portrait of Dr. Carl June, a leading figure in cancer immunotherapy",
+        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/180d3f5b-06f7-4db1-87f7-2bc2da92eb00/avatar",
+        alt: "Lab photo of Dr. Carl June, a leading figure in cancer immunotherapy",
       },
     },
-  },
-  {
-    title:
-      "Unlocking Hope: Support Dr. Feng Zhang's Quest to Cure Neurodegenerative Diseases",
-    description:
-      "Step into the future of medicine with Dr. Feng Zhang at the Broad Institute of MIT and Harvard. His groundbreaking work harnessing CRISPR technology is redefining our approach to neurodegenerative diseases like Alzheimer’s and Parkinson’s. By supporting Dr. Zhang, you're investing in innovative research that holds the key to unlocking new treatments, directly impacting millions of lives affected by these debilitating conditions.",
-    header:
-      "Join a Revolution in Medical Science: Dr. Zhang's Neurodegenerative Disease Research",
-    slug: "dr-feng-zhang-neurodegenerative-research",
-    tags: ["Health Horizons", "Cure Discovery", "Vital Research"],
-    banner: {
-      src: "https://example.com/dr-zhang-banner.jpg",
-      alt: "Dr. Feng Zhang in his laboratory, pushing the boundaries of neurodegenerative disease research",
-    },
-    creator: {
-      name: "Dr. Zhang, Feng",
-      avatar: {
-        src: "https://example.com/dr-zhang-avatar.jpg",
-        alt: "Portrait of Dr. Feng Zhang, a visionary in neurodegenerative disease research",
+    areas: [
+      {
+        header: "Transforming Cancer Treatment",
+        body: "Dr. June's CAR T cell therapies have shown remarkable results in treating acute leukemia in children and adults, and lymphoma in adults. Supporting this research contributes to developing more effective, targeted treatments for these devastating diseases.",
       },
-    },
-  },
-  {
-    title: "Russell Lab community outreach and education",
-    description:
-      "Community engagement is integral to our science. We frequently enjoy sharing our passion for entomology, botany, microbiology, pollination ecology, and natural history with the public.",
-    header:
-      "Transform Lives and the Planet: Your Support Empowers Tomorrow’s Innovators at Russell Lab to Lead the Climate Change Battle",
-    slug: "russelllab",
-    tags: [
-      "Climate Action Now",
-      "Green Tomorrow",
-      "Learn for All",
-      "Access to Education",
-      "Change Innovators",
-      "Empower Youth",
-      "Leaders of Tomorrow",
-      "Inspire Young Minds",
+      {
+        header: "Advancing Gene Therapy",
+        body: "The technology developed in the June Laboratory has been pivotal in progressing cancer gene therapy. This approach offers a new paradigm in treating cancers that have been resistant to traditional therapies.",
+      },
+      {
+        header: "Wider Application and Accessibility",
+        body: "With ongoing development and anticipated FDA approval, the therapies pioneered by Dr. June are set to become more widely available, potentially benefiting a vast number of patients globally.",
+      },
     ],
-    banner: {
-      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
-      alt: "Picture of Russell Lab members at a community outreach event",
-    },
-    creator: {
-      name: "Dr. Russell, Avery",
-      avatar: {
-        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d72c54b9-7680-4686-d66f-04b678cd1800/avatar",
-        alt: "Profile image of Dr. Russell, Avery",
-      },
-    },
+    callToAction:
+      "Your support is not just a donation; it's an investment in a future where cancer can be effectively combated through advanced gene therapy. Join us in backing Dr. Carl June’s transformative work, paving the way for new horizons in cancer treatment and giving hope to millions around the world.",
   },
-  {
-    title: "Russell Lab community outreach and education",
-    description:
-      "Community engagement is integral to our science. We frequently enjoy sharing our passion for entomology, botany, microbiology, pollination ecology, and natural history with the public.",
-    header:
-      "Transform Lives and the Planet: Your Support Empowers Tomorrow’s Innovators at Russell Lab to Lead the Climate Change Battle",
-    slug: "russelllab",
-    tags: [
-      "Climate Action Now",
-      "Green Tomorrow",
-      "Learn for All",
-      "Access to Education",
-      "Change Innovators",
-      "Empower Youth",
-      "Leaders of Tomorrow",
-      "Inspire Young Minds",
-    ],
-    banner: {
-      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
-      alt: "Picture of Russell Lab members at a community outreach event",
-    },
-    creator: {
-      name: "Dr. Russell, Avery",
-      avatar: {
-        src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d72c54b9-7680-4686-d66f-04b678cd1800/avatar",
-        alt: "Profile image of Dr. Russell, Avery",
-      },
-    },
-  },
-] as const;
+];
 ---
 
 <Layout title='Lightup'>
@@ -289,7 +317,7 @@ const PROJECTS = [
       <h3 class='text-brand_white mx-4 sm:mx-0 pl-4'>Interests</h3>
       <div class='flex overflow-x-scroll scrolling-touch -ml-4 pl-8 gap-8'>
         {
-          interests.map((interest) => (
+          INTERESTS.map((interest) => (
             <a data-astro-prefetch href={`/${interest.slug}`}>
               <div class='relative h-24'>
                 <div class='absolute bg-brand_pink w-full h-full -translate-x-2 -translate-y-2' />
@@ -308,21 +336,20 @@ const PROJECTS = [
 
     <!-- RECENT PROJECTS - START -->
     <div class='my-4 flex flex-col gap-4 mx-auto'>
-      <div class='grid grid-cols-4 gap-4 w-full max-w-5xl mx-auto'>
+      <div class='grid grid-cols-4 gap-4 w-full max-w-6xl mx-auto'>
         <!-- PROJECTS COLUMN - START -->
         <div class='col-span-4 lg:col-span-3 gap-4'>
           <h3 class='text-brand_white mx-4'>Happening on Lightup</h3>
           {PROJECTS.map((project) => <ProjectCard project={project} />)}
         </div>
         <!-- PROJECTS COLUMN - END -->
-
         <!-- DESKTOP ONLY INTERESTS COLUMN - START -->
         <div class='hidden lg:block h-[6000px]'>
           <div class='sticky top-12'>
             <h3 class='text-brand_white mx-4 sm:mx-0'>Interests</h3>
             <div class='flex gap-4 flex-wrap py-4'>
               {
-                interests.map((interest) => (
+                INTERESTS.map((interest) => (
                   <a data-astro-prefetch href={`/${interest.slug}`}>
                     <div class='relative'>
                       <div class='absolute bg-brand_pink w-full h-full translate-x-2 translate-y-2' />

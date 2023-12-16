@@ -2,31 +2,48 @@
 export const prerender = true;
 
 const FEATURED_PROJECT = {
-  title: "Russell Lab community outreach and education",
-  header:
-    "Transform Lives and the Planet: Your Support Empowers Tomorrow’s Innovators at Russell Lab to Lead the Climate Change Battle",
-  slug: "russelllab",
-  tags: ["Science", "Education", "Outreach", "Climate Change"],
+  title:
+    "Accelerate Breakthroughs in Cancer Treatment: Support Dr. Carl June's Pioneering Research",
   description:
-    "Community engagement is integral to our science. We frequently enjoy sharing our passion for entomology, botany, microbiology, pollination ecology, and natural history with the public.",
+    "Empower Dr. Carl June's ongoing mission to revolutionize cancer treatment through advanced T cell-based therapies. For over two decades, the June Laboratory has been at the forefront of innovative cancer gene therapy, making significant strides in lymphocyte costimulation and CAR T cell technology. From pioneering the clinical use of lentiviruses to modify T cells in combating HIV and advanced leukemia, to achieving 'Breakthrough Therapy' status from the FDA for treating acute leukemia and lymphoma, Dr. June's work offers hope to millions battling these diseases. By contributing to this groundbreaking research, you become part of a transformative journey, helping to bring these life-saving therapies from the laboratory to widespread clinical use.",
+  header: "Be Part of a Medical Revolution: Dr. June's Fight Against Cancer",
+  slug: "dr-carl-june-cancer-immunotherapy",
+  tags: ["Health Horizons", "Cure Discovery", "Vital Research"],
   banner: {
-    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/1f126b1b-8f98-4d32-ccec-21a61f83dc00/small",
-    alt: "Picture of Russell Lab members at a community outreach event",
+    src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/291da074-701a-4df7-9cbe-e53737e14000/public",
+    alt: "Dr. Carl June with his laboratory, pioneering cancer immunotherapy research",
   },
   creator: {
-    name: "Dr. Russell, Avery",
+    name: "Dr. June, Carl",
     avatar: {
-      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/d72c54b9-7680-4686-d66f-04b678cd1800/avatar",
-      alt: "Profile image of Dr. Russell, Avery",
+      src: "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/180d3f5b-06f7-4db1-87f7-2bc2da92eb00/avatar",
+      alt: "Lab photo of Dr. Carl June, a leading figure in cancer immunotherapy",
     },
   },
+  areas: [
+    {
+      header: "Transforming Cancer Treatment",
+      body: "Dr. June's CAR T cell therapies have shown remarkable results in treating acute leukemia in children and adults, and lymphoma in adults. Supporting this research contributes to developing more effective, targeted treatments for these devastating diseases.",
+    },
+    {
+      header: "Advancing Gene Therapy",
+      body: "The technology developed in the June Laboratory has been pivotal in progressing cancer gene therapy. This approach offers a new paradigm in treating cancers that have been resistant to traditional therapies.",
+    },
+    {
+      header: "Wider Application and Accessibility",
+      body: "With ongoing development and anticipated FDA approval, the therapies pioneered by Dr. June are set to become more widely available, potentially benefiting a vast number of patients globally.",
+    },
+  ],
+  callToAction:
+    "Your support is not just a donation; it's an investment in a future where cancer can be effectively combated through advanced gene therapy. Join us in backing Dr. Carl June’s transformative work, paving the way for new horizons in cancer treatment and giving hope to millions around the world.",
 };
 ---
+
 <!-- DESKTOP ONLY FEATURED BANNER - START -->
 <a
   href={`/${FEATURED_PROJECT.slug}`}
   data-astro-prefetch
-  class='hidden lg:flex flex-nowrap max-w-5xl mx-auto gap-4 group'
+  class='hidden lg:flex max-w-6xl mx-auto gap-4 group h-96'
 >
   <div class='relative opacity-100 group-hover:opacity-100 z-10'>
     <h2
@@ -38,34 +55,32 @@ const FEATURED_PROJECT = {
   <img
     src={FEATURED_PROJECT.banner.src}
     alt={FEATURED_PROJECT.banner.alt}
-    class='pointer-events-none object-cover w-full'
+    class='pointer-events-none object-cover aspect-sqaure'
     loading='eager'
+    width='385'
+    height='200'
   />
-  <div>
-    <div class='flex flex-col gap-4 p-4'>
-      <h1
-        class='pointer-events-none mt-2 block font-black text-brand_white text-start'
-      >
-        {FEATURED_PROJECT.title}
-      </h1>
-      <blockquote>
-        <p class='pointer-events-none text-brand_white'>
+  <div class='flex flex-col gap-4 p-4 pt-0'>
+    <h1
+      class='pointer-events-none block font-black text-brand_white text-start'
+    >
+      {FEATURED_PROJECT.title}
+    </h1>
+    <!-- <blockquote>
+        <p class='pointer-events-none text-brand_white text-ellipsis overflow-hidden'>
           {FEATURED_PROJECT.description}
         </p>
-      </blockquote>
-      <div class='flex gap-4'>
-        <img
-          src={FEATURED_PROJECT.creator.avatar.src}
-          alt={FEATURED_PROJECT.creator.avatar.alt}
-          loading='lazy'
-          class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-        />
-        <p
-          class='pointer-events-none block text-xl font-black text-brand_white'
-        >
-          {FEATURED_PROJECT.creator.name}
-        </p>
-      </div>
+      </blockquote> -->
+    <div class='flex gap-4'>
+      <img
+        src={FEATURED_PROJECT.creator.avatar.src}
+        alt={FEATURED_PROJECT.creator.avatar.alt}
+        loading='lazy'
+        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+      />
+      <p class='pointer-events-none block text-xl font-black text-brand_white'>
+        {FEATURED_PROJECT.creator.name}
+      </p>
     </div>
     <button
       class='bg-brand_pink animate-breath py-2 px-6 text-brand_white w-full mt-2 uppercase'
