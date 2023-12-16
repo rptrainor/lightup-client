@@ -6,7 +6,11 @@ import ProjectLikeButton from "~/components/ProjectLikeButton";
 import InterestsBox from "~/components/InterestsBox.astro";
 ---
 
-<Layout title={project.title}>
+<Layout
+  title={project.title}
+  image={project.banner.src}
+  description={project.header}
+>
   <div class='flex flex-col items-start gap-4 max-w-6xl mx-auto mb-28'>
     <!-- Tags and Banner -->
     <div class='flex flex-wrap gap-2 mx-4 sm:mx-0'>
