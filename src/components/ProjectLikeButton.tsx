@@ -18,6 +18,13 @@ type Project = {
         alt: string;
       };
     };
+    areas: [
+      {
+        header: string,
+        body: string,
+      }
+    ],
+    callToAction: string,
   };
 }
 

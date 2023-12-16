@@ -1,0 +1,66 @@
+---
+const { project } = Astro.props;
+import Layout from "~/layouts/Layout.astro";
+import ProjectLikeButton from "~/components/ProjectLikeButton";
+---
+
+<Layout title={project.title}>
+  <div class='flex flex-col items-start gap-4 max-w-xl mx-auto mb-28'>
+    <!-- Tags and Banner -->
+    <div class='flex flex-wrap gap-2 mx-4 sm:mx-0'>
+      {
+        project.tags.map((tag) => (
+          <span class='inline-flex items-center gap-2 px-3 py-0 lg:py-0.5 rounded-full text-xs sm:text-sm leading-5 bg-brand_yellow w-fit text-brand_black uppercase font-bold'>
+            {tag}
+          </span>
+        ))
+      }
+    </div>
+    <img
+      src={project.banner.src}
+      alt={project.banner.alt}
+      class='w-full object-cover'
+    />
+
+    <!-- Title and Like Button -->
+    <h1 class='text-start px-4 sm:px-0 text-brand_yellow'>{project.title}</h1>
+    <ProjectLikeButton project={project} client:load />
+
+    <!-- Description -->
+    <blockquote class='mx-4 sm:mx-0'>
+      <p class='pointer-events-none text-brand_white'>
+        {project.description}
+      </p>
+    </blockquote>
+
+    <!-- Creator Info -->
+    <div class='flex flex-col gap-4 mx-4 sm:mx-0'>
+      <img
+        src={project.creator.avatar.src}
+        alt={project.creator.avatar.alt}
+        loading='lazy'
+        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+      />
+      <h2 class='pointer-events-none block font-black text-brand_yellow'>
+        {project.creator.name}
+      </h2>
+
+      <!-- Impact Areas -->
+      {
+        project.areas.map((area) => (
+          <>
+            <h2>{area.header}</h2>
+            <p>{area.body}</p>
+          </>
+        ))
+      }
+
+      <!-- Call to Action -->
+      <blockquote>
+        <p class='pointer-events-none text-brand_white'>
+          {project.callToAction}
+        </p>
+      </blockquote>
+    </div>
+  </div>
+</Layout>
