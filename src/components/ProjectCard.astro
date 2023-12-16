@@ -11,7 +11,11 @@ const { project } = Astro.props;
       class='pointer-events-none object-cover group-hover:opacity-75 w-full'
       loading='lazy'
     />
-    <a href={`/${project.slug}`} class='absolute inset-0 focus:outline-none' data-astro-prefetch>
+    <a
+      href={`/${project.slug}`}
+      class='absolute inset-0 focus:outline-none'
+      data-astro-prefetch
+    >
       <span class='sr-only'>{`View details  ${project.title}`}</span>
     </a>
   </div>
@@ -39,7 +43,9 @@ const { project } = Astro.props;
       </p>
     </div>
   </div>
-  <div class='bg-brand_pink py-2 px-6 text-brand_white w-full mt-2 uppercase'>
+  <div
+    class='bg-brand_pink animate-breath sm:px-6 border-solid border-4 border-brand_black text-brand_white w-full mt-2 uppercase'
+  >
     <h1 class='text-brand_black'>Learn more</h1>
   </div>
 </div>
