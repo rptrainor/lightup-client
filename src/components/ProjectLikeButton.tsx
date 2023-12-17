@@ -32,7 +32,7 @@ const ProjectLikeButton = (project: Project) => {
   const [isLiked, setIsLiked] = createSignal<boolean>(false)
   return (
     <button
-      class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 h-24 group'
+      class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 h-24 group z-20'
       onClick={() => setIsLiked(prevValue => !prevValue)}
     >
       <h1 class="text-brand_black font-black bg-brand_pink flex sm:flex-row-reverse flex-nowrap items-center justify-around">

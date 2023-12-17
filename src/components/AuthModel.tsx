@@ -28,7 +28,7 @@ const AuthModel = () => {
   return (
     <Show when={userState().status === "loggedOut" && !dismissed()} fallback={null}>
       <div
-        class='w-64 sm:w-72 border-4 border-solid border-brand_black text-brand_black fixed right-1 bottom-2 sm:bottom-4 sm:right-2 bg-brand_white pt-16 sm:pt-20 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-20'
+        class='w-64 sm:w-72 border-4 border-solid border-brand_black text-brand_black fixed right-1 bottom-2 sm:bottom-4 sm:right-2 bg-brand_white pt-16 sm:pt-20 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-30'
       >
         {/* <!-- SVG Close Icon --> */}
         <button
