@@ -1,7 +1,10 @@
-import { Show } from "solid-js";
+import { Show, createEffect } from "solid-js";
 import { userState } from "~/stores/auth_store";
 
 const ProfileButton = () => {
+  createEffect(() => {
+    console.log("ProfileButton userState", userState());
+  });
   return (
     <Show when={userState().status === "loggedIn"} fallback={null}>
       <div class="flex justify-center items-center z-10">

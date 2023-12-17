@@ -11,7 +11,7 @@ interface Props {
 }
 
 import PostHog from "~/components/posthog.astro";
-import AuthModel from "~/components/AuthModel.tsx";
+import AuthModel from "~/components/AuthModal";
 import ProfileButton from "~/components/ProfileButton";
 ---
 
@@ -55,6 +55,7 @@ import ProfileButton from "~/components/ProfileButton";
     <main>
       <slot />
     </main>
-    <AuthModel client:load />
+    <AuthModel client:only />
   </body>
 </html>
+~/components/AuthModal

@@ -1,16 +1,15 @@
-import { createSignal, Show } from "solid-js";
+import { createSignal, Show, createEffect } from "solid-js";
 
 import { userState } from "~/stores/auth_store";
 import handleSignInWithGoogleAuth from "~/utilities/handleSignInWithGoogle";
 import handleSignInWithEmailAuth from "~/utilities/handleSignInWithEmail";
 
-
-const AuthModel = () => {
-  const [dismissed, setDismissed] = createSignal<boolean>(false);
+const AuthModal = () => {
+  const [isAuthModalDismissed, setIsAuthModalDismissed] = createSignal<boolean>(false);
   const [email, setEmail] = createSignal<string>("");
 
   const handleClose = () => {
-    setDismissed(true);
+    setIsAuthModalDismissed(true);
   }
 
   // Validate email format
@@ -25,8 +24,13 @@ const AuthModel = () => {
     }
   };
 
+  createEffect(() => {
+    console.log("AuthModal isAuthModalDismissed", isAuthModalDismissed());
+    console.log("AuthModal userState", userState());
+  });
+
   return (
-    <Show when={userState().status === "loggedOut" && !dismissed()} fallback={null}>
+    <Show when={userState().status === "loggedOut" && !isAuthModalDismissed()} fallback={null}>
       <div
         class='w-64 sm:w-72 border-4 border-solid border-brand_black text-brand_black fixed right-1 bottom-2 sm:bottom-4 sm:right-2 bg-brand_white pt-16 sm:pt-20 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-30'
       >
@@ -57,11 +61,11 @@ const AuthModel = () => {
         />
         <div class='flex flex-col justify-center h-full gap-2 mt-16 sm:mt-20'>
           <p class='text-sm sm:text-base'>
-          Hi! I'm Ryan, one of the Co-Founders of Lightup
+            Hi! I'm Ryan, one of the Co-Founders of Lightup
 
           </p>
           <p class='text-xs sm:text-sm'>
-          We would like to send you a gift, could you share your email and we will
+            We would like to send you a gift, could you share your email and we will
             be in touch
           </p>
 
@@ -109,4 +113,4 @@ const AuthModel = () => {
   );
 };
 
-export default AuthModel;
+export default AuthModal;

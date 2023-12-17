@@ -1,11 +1,11 @@
 import { createSignal, Show } from "solid-js";
 import { supabase } from "~/db/connection";
 
-const SciComModel = () => {
-  const [dismissed, setDismissed] = createSignal<boolean>(false);
+const ProfileModal = () => {
+  const [isProfileModalDismissed, setIsProfileModalDismissed] = createSignal<boolean>(false);
 
   const handleClose = () => {
-    setDismissed(true);
+    setIsProfileModalDismissed(true);
   }
 
   // Stop propagation function
@@ -26,7 +26,7 @@ const SciComModel = () => {
   }
 
   return (
-    <Show when={!dismissed()} fallback={null}>
+    <Show when={!isProfileModalDismissed()} fallback={null}>
       <div class="fixed inset-0 bg-black/30 z-10" onClick={handleClose}>
         <div
           class='w-full sm:min-w-min sm:max-w-2xl text-brand_black border-4 border-solid border-brand_black fixed inset-x-0 mx-auto bottom-0 sm:bottom-[40vh] bg-brand_white pt-8 sm:pt-12 pb-2 px-2 sm:px-4 flex flex-col items-center gap-2 sm:gap-4 z-50'
@@ -77,4 +77,4 @@ const SciComModel = () => {
   );
 };
 
-export default SciComModel;
+export default ProfileModal;

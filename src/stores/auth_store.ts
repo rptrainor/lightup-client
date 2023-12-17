@@ -10,53 +10,67 @@ type UserState =
 
 const [userState, setUserState] = createSignal<UserState>({ status: 'initial', user: null });
 
-export async function addUserToPublicTable(user: User) {
-  try {
-    const { data, error } = await supabase
-      .from('users')
-      .upsert([{ ...user }]); // Using upsert to insert or update based on the 'id'
+// export async function addUserToPublicTable(user: User) {
+//   try {
+//     const { data, error } = await supabase
+//       .from('users')
+//       .upsert([{ ...user }]); // Using upsert to insert or update based on the 'id'
 
-    if (error) {
-      console.error("Error in addUserToPublicTable:", error);
-      throw new Error("Error adding/updating user");
-    }
+//     if (error) {
+//       console.error("Error in addUserToPublicTable:", error);
+//       // throw new Error("Error adding/updating user");
+//     }
 
-    return data;
-  } catch (error) {
-    console.error("Error in addUserToPublicTable:", error);
-    throw new Error("Error in addUserToPublicTable");
-  }
-}
+//     return data;
+//   } catch (error) {
+//     console.error("Error in addUserToPublicTable:", error);
+//     // throw new Error("Error in addUserToPublicTable");
+//   }
+// }
 
 const handleCheckUser = async () => {
-  const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser()
 
-  if (supabaseUser && Object.keys(supabaseUser).length > 0) {
-    // Transform the user data
-    const transformedUser: User = {
-      id: supabaseUser.id,
-      created_at: supabaseUser.created_at,
-      updated_at: supabaseUser.updated_at,
-      email: supabaseUser.email,
-      is_active: true,
-      name: supabaseUser.user_metadata.full_name,
-      avatar_url: supabaseUser.user_metadata.avatar_url,
-      full_name: supabaseUser.user_metadata.full_name,
-      picture: supabaseUser.user_metadata.avatar_url,
-    };
-    setUserState({ status: 'loggedIn', user: transformedUser });
+    // if (error) {
+    //   console.error("Error in handleCheckUser:", error);
+    //   throw new Error("Error in handleCheckUser");
+    // }
 
-    // Sync user with public.users table
-    await addUserToPublicTable(transformedUser);
-  } else if (supabaseUser === null) {
-    setUserState({ status: 'loggedOut', user: null });
-  } else {
-    setUserState({ status: 'initial', user: null });
+    if (user && Object.keys(user).length > 0) {
+      // Transform the user data
+      const transformedUser: User = {
+        id: user.id,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        email: user.email,
+        is_active: true,
+        name: user.user_metadata.full_name,
+        avatar_url: user.user_metadata.avatar_url,
+        full_name: user.user_metadata.full_name,
+        picture: user.user_metadata.avatar_url,
+      };
+      setUserState({ status: 'loggedIn', user: transformedUser });
+
+      // Sync user with public.users table
+      // await addUserToPublicTable(transformedUser);
+    } else if (user === null) {
+      setUserState({ status: 'loggedOut', user: null });
+    } else {
+      setUserState({ status: 'initial', user: null });
+    }
+  } catch (error) {
+    console.error("Error in handleCheckUser:", error);
+    throw new Error("Error in handleCheckUser");
   }
 }
 
 createEffect(async () => {
   handleCheckUser();
+});
+
+createEffect(() => {
+  console.log("auth_store.ts: userState changed:", userState());
 });
 
 export {
