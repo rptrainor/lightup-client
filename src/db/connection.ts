@@ -14,6 +14,5 @@ export const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_K
   auth: {
     autoRefreshToken: false,
     persistSession: true,
-    storage: window.localStorage,
   }
 });

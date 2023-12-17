@@ -30,7 +30,7 @@ export async function addUserToPublicTable(user: User) {
 
 const handleCheckUser = async () => {
   try {
-    const { data: { user }, error } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
 
     // if (error) {
     //   console.error("Error in handleCheckUser:", error);
@@ -61,7 +61,7 @@ const handleCheckUser = async () => {
     }
   } catch (error) {
     console.error("Error in handleCheckUser:", error);
-    throw new Error("Error in handleCheckUser");
+    // throw new Error("Error in handleCheckUser");
   }
 }
 

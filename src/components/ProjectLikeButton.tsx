@@ -1,4 +1,10 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
+
+import { userState } from "~/stores/auth_store";
+import checkLikeStatus from "~/utilities/checkLikeStatus";
+import handleSignInWithGoogleAuth from "~/utilities/handleSignInWithGoogle";
+import likeProject from "~/utilities/likeProject";
+import unlikeProject from "~/utilities/unlikeProject";
 
 type Area = {
   header: string,
@@ -7,6 +13,7 @@ type Area = {
 
 export type Project = {
   project: {
+    id: string;
     title: string;
     description: string;
     header: string;
@@ -29,11 +36,38 @@ export type Project = {
 }
 
 const ProjectLikeButton = (project: Project) => {
-  const [isLiked, setIsLiked] = createSignal<boolean>(false)
+  const [isLiked, setIsLiked] = createSignal<boolean>(false);
+
+  const handleProjectLikeButtonClick = async () => {
+    const userId = userState().user?.id;
+    if (!userId) {
+      handleSignInWithGoogleAuth();
+      return;
+    }
+
+    const newValue = !isLiked();
+    setIsLiked(newValue);
+
+    if (newValue) {
+      await likeProject({ userId, projectId: project.project.id });
+    } else {
+      await unlikeProject({ userId, projectId: project.project.id });
+    }
+  };
+
+  onMount(async () => {
+    const userId = userState().user?.id;
+    if (userId) {
+      const status = await checkLikeStatus({ userId, projectId: project.project.id });
+      setIsLiked(status);
+    }
+  });
+
+
   return (
     <button
       class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 h-24 group z-20'
-      onClick={() => setIsLiked(prevValue => !prevValue)}
+      onClick={handleProjectLikeButtonClick}
     >
       <h1 class="text-brand_black font-black bg-brand_pink flex sm:flex-row-reverse flex-nowrap items-center justify-around">
         <span class="flex">Like</span>
