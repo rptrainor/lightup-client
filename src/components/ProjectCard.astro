@@ -3,26 +3,28 @@ export const prerender = true;
 const { project } = Astro.props;
 ---
 
-<a href={`/${project.slug}`} class='block no-underline group' data-astro-prefetch>
+<a
+  href={`/${project.slug}`}
+  class='block no-underline group'
+  data-astro-prefetch
+>
   <span class='sr-only'>{`View details ${project.title}`}</span>
   <div class='relative aspect-[3/2] my-8 lg:my-12'>
     <div class='aspect-video block w-full overflow-hidden bg-brand_white'>
       <img
         src={project.banner.src}
         alt={project.banner.alt}
-        class='pointer-events-none object-cover group-hover:opacity-75 w-full'
+        class='object-cover group-hover:opacity-75 w-full'
         loading='lazy'
       />
     </div>
 
     <div class='flex flex-col gap-4 p-4'>
-      <h1
-        class='pointer-events-none mt-2 block font-black text-brand_white text-start'
-      >
+      <h1 class='mt-2 block font-black text-brand_white text-start'>
         {project.title}
       </h1>
       <blockquote>
-        <p class='pointer-events-none text-brand_white'>
+        <p class='text-brand_white'>
           {project.description}
         </p>
       </blockquote>
@@ -31,11 +33,9 @@ const { project } = Astro.props;
           src={project.creator.avatar.src}
           alt={project.creator.avatar.alt}
           loading='lazy'
-          class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+          class='object-cover group-hover:opacity-75 rounded-full w-10 h-10'
         />
-        <p
-          class='pointer-events-none block text-xl font-black text-brand_white'
-        >
+        <p class='block text-xl font-black text-brand_white'>
           {project.creator.name}
         </p>
       </div>

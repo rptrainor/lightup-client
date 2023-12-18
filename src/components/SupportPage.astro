@@ -1,6 +1,4 @@
 ---
-import LikeComponent from "~/components/LikeComponent";
-
 type BuyButtonId = {
   dev: string;
   prod: string;
@@ -77,5 +75,4 @@ const isProd = import.meta.env.PROD;
       <h2>Amplify It Now with a Timely Donation!</h2>
     </div>
   </div>
-  <LikeComponent client:only project={project} />
 </LayoutCheckout>

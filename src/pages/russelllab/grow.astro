@@ -1,4 +1,6 @@
 ---
+import GrowPage from "~/components/GrowPage.astro";
+
 const PROJECT = {
   id: "9459fd30-6eb8-4c84-8a2c-357913b38a79",
   title: "Inspiring Future Scientists: Support Russell Lab's Outreach Mission",
@@ -37,7 +39,4 @@ const PROJECT = {
 };
 ---
 
-<div class='flex flex-col justify-center items-center'>
-  <h1>{PROJECT.title}</h1>
-  <h2>Grow Page here~</h2>
-</div>
+<GrowPage project={PROJECT} />
