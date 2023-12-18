@@ -1,4 +1,6 @@
 ---
+import LikeComponent from "~/components/LikeComponent";
+
 type BuyButtonId = {
   dev: string;
   prod: string;
@@ -11,7 +13,7 @@ type PublishableKey = {
 
 import LayoutCheckout from "~/layouts/LayoutCheckout.astro";
 import type { Project } from "~/components/ProjectLikeButton";
-const { project } = Astro.props as Project;
+const { project } = Astro.props as { project: Project };
 const { buy_button_id, publishable_key } = Astro.props as {
   buy_button_id: BuyButtonId;
   publishable_key: PublishableKey;
@@ -75,4 +77,5 @@ const isProd = import.meta.env.PROD;
       <h2>Amplify It Now with a Timely Donation!</h2>
     </div>
   </div>
+  <LikeComponent client:only project={project} />
 </LayoutCheckout>

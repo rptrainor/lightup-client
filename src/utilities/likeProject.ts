@@ -6,12 +6,6 @@ type Props = {
 }
 
 async function likeProject({ userId, projectId }: Props) {
-  // const { data, error } = await supabase
-  //   .from('likes')
-  //   .insert(
-  //     { user_id: userId, project_id: projectId, is_liked: true }
-  //   );
-
   const { data, error } = await supabase
     .from('likes')
     .insert([

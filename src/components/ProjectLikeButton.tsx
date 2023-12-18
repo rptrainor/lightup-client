@@ -1,4 +1,4 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, createEffect, Show } from "solid-js";
 
 import { userState } from "~/stores/auth_store";
 import checkLikeStatus from "~/utilities/checkLikeStatus";
@@ -12,30 +12,32 @@ type Area = {
 }
 
 export type Project = {
-  project: {
-    id: string;
-    title: string;
-    description: string;
-    header: string;
-    slug: string;
-    tags: string[];
-    banner: {
+  id: string;
+  title: string;
+  description: string;
+  header: string;
+  slug: string;
+  tags: string[];
+  banner: {
+    src: string;
+    alt: string;
+  };
+  creator: {
+    name: string;
+    avatar: {
       src: string;
       alt: string;
     };
-    creator: {
-      name: string;
-      avatar: {
-        src: string;
-        alt: string;
-      };
-    };
-    areas: Area[],
-    callToAction: string,
   };
+  areas: Area[],
+  callToAction: string,
 }
 
-const ProjectLikeButton = (project: Project) => {
+type Props = {
+  project: Project;
+}
+
+const ProjectLikeButton = (props: Props) => {
   const [isLiked, setIsLiked] = createSignal<boolean>(false);
 
   const handleProjectLikeButtonClick = async () => {
@@ -49,23 +51,23 @@ const ProjectLikeButton = (project: Project) => {
     setIsLiked(newValue);
 
     if (newValue) {
-      await likeProject({ userId, projectId: project.project.id });
+      await likeProject({ userId, projectId: props.project.id });
     } else {
-      await unlikeProject({ userId, projectId: project.project.id });
+      await unlikeProject({ userId, projectId: props.project.id });
     }
   };
 
-  onMount(async () => {
+  createEffect(async () => {
     const userId = userState().user?.id;
     if (userId) {
-      const status = await checkLikeStatus({ userId, projectId: project.project.id });
+      const status = await checkLikeStatus({ userId, projectId: props.project.id });
       setIsLiked(status);
     }
   });
 
   return (
     <Show when={isLiked()} fallback={
-      <a href={`/${project.project.slug}/support`} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
+      <a href={`/${props.project.slug}/support`} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
           <h1 class="text-brand_black font-black bg-brand_pink flex sm:flex-row-reverse flex-nowrap items-center justify-around">
             <span class="flex">Like</span>
             <div class="bg-brand_white rounded-full p-2 flex flex-nowrap justify-center items-center group-hover:scale-75 transition-all">

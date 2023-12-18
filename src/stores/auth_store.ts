@@ -69,10 +69,6 @@ createEffect(async () => {
   handleCheckUser();
 });
 
-createEffect(() => {
-  console.log("auth_store.ts: userState changed:", userState());
-});
-
 export {
   userState,
   setUserState,
