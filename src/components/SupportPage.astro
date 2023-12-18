@@ -13,7 +13,7 @@ type PublishableKey = {
 
 import LayoutCheckout from "~/layouts/LayoutCheckout.astro";
 import type { Project } from "~/components/ProjectLikeButton";
-const { project } = Astro.props as { project: Project };
+const project = Astro.props.project as Project;
 const { buy_button_id, publishable_key } = Astro.props as {
   buy_button_id: BuyButtonId;
   publishable_key: PublishableKey;

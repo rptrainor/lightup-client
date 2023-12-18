@@ -7,12 +7,13 @@ type Props = {
 
 async function checkLikeStatus({ userId, projectId }: Props) {
   console.log('checkLikeStatus', { userId, projectId });
+
   const { data, error } = await supabase
     .from('likes')
     .select('is_liked')
     .eq('user_id', userId)
-    .eq('project_id', projectId)
-    .single();
+    .eq('project_id', projectId);
+
   console.log('checkLikeStatus', { data, error });
 
   if (error) {
@@ -20,7 +21,7 @@ async function checkLikeStatus({ userId, projectId }: Props) {
     return null;
   }
 
-  return data ? data.is_liked : false;
+  return data?.[0]?.is_liked ?? false;
 }
 
 export default checkLikeStatus;
