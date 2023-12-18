@@ -18,7 +18,11 @@ import ProfileButton from "~/components/ProfileButton";
 <html lang='en'>
   <head>
     <meta charset='utf-8' />
-    <meta name='description' content={Astro.props.description || "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."} />
+    <meta
+      name='description'
+      content={Astro.props.description ||
+        "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."}
+    />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta
@@ -26,14 +30,24 @@ import ProfileButton from "~/components/ProfileButton";
       content={Astro.props.title ??
         "Lightup: Fueling Scientific Breakthroughs for a Better World"}
     />
-    <meta property='og:description' content={Astro.props.description || "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."} />
+    <meta
+      property='og:description'
+      content={Astro.props.description ||
+        "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."}
+    />
     <meta
       property='og:image'
       content={Astro.props.image ||
         "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/4accd2f7-b876-4a25-4b18-b0a973798700/ogImage"}
     />
     <meta name='generator' content={Astro.generator} />
-    <title>{Astro.props.title ?? "Lightup: Fueling Scientific Breakthroughs for a Better World"}</title>
+    <title>
+      {
+        Astro.props.title ??
+          "Lightup: Fueling Scientific Breakthroughs for a Better World"
+      }
+    </title>
+    <script async src='https://js.stripe.com/v3/buy-button.js'></script>
     <ViewTransitions />
     <PostHog />
   </head>

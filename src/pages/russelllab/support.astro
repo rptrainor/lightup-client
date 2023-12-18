@@ -1,4 +1,5 @@
 ---
+import LayoutCheckout from "~/layouts/LayoutCheckout.astro";
 const PROJECT = {
   id: "9459fd30-6eb8-4c84-8a2c-357913b38a79",
   title: "Inspiring Future Scientists: Support Russell Lab's Outreach Mission",
@@ -37,7 +38,59 @@ const PROJECT = {
 };
 ---
 
-<div class='flex flex-col justify-center items-center'>
-  <h1>{PROJECT.title}</h1>
-  <h2>Support Page here~</h2>
-</div>
+<LayoutCheckout
+  title={`Join us in support of ${PROJECT.creator.name}'s research`}
+  description={`Join us in support of ${PROJECT.creator.name}'s research`}
+  image='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/af4aefd1-df33-40aa-af44-0e33a8137b00/ogImage'
+>
+  <div class='m-auto w-full h-auto max-w-2xl'>
+    <img
+      src={PROJECT.banner.src}
+      alt={PROJECT.banner.alt}
+      class='w-full object-cover'
+    />
+  </div>
+  <div class='flex flex-col-reverse sm:flex-row p-4 mx-auto max-w-2xl gap-4'>
+    <stripe-buy-button
+      buy-button-id='buy_btn_1OOUvwHaHTMpqSesxXppQSsg'
+      publishable-key='pk_live_WlOeDsvCuAZK5oKtVb9yuvKu00fh1DiKk5'
+    >
+    </stripe-buy-button>
+    <div class='flex flex-col'>
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:xlink='http://www.w3.org/1999/xlink'
+        width='500'
+        zoomAndPan='magnify'
+        viewBox='0 0 375 374.999991'
+        height='500'
+        preserveAspectRatio='xMidYMid meet'
+        version='1.0'
+        class='w-40 h-40 mx-auto hidden sm:block'
+        ><defs
+          ><clipPath id='b21df5c38b'
+            ><path
+              d='M 39 38 L 338 38 L 338 337.5 L 39 337.5 Z M 39 38 '
+              clip-rule='nonzero'></path></clipPath
+          ><clipPath id='399a90d8b4'
+            ><path
+              d='M 49.394531 85.402344 C 28.953125 131.199219 42.207031 175.777344 63.742188 199.4375 L 189.65625 337.5 L 312.917969 199.929688 C 332.945312 174.476562 339.648438 147.480469 336.359375 117.421875 C 330.46875 75.835938 300.484375 43.574219 263.445312 38.964844 C 240.726562 36.699219 218.78125 43.519531 201.65625 59.785156 C 197.042969 64.160156 192.925781 69.054688 189.332031 74.371094 C 185.074219 68.316406 180.078125 62.777344 174.425781 57.867188 C 154.730469 40.761719 129.65625 35.375 105.574219 39.253906 C 82.765625 44.289062 62.292969 61.101562 49.394531 85.402344 Z M 49.394531 85.402344 '
+              clip-rule='nonzero'></path></clipPath
+          ></defs
+        ><g clip-path='url(#b21df5c38b)'
+          ><g clip-path='url(#399a90d8b4)'
+            ><path
+              fill='#ffda00'
+              d='M 37.5 37.5 L 337.5 37.5 L 337.5 337.5 L 37.5 337.5 Z M 37.5 37.5 '
+              fill-opacity='1'
+              fill-rule='nonzero'></path></g
+          ></g
+        ></svg
+      >
+      <h2>
+        {`Your Support for ${PROJECT.creator.name}'s research is Impactful`}
+      </h2>
+      <h2>Amplify It Now with a Timely Donation!</h2>
+    </div>
+  </div>
+</LayoutCheckout>
