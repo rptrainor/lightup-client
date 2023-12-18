@@ -176,5 +176,6 @@ blockquote {
 }
 
 ::selection {
-  @apply bg-brand_yellow text-brand_black;
+  background-color: #FFDA00;
+  color: #101214;
 }
