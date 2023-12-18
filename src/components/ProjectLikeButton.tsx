@@ -65,7 +65,7 @@ const ProjectLikeButton = (project: Project) => {
 
   return (
     <Show when={isLiked()} fallback={
-      <a href={`/${project.project.slug}/support`} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20' data-astro-prefetch >
+      <a href={`/${project.project.slug}/support`} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
           <h1 class="text-brand_black font-black bg-brand_pink flex sm:flex-row-reverse flex-nowrap items-center justify-around">
             <span class="flex">Like</span>
             <div class="bg-brand_white rounded-full p-2 flex flex-nowrap justify-center items-center group-hover:scale-75 transition-all">
