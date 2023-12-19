@@ -1,5 +1,4 @@
 ---
-import LikeComponent from "~/components/LikeComponent";
 import ThankYouLetter from "~/components/ThankYouLetter";
 import Layout from "~/layouts/Layout.astro";
 import type { Project } from "~/components/ProjectLikeButton";
@@ -27,5 +26,4 @@ const project = Astro.props.project as Project;
     />
     <ThankYouLetter project={project} client:only />
   </div>
-  <LikeComponent client:only project={project} />
 </Layout>

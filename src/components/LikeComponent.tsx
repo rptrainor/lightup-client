@@ -1,6 +1,7 @@
-import { onMount } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { userState } from "~/stores/auth_store";
 import likeProject from "~/utilities/likeProject";
+import checkLikeStatus from "~/utilities/checkLikeStatus";
 import type { Project } from "~/components/ProjectLikeButton";
 
 type Props = {
@@ -8,11 +9,26 @@ type Props = {
 }
 
 export default function LikeComponent(props: Props) {
-  onMount(async () => {
-    const userId = userState().user?.id;
-    if (userId && props.project.id) {
-      await likeProject({ userId, projectId: props.project.id });
+  const [isLiked, setIsLiked] = createSignal<boolean | null>(null)
+
+  console.log("LikeComponent - RENDER")
+
+  createEffect(async () => {
+    console.log("LikeComponent - onMount", { userState: userState() })
+    console.log("LikeComponent - onMount", { project_id: props.project.id })
+
+    if (userState().user?.id && props.project.id) {
+      const status = await checkLikeStatus({ userId: userState().user?.id ?? "", projectId: props.project.id });
+      console.log('LikeComponent', { status })
+      setIsLiked(status)
     }
   });
+
+  createEffect(() => {
+    if (isLiked() === false && userState().user?.id && props.project.id) {
+      console.log('LIKING THE PROJECT NOW')
+      likeProject({ userId: userState().user?.id ?? "", projectId: props.project.id });
+    }
+  })
   return null;
 }
