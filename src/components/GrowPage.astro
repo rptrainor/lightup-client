@@ -3,6 +3,7 @@ import LikeComponent from "~/components/LikeComponent";
 import ThankYouLetter from "~/components/ThankYouLetter";
 import Layout from "~/layouts/Layout.astro";
 import type { Project } from "~/components/ProjectLikeButton";
+import ShareButtons from "~/components/ShareButtons";
 const project = Astro.props.project as Project;
 ---
 
@@ -11,13 +12,19 @@ const project = Astro.props.project as Project;
   description='Your donation to LightUp is invaluable. Thanks and welcome to our Empower & Earn program! Share your affiliate link and get rewarded with 10% of the funds raised.'
   image='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/af4aefd1-df33-40aa-af44-0e33a8137b00/ogImage'
 >
-  <div class='flex flex-col max-w-6xl p-4 gap-4'>
+  <div class='flex flex-col max-w-6xl p-4 gap-4 mx-auto'>
     <h1 class='text-brand_yellow'>We Shine Brighter Together</h1>
     <h1 class='text-brand_yellow'>Thank You for Being a Light</h1>
     <h2 class='text-center'>
       Empower & Earn: Receive a Generous 10% Reward for Every Donation Made via
       Your Link!
     </h2>
+    <ShareButtons
+      url='https://www.apple.com/'
+      text='You are now watching MadTV'
+      image='https://cdn.topofart.com/images/artists/Rene-Magritte/paintings-wm/magritte-002.jpg'
+      client:only
+    />
     <ThankYouLetter project={project} client:only />
   </div>
   <LikeComponent client:only project={project} />

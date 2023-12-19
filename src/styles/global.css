@@ -69,9 +69,9 @@ body {
   font-style: normal;
   transition: font-size 0.3s ease-out;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   -webkit-font-smoothing: antialiased;
-  font-size: 1.25rem;
+  font-size: 18px; /* Base font size for mobile */
 }
 
 /* width */
@@ -123,8 +123,8 @@ h6 {
 }
 
 h1 {
+  font-size: 1.67rem; /* Scaled up from 18px */
   scroll-margin: 5rem /* 80px */;
-  font-size: 2.25rem /* 36px */;
   line-height: 2.5rem /* 40px */;
   font-weight: 800;
   letter-spacing: -0.025em;
@@ -132,16 +132,15 @@ h1 {
   overflow-wrap: break-word;
   text-align: center;
   @media (min-width: 1024px) {
-    font-size: 3rem /* 48px */;
     line-height: 1;
   }
 }
 
 h2 {
+  font-size: 1.39rem; /* Scaled up from 18px */
   scroll-margin: 5rem /* 80px */;
   border-bottom-width: 1px;
   padding-bottom: 0.5rem /* 8px */;
-  font-size: 1.875rem /* 30px */;
   line-height: 2.25rem /* 36px */;
   font-weight: 600;
   letter-spacing: -0.025em;
@@ -149,16 +148,16 @@ h2 {
 }
 
 h3 {
+  font-size: 1.25rem; /* Scaled up from 18px */
   scroll-margin: 5rem /* 80px */;
-  font-size: 1.5rem /* 24px */;
   line-height: 2rem /* 32px */;
   font-weight: 600;
   letter-spacing: -0.025em;
 }
 
 h4 {
+  font-size: 1.11rem; /* Scaled up from 18px */
   scroll-margin: 5rem /* 80px */;
-  font-size: 1.25rem /* 20px */;
   line-height: 1.75rem /* 28px */;
   font-weight: 600;
   letter-spacing: -0.025em;
@@ -166,6 +165,44 @@ h4 {
 
 p {
   line-height: 1.75rem /* 28px */;
+}
+
+/* Tablet screen sizes */
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2.22rem; /* Scaled up for tablet */
+  }
+
+  h2 {
+    font-size: 1.94rem; /* Scaled up for tablet */
+  }
+
+  h3 {
+    font-size: 1.67rem; /* Scaled up for tablet */
+  }
+
+  h4 {
+    font-size: 1.39rem; /* Scaled up for tablet */
+  }
+}
+
+/* Desktop screen sizes */
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 2.78rem; /* Scaled up for desktop */
+  }
+
+  h2 {
+    font-size: 2.22rem; /* Scaled up for desktop */
+  }
+
+  h3 {
+    font-size: 1.94rem; /* Scaled up for desktop */
+  }
+
+  h4 {
+    font-size: 1.67rem; /* Scaled up for desktop */
+  }
 }
 
 blockquote {
@@ -176,6 +213,6 @@ blockquote {
 }
 
 ::selection {
-  background-color: #FFDA00;
+  background-color: #ffda00;
   color: #101214;
 }
