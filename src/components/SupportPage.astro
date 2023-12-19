@@ -24,14 +24,14 @@ const isProd = import.meta.env.PROD;
   description={`Join us in support of ${project.creator.name}'s research`}
   image='https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/af4aefd1-df33-40aa-af44-0e33a8137b00/ogImage'
 >
-  <div class='m-auto w-full h-auto max-w-2xl'>
+  <div class='m-auto w-full h-auto max-w-6xl'>
     <img
       src={project.banner.src}
       alt={project.banner.alt}
       class='w-full object-cover'
     />
   </div>
-  <div class='flex flex-col-reverse sm:flex-row p-4 mx-auto max-w-2xl gap-4'>
+  <div class='flex flex-col-reverse sm:flex-row p-4 mx-auto max-w-6xl gap-4'>
     <stripe-buy-button
       buy-button-id={isProd ? buy_button_id.prod : buy_button_id.dev}
       publishable-key={isProd ? publishable_key.prod : publishable_key.dev}

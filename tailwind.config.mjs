@@ -22,7 +22,7 @@ export default {
           "50%": { transform: "rotate(3deg)" },
         },
         breath: {
-          "50%": { opacity: 0.85 },
+          "50%": { opacity: 0.90 },
         },
       },
     },

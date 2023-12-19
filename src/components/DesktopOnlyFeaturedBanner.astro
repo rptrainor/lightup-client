@@ -47,11 +47,11 @@ const FEATURED_PROJECT = {
   class='hidden lg:flex max-w-6xl mx-auto gap-4 group h-96'
 >
   <div class='relative opacity-100 group-hover:opacity-100 z-10'>
-    <h2
+    <h1
       class='py-2 px-4 bg-brand_pink text-4xl text-brand_white font-brand_white absolute translate-x-8 -translate-y-8 h-fit w-max'
     >
       Today's win
-    </h2>
+    </h1>
   </div>
   <img
     src={FEATURED_PROJECT.banner.src}
@@ -61,33 +61,47 @@ const FEATURED_PROJECT = {
     width='385'
     height='200'
   />
-  <div class='flex flex-col gap-4 p-4 pt-0'>
-    <h1
+  <div class='flex flex-col justify-between gap-4 px-4'>
+    <h2
       class='pointer-events-none block font-black text-brand_white text-start'
     >
       {FEATURED_PROJECT.title}
-    </h1>
-    <!-- <blockquote>
-        <p class='pointer-events-none text-brand_white text-ellipsis overflow-hidden'>
-          {FEATURED_PROJECT.description}
-        </p>
-      </blockquote> -->
-    <div class='flex gap-4'>
-      <img
-        src={FEATURED_PROJECT.creator.avatar.src}
-        alt={FEATURED_PROJECT.creator.avatar.alt}
-        loading='lazy'
-        class='pointer-events-none object-cover group-hover:opacity-75 rounded-full w-10 h-10'
-      />
-      <p class='pointer-events-none block text-xl font-black text-brand_white'>
-        {FEATURED_PROJECT.creator.name}
+    </h2>
+    <blockquote class='mt-0'>
+      <p
+        class='pointer-events-none text-brand_white overflow-hidden text-ellipsis line-clamp-4'
+      >
+        {FEATURED_PROJECT.description}
       </p>
-    </div>
-    <button
-      class='bg-brand_pink animate-breath py-2 px-6 text-brand_white w-full mt-2 uppercase'
+    </blockquote>
+    <div
+      class='bg-brand_pink sm:px-6 border-solid border-4 border-brand_black w-full sm:mt-2 uppercase gap-2 z-20 max-w-[100vw]'
     >
-      <h1>Get the win</h1>
-    </button>
+      <h1
+        class='text-brand_black font-black bg-brand_pink lg:text-3xl xl:text-4xl animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4'
+      >
+        <span>Be a Light, Change a Life</span>
+        <div
+          class='bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all'
+        >
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            stroke-width='1.5'
+            stroke='currentColor'
+            data-slot='icon'
+            class='w-16 h-16 transition-transform animate-wiggle'
+          >
+            <path
+              stroke-linecap='round'
+              stroke-linejoin='round'
+              d='M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z'
+            ></path>
+          </svg>
+        </div>
+      </h1>
+    </div>
   </div>
 </a>
 <!-- DESKTOP ONLY FEATURED BANNER - END -->

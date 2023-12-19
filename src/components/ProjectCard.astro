@@ -28,23 +28,23 @@ const { project } = Astro.props;
           {project.description}
         </p>
       </blockquote>
-      <div class='flex gap-4'>
+      <div class='flex gap-4 items-center'>
         <img
           src={project.creator.avatar.src}
           alt={project.creator.avatar.alt}
           loading='lazy'
-          class='object-cover group-hover:opacity-75 rounded-full w-10 h-10'
+          class='object-cover group-hover:opacity-75 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-brand_pink flex items-center justify-center overflow-hidden border-solid border-brand_black border-2'
         />
-        <p class='block text-xl font-black text-brand_white'>
+        <h3 class='block font-black text-brand_white'>
           {project.creator.name}
-        </p>
+        </h3>
       </div>
     </div>
     <div
       class='bg-brand_pink sm:px-6 border-solid border-4 border-brand_black w-full sm:mt-2 uppercase gap-2 z-20 max-w-[100vw]'
     >
       <h1
-        class='text-brand_black font-black bg-brand_pink flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4'
+        class='text-brand_black font-black bg-brand_pink flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4 animate-breath'
       >
         <span>Learn more</span>
         <div
