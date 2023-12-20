@@ -1,4 +1,5 @@
-import { PaymentElement, useStripe, useElements } from 'solid-stripe'
+import type { PaymentRequestPaymentMethodEvent } from '@stripe/stripe-js'
+import { LinkAuthenticationElement, PaymentElement, useStripe, useElements, PaymentRequestButton } from 'solid-stripe'
 
 export default function CheckoutForm() {
   const stripe = useStripe()
@@ -35,6 +36,7 @@ export default function CheckoutForm() {
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
+      <LinkAuthenticationElement />
       <button>Pay</button>
     </form>
   )

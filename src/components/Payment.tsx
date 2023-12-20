@@ -11,18 +11,20 @@ export default function Payment() {
     const stripeResult = await loadStripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST)
     setStripe(stripeResult)
 
-    const secret = await createPaymentIntent(4200) // Example amount in cents
-    setClientSecret(secret)
+    // Example: Choosing currency based on some condition or user selection
+    const currency = "usd"; // This can be dynamic based on your application's logic
+    const secret = await createPaymentIntent(4200, currency); // Pass the currency here
+    setClientSecret(secret);
   })
 
-  async function createPaymentIntent(amount: number): Promise<string | undefined> {
+  async function createPaymentIntent(amount: number, currency: string): Promise<string | undefined> {
     try {
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ amount })
+        body: JSON.stringify({ amount, currency })
       });
 
       if (!response.ok) {
