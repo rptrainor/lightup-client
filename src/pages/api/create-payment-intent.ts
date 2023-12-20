@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount,
+      amount: totalAmount * 100,
       currency,
       payment_method_types: paymentMethodTypes,
     });
