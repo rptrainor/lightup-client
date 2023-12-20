@@ -1,4 +1,5 @@
 ---
+import Payment from "~/components/Payment";
 const {userId} = Astro.params;
 
 const PROJECT = {
@@ -43,4 +44,6 @@ const PROJECT = {
   <h1>{PROJECT.title}</h1>
   <h2>Support Page here. userId is:</h2>
   <h2>{userId}</h2>
+  <Payment client:only />
+
 </div>
