@@ -13,18 +13,21 @@ export default function Payment() {
 
     // Example: Choosing currency based on some condition or user selection
     const currency = "usd"; // This can be dynamic based on your application's logic
-    const secret = await createPaymentIntent(4200, currency); // Pass the currency here
+    const tip = 4200 * 0.2; // Initialize tip amount (can be updated based on user input)
+    const amount = 4200; // Example amount in cents (or the currency's smallest unit)
+    
+    const secret = await createPaymentIntent(amount, currency, tip);
     setClientSecret(secret);
   })
 
-  async function createPaymentIntent(amount: number, currency: string): Promise<string | undefined> {
+  async function createPaymentIntent(amount: number, currency: string, tip: number): Promise<string | undefined> {
     try {
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ amount, currency })
+        body: JSON.stringify({ amount, currency, tip }),
       });
 
       if (!response.ok) {

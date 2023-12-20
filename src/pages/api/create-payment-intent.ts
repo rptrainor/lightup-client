@@ -7,7 +7,8 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { amount, currency } = await request.json();
+    const { amount, currency, tip } = await request.json();
+    const totalAmount = amount + (tip || 0);
 
     if (!amount || !currency) {
       return new Response(JSON.stringify({
@@ -22,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
+      amount: totalAmount,
       currency,
       payment_method_types: paymentMethodTypes,
     });
