@@ -2,13 +2,14 @@ import type { APIRoute } from 'astro';
 import Stripe from 'stripe';
 
 const isDev = import.meta.env.DEV;
-const STRIPE_SECRET_KEY = isDev ? import.meta.env.PUBLIC_STRIPE_SECRET_KEY_TEST : import.meta.env.PUBLIC_STRIPE_SECRET_KEY_LIVE;
+const STRIPE_SECRET_KEY = isDev ? import.meta.env.STRIPE_SECRET_KEY_TEST : import.meta.env.STRIPE_SECRET_KEY_LIVE;
 const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { amount, currency, tip } = await request.json();
-    const totalAmount = amount + (tip || 0);
+    const {
+      amount, currency, tipAmount, referring_userId, projectId, totalAmount
+    } = await request.json();
 
     if (!amount || !currency) {
       return new Response(JSON.stringify({
@@ -26,6 +27,14 @@ export const POST: APIRoute = async ({ request }) => {
       amount: totalAmount * 100,
       currency,
       payment_method_types: paymentMethodTypes,
+      metadata: {
+        projectId,
+        referring_userId,
+        tipAmount,
+        amount,
+        totalAmount,
+        currency
+      }
     });
 
     if (!paymentIntent.client_secret) {

@@ -1,8 +1,6 @@
 ---
-const {userId} = Astro.params;
+import Payment from "~/components/Payment";
+const { userId } = Astro.params;
 ---
 
-<div class='flex flex-col justify-center items-center'>
-  <h2>Support Page here. userId is:</h2>
-  <h2>{userId}</h2>
-</div>
+<Payment client:only referring_userId={userId} />

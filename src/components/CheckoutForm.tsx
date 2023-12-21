@@ -1,6 +1,13 @@
 import { LinkAuthenticationElement, PaymentElement, useStripe, useElements } from 'solid-stripe'
 
-export default function CheckoutForm() {
+type CheckoutFormProps = {
+  customerId: string | undefined;
+  customerEmail: string | undefined;
+  customerName: string | undefined;
+  setCustomerEmail: (email: string | undefined) => void;
+}
+
+export default function CheckoutForm(props: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -28,6 +35,7 @@ export default function CheckoutForm() {
       // Handle payment failure
     } else {
       // payment succeeded
+      console.log("Payment succeeded!", { result })
       // Handle successful payment
     }
   }
@@ -35,7 +43,12 @@ export default function CheckoutForm() {
 
   return (
     <form onSubmit={handleSubmit} class="space-y-4">
-      <LinkAuthenticationElement />
+      <LinkAuthenticationElement
+        defaultValues={{
+          email: props.customerEmail ?? ""
+        }}
+        onChange={(event) => props.setCustomerEmail(event.value.email)}
+      />
       <PaymentElement />
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Pay

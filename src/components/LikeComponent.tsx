@@ -15,7 +15,7 @@ export default function LikeComponent(props: Props) {
 
   createEffect(async () => {
     console.log("LikeComponent - onMount", { userState: userState() })
-    console.log("LikeComponent - onMount", { project_id: props.project.id })
+    console.log("LikeComponent - onMount", { projectId: props.project.id })
 
     if (userState().user?.id && props.project.id) {
       const status = await checkLikeStatus({ userId: userState().user?.id ?? "", projectId: props.project.id });

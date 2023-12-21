@@ -108,7 +108,10 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+label,
+button,
+input {
   font-weight: 700;
 }
 
@@ -215,4 +218,24 @@ blockquote {
 ::selection {
   background-color: #ffda00;
   color: #101214;
+}
+
+label {
+  display: block;
+  color: #FFFFFF;
+  line-height: 1.25;
+}
+
+input {
+  display: inline-block;
+  padding: 4px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.error-message {
+  color: #dc2626;
+  padding: 8px;
+}
+.error-input {
+  box-shadow: 0px 0px 2px 1px #dc2626;
 }

@@ -1,8 +1,13 @@
 ---
-const {userId} = Astro.params;
+import Payment from "~/components/Payment";
+import Layout from "~/layouts/Layout.astro";
+const { userId } = Astro.params;
 ---
 
-<div class='flex flex-col justify-center items-center'>
-  <h2>Support Page here. userId is:</h2>
-  <h2>{userId}</h2>
-</div>
+<Layout>
+  <Payment
+    client:only
+    referring_userId={userId}
+    projectId='aa879726-b172-4890-968a-992bc93d77ac'
+  />
+</Layout>

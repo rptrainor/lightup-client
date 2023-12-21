@@ -17,6 +17,12 @@ const ProfileModal = () => {
     window.location.href = 'mailto:ryan@lightup.fyi';
   }
 
+  const handleRouteToStripeCustomerPortal = () => {
+    const isDev = import.meta.env.DEV;
+    const stripePortalUrl = isDev ? import.meta.env.PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK_TEST : import.meta.env.PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK_LIVE;
+    window.open(stripePortalUrl, '_blank', 'noopener, noreferrer');
+  }
+
   const handleLogout = async () => {
     let { error } = await supabase.auth.signOut()
     window.location.href = window.location.origin;
@@ -55,9 +61,8 @@ const ProfileModal = () => {
           <div class='flex flex-col justify-center items-end h-full gap-2 font-bold'>
             <div class="flex flex-nowrap gap-2 w-full">
 
-              {/* //TODO: Add links to manage subscription */}
-              <button class="bg-brand_pink text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
-               <h4>Manage Lightup subscription</h4>
+              <button onClick={handleRouteToStripeCustomerPortal} class="bg-brand_pink text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
+                <h4>Manage Lightup subscription</h4>
               </button>
               <button onClick={handleLogout} class="bg-brand_blue text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
                 <h4>Log out of Lightup</h4>
