@@ -1,4 +1,4 @@
-import { LinkAuthenticationElement, PaymentElement, useStripe, useElements } from 'solid-stripe'
+import { PaymentElement, useStripe, useElements } from 'solid-stripe'
 
 type CheckoutFormProps = {
   customerId: string | undefined;
@@ -30,6 +30,8 @@ export default function CheckoutForm(props: CheckoutFormProps) {
       redirect: 'if_required',
     })
 
+    console.log('handleSubmit', { result })
+
     if (result.error) {
       // payment failed
       // Handle payment failure
@@ -42,16 +44,14 @@ export default function CheckoutForm(props: CheckoutFormProps) {
 
 
   return (
-    <form onSubmit={handleSubmit} class="space-y-4">
-      <LinkAuthenticationElement
-        defaultValues={{
-          email: props.customerEmail ?? ""
-        }}
-        onChange={(event) => props.setCustomerEmail(event.value.email)}
-      />
+    <form onSubmit={handleSubmit} class="text-brand_black p-4 rounded-none flex flex-col gap-4 bg-brand_white min-h-full">
       <PaymentElement />
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Pay
+      <button
+        class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
+      >
+        <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
+          Pay
+        </h1>
       </button>
     </form>
   )

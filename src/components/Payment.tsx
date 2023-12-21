@@ -3,7 +3,6 @@ import { Elements } from 'solid-stripe'
 import { loadStripe, type Stripe } from '@stripe/stripe-js'
 import CheckoutForm from './CheckoutForm'
 import { userState } from "~/stores/auth_store";
-import EURButtons from './EURButtons';
 import USDButtons from './USDButtons';
 
 type HandlePaymentIntentProps = {
@@ -56,7 +55,6 @@ export default function Payment(props: PaymentProps) {
   const [amount, setAmount] = createSignal<number>(47)
   const [tipPercent, setTimePercent] = createSignal<number>(0.2);
   const [isCustomTip, setIsCustomTip] = createSignal(false);
-  // IBAN: Test account number: DE89370400440532013000
   const [currency, setCurrency] = createSignal('usd');
   const [isRecurring, setIsRecurring] = createSignal(false);
   const [customerId, setCustomerId] = createSignal<string | undefined>(undefined);
@@ -65,13 +63,9 @@ export default function Payment(props: PaymentProps) {
   const [totalAmount, setTotalAmount] = createSignal<number>(56);
 
   onMount(async () => {
-    const stripeResult = await loadStripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST)
+    const stripeResult = await loadStripe(import.meta.env.DEV ? import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY_TEST : import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE)
     setStripe(stripeResult)
   })
-
-  const toggleCurrency = () => {
-    setCurrency(currency() === 'usd' ? 'eur' : 'usd');
-  };
 
   async function createCustomer({ email, name }: CreateCustomerProps): Promise<{ customerId: string | undefined, customerEmail: string | undefined, customerName: string | undefined } | undefined> {
     try {
@@ -261,7 +255,6 @@ export default function Payment(props: PaymentProps) {
       isCustomTip: isCustomTip(),
       isRecurring: isRecurring(),
       totalAmount: totalAmount(),
-      clientSecret: clientSecret()
     });
   })
 
@@ -270,10 +263,7 @@ export default function Payment(props: PaymentProps) {
       <Match when={!clientSecret()}>
         <div class='flex flex-col gap-4 w-full p-4 mx-auto max-w-sm'>
           {/* Donation Amount Buttons */}
-          <Show when={currency() === 'eur'} fallback={<USDButtons onAmountChange={handleDonationAmountChange} />}>
-            <EURButtons onAmountChange={handleDonationAmountChange} />
-          </Show>
-
+          <USDButtons onAmountChange={handleDonationAmountChange} />
           {/* Recurring Payment Option */}
           <div class="grid w-full items-center gap-1.5">
             <label class="">
@@ -319,28 +309,14 @@ export default function Payment(props: PaymentProps) {
               <option value={1}>100%</option>
             </select>
           </div>
-          <div>
-            {/* Submit Button */}
-            <button onClick={handlePaymentIntent} class='bg-brand_pink text-brand_black sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 group z-20 text-3xl' >
-              <span class='group-hover:text-brand_pink'>Donate</span>
-            </button>
-            {/* Currency Switch */}
-            <fieldset class="grid grid-cols-4 gap-2">
-              <Show when={currency() === 'eur'} fallback={<legend class='pb-2'>Switch to <span>&euro;</span>:</legend>}>
-                <legend class='pb-2'>Switch to <span>&dollar;</span>:</legend>
-              </Show>
-              <div class="flex items-center h-4 gap-6 space-y-0">
-                <div class="flex items-center gap-0">
-                  <input id="usd" value='usd' name="notification-method" type="radio" checked={currency() === 'usd'} onChange={() => handleCurrencyChange('usd')} class="h-4 w-4 border-brand_black text-brand_pink focus:ring-brand_pink" />
-                  <label for="usd" class="ml-2 block text-sm font-medium leading-6 text-brand_white">&dollar;</label>
-                </div>
-                <div class="flex items-center gap-0">
-                  <input id="eur" value='eur' name="notification-method" type="radio" checked={currency() === 'eur'} onChange={() => handleCurrencyChange('eur')} class="h-4 w-4 border-brand_black text-brand_pink focus:ring-brand_pink" />
-                  <label for="eur" class="ml-2 block text-sm font-medium leading-6 text-brand_white">&euro;</label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
+          {/* Submit Button */}
+          <button onClick={() => handlePaymentIntent()}
+            class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
+          >
+            <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
+              Donate
+            </h1>
+          </button>
         </div>
       </Match>
       <Match when={stripe() && clientSecret()}>
@@ -353,6 +329,6 @@ export default function Payment(props: PaymentProps) {
           />
         </Elements>
       </Match>
-    </Switch >
+    </Switch>
   )
 }
