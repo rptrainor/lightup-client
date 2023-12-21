@@ -1,4 +1,4 @@
-import { createSignal, onMount, createEffect, Match, Switch } from 'solid-js'
+import { createSignal, onMount, createEffect, Match, Switch, Show } from 'solid-js'
 import { Elements } from 'solid-stripe'
 import { loadStripe, type Stripe } from '@stripe/stripe-js'
 import CheckoutForm from './CheckoutForm'
@@ -68,6 +68,10 @@ export default function Payment(props: PaymentProps) {
     setStripe(stripeResult)
   })
 
+  const toggleCurrency = () => {
+    setCurrency(currency() === 'usd' ? 'eur' : 'usd');
+  };
+
   async function createCustomer({ email, name }: CreateCustomerProps): Promise<{ customerId: string | undefined, customerEmail: string | undefined, customerName: string | undefined } | undefined> {
     try {
       const response = await fetch('/api/create-customer', {
@@ -79,7 +83,7 @@ export default function Payment(props: PaymentProps) {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: &dollar;{response.status}`);
       }
 
       const data = await response.json();
@@ -110,7 +114,7 @@ export default function Payment(props: PaymentProps) {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: &dollar;{response.status}`);
       }
 
       const data = await response.json();
@@ -208,7 +212,7 @@ export default function Payment(props: PaymentProps) {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: &dollar;{response.status}`);
       }
 
       const data = await response.json();
@@ -243,105 +247,133 @@ export default function Payment(props: PaymentProps) {
   })
 
   return (
-    <div class='flex flex-col gap-4 w-full p-4'>
-      <Switch fallback={null}>
-        <Match when={!clientSecret()}>
-          <div class='flex gap-4 flex-wrap w-full justify-center items-baseline'>
-            <button class="bg-brand_pink text-brand_black aspect-video p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;3</span></button>
-            <button class="bg-brand_pink text-brand_black aspect-video  p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;5</span></button>
+    <Switch fallback={null}>
+      <Match when={!clientSecret()}>
+        <form class='flex flex-col gap-4 w-full p-4 mx-auto max-w-sm'>
 
-            <button class="bg-brand_pink text-brand_black aspect-video p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;10</span></button>
+          <fieldset class="grid grid-cols-4 gap-2">
+            <legend class='pb-2'>Choose an amount:</legend>
+            <label class="relative flex items-center justify-center">
+              <input checked aria-checked="true" type="radio" id="50" name="donation_amount" role="radio" class="peer sr-only" value="50" />
+              <span class="absolute z-10 text-brand_black">&dollar;47</span>
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            </label>
+            <label class="relative flex items-center justify-center">
+              <input type="radio" id="75" name="donation_amount" role="radio" class="peer sr-only" value="75" />
+              <span class="absolute z-10 text-brand_black">&dollar;72</span>
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            </label>
 
-            <button class="bg-brand_pink text-brand_black aspect-video p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;25</span></button>
+            <label class="relative flex items-center justify-center">
+              <input type="radio" id="100" name="donation_amount" role="radio" class="peer sr-only" value="100" />
+              <span class="absolute z-10 text-brand_black">&dollar;106</span>
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            </label>
+            <label class="relative flex items-center justify-center">
+              <input type="radio" id="40" name="donation_amount" role="radio" class="peer sr-only" value="40" />
+              <span class="absolute z-10 text-brand_black">&dollar;39</span>
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            </label>
+            <label class="relative flex items-center justify-center">
+              <input type="radio" id="25" name="donation_amount" role="radio" class="peer sr-only" value="25" />
+              <span class="absolute z-10 text-brand_black">&dollar;23</span>
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            </label>
+            <label class="relative flex items-center justify-center">
+              <input type="radio" id="15" name="donation_amount" role="radio" class="peer sr-only" value="15" />
+              <span class="absolute z-10 text-brand_black">&dollar;17</span>
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            </label>
+            <label class="relative flex items-center justify-center">
+              <input type="radio" id="10" name="donation_amount" role="radio" class="peer sr-only" value="10" />
+              <span class="absolute z-10 text-brand_black">&dollar;6</span>
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            </label>
+            {/* Custom amount input */}
+            <label class="relative flex flex-col items-center justify-center text-brand_black">
+              <input type="radio" id="custom_amount_radio" name="donation_amount" role="radio" class="peer sr-only" value="custom" />
+              <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
+                <input type="number" id="custom_amount" name="custom_amount" placeholder="$" class="w-full h-full text-center border-0 peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black p-2 peer-focus:border-brand_pink peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-brand_pink transition-colors disabled:bg-gray-100 disabled:text-gray-500" />
+              </div>
+            </label>
+          </fieldset>
 
-            <button class="bg-brand_pink text-brand_black aspect-video p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;50</span></button>
-
-            <button class="bg-brand_pink text-brand_black aspect-video p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;100</span></button>
-
-            <button class="bg-brand_pink text-brand_black aspect-video p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;500</span></button>
-
-            <button class="bg-brand_pink text-brand_black aspect-video p-2 justify-center items-center border-solid border-4 border-brand_black"><span class='h-6 w-6'>&dollar;1,000</span></button>
-
+          <div class="grid w-full items-center gap-1.5">
+            <label class="">
+              Make it monthly!
+            </label>
+            <fieldset class="grid grid-cols-2 gap-2">
+              <label class="relative flex items-center justify-center">
+                <input type="radio" id="yes" name="sustaining membership" role="radio" class="peer sr-only" value="yes" />
+                <span class="absolute z-10 text-brand_black">Yes, Let's go!</span>
+                <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+              </label>
+              <label class="relative flex items-center justify-center">
+                <input checked type="radio" id="no" name="sustaining membership" role="radio" class="peer sr-only" value="no" />
+                <span class="absolute z-10 text-brand_black">No, give once</span>
+                <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+              </label>
+            </fieldset>
           </div>
-          <form class="grid w-full max-w-sm items-center gap-1.5 mx-auto">
-            <h1>How much do you want to donate?</h1>
-            <div class="grid w-full max-w-sm items-center gap-1.5">
-              <label>
-                Enter a donation amount:
-              </label>
-              <input
-                type='number'
-                class="border p-2 rounded mt-2 text-brand_black"
-                value={amount()}
-                onChange={(event: Event) => setAmount(parseFloat((event.target as HTMLInputElement).value) || 0)}
-              />
-            </div>
-            <div class="grid w-full max-w-sm items-center gap-1.5">
-              <label>
-                Add a tip to support Lightup (percentages are rounded to the nearest whole dollar amount):
-              </label>
-              <select onChange={handleTipChange} class="border p-2 rounded text-brand_black">
-                <option value={0}>0%</option>
-                <option value={0.05}>5%</option>
-                <option value={0.1}>10%</option>
-                <option value={0.15}>15%</option>
-                <option value={0.2} selected>20%</option>
-                <option value={0.25}>25%</option>
-                <option value={0.3}>30%</option>
-                <option value={0.35}>35%</option>
-                <option value={0.4}>40%</option>
-                <option value={0.45}>45%</option>
-                <option value={0.5}>50%</option>
-                <option value={0.55}>55%</option>
-                <option value={0.6}>60%</option>
-                <option value={0.65}>65%</option>
-                <option value={0.7}>70%</option>
-                <option value={0.75}>75%</option>
-                <option value={0.8}>80%</option>
-                <option value={0.85}>85%</option>
-                <option value={0.9}>90%</option>
-                <option value={0.95}>95%</option>
-                <option value={1}>100%</option>
-              </select>
-            </div>
-            <div class="grid w-full max-w-sm items-center gap-1.5">
-              <label>
-                Select currency:
-              </label>
-              <select onChange={(event: Event) => setCurrency((event.target as HTMLInputElement).value)} class="border p-2 rounded text-brand_black">
-                <option value="usd" class='text-brand_black'>USD</option>
-                <option value="eur" class='text-brand_black'>EUR</option>
-              </select>
-            </div>
-            <div class="flex items-center py-2">
-              <button onClick={() => setIsRecurring(prev => !prev)} type="button" class="bg-gray-200 aria-checked:bg-brand_pink relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand_pink focus:ring-offset-2" role="switch" aria-checked={!!isRecurring()} aria-labelledby="recurring">
-                {/* <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" --> */}
-                <span aria-checked={!isRecurring()} class="translate-x-0 aria-checked:translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-brand_black shadow ring-0 transition duration-200 ease-in-out"></span>
-              </button>
-              <label class="ml-3" id="recurring">
-                <span>Make it recurring</span>
-              </label>
-            </div>
-            <button onClick={() => handlePaymentIntent()}
-              class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]'
-            >
-              <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
-                Donate
-              </h1>
-            </button>
-          </form>
-        </Match>
-        <Match when={stripe() && clientSecret()}>
-          <Elements stripe={stripe()} clientSecret={clientSecret()}>
-            <CheckoutForm
-              customerId={customerId()}
-              customerEmail={customerEmail()}
-              customerName={customerName()}
-              setCustomerEmail={setCustomerEmail}
-            />
-          </Elements>
-        </Match>
-      </Switch>
-    </div>
+
+          <div class="grid w-full items-center gap-1.5">
+            <label class="">
+              Add a tip to support Lightup
+            </label>
+            <select onChange={handleTipChange} class="w-full border-4 border-brand_black bg-brand_white text-brand_black p-2 hover:border-brand_pink focus:border-brand_pink focus:ring focus:ring-brand_pink focus:ring-opacity-50 transition ease-in-out duration-150">
+              <option value={0}>0%</option>
+              <option value={0.05}>5%</option>
+              <option value={0.1}>10%</option>
+              <option value={0.15}>15%</option>
+              <option value={0.2} selected>20%</option>
+              <option value={0.25}>25%</option>
+              <option value={0.3}>30%</option>
+              <option value={0.35}>35%</option>
+              <option value={0.4}>40%</option>
+              <option value={0.45}>45%</option>
+              <option value={0.5}>50%</option>
+              <option value={0.55}>55%</option>
+              <option value={0.6}>60%</option>
+              <option value={0.65}>65%</option>
+              <option value={0.7}>70%</option>
+              <option value={0.75}>75%</option>
+              <option value={0.8}>80%</option>
+              <option value={0.85}>85%</option>
+              <option value={0.9}>90%</option>
+              <option value={0.95}>95%</option>
+              <option value={1}>100%</option>
+            </select>
+          </div>
+          <div>
+            <input type='submit' onClick={handlePaymentIntent} class='bg-brand_pink text-brand_black sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 group z-20 text-3xl' value='Donate' />
+            <fieldset class="grid grid-cols-4 gap-2">
+              <Show when={currency() === 'eur'} fallback={<legend class='pb-2'>Switch to <span>&euro;</span>:</legend>}>
+                <legend class='pb-2'>Switch to <span>&dollar;</span>:</legend>
+              </Show>
+              <div class="flex items-center h-4 gap-6 space-y-0">
+                <div class="flex items-center gap-0">
+                  <input id="usd" value='usd' name="notification-method" type="radio" checked={currency() === 'usd'} onChange={() => setCurrency('usd')} class="h-4 w-4 border-brand_black text-brand_pink focus:ring-brand_pink" />
+                  <label for="usd" class="ml-2 block text-sm font-medium leading-6 text-brand_white">&dollar;</label>
+                </div>
+                <div class="flex items-center gap-0">
+                  <input id="eur" value='eur' name="notification-method" type="radio" checked={currency() === 'eur'} onChange={() => setCurrency('eur')} class="h-4 w-4 border-brand_black text-brand_pink focus:ring-brand_pink" />
+                  <label for="eur" class="ml-2 block text-sm font-medium leading-6 text-brand_white">&euro;</label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </form>
+      </Match>
+      <Match when={stripe() && clientSecret()}>
+        <Elements stripe={stripe()} clientSecret={clientSecret()}>
+          <CheckoutForm
+            customerId={customerId()}
+            customerEmail={customerEmail()}
+            customerName={customerName()}
+            setCustomerEmail={setCustomerEmail}
+          />
+        </Elements>
+      </Match>
+    </Switch>
   )
 }

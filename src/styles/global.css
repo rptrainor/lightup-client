@@ -239,3 +239,7 @@ input {
 .error-input {
   box-shadow: 0px 0px 2px 1px #dc2626;
 }
+
+.dollar {
+  content: "\0024";
+}
