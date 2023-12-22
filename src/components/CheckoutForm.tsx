@@ -1,19 +1,15 @@
-import { PaymentElement, useStripe, useElements } from 'solid-stripe'
+import { PaymentElement, useElements, useStripe } from 'solid-stripe'
 
-type CheckoutFormProps = {
-  customerId: string | undefined;
-  customerEmail: string | undefined;
-  customerName: string | undefined;
-  setCustomerEmail: (email: string | undefined) => void;
+type Props = {
+  onSucess: () => void;
 }
 
-export default function CheckoutForm(props: CheckoutFormProps) {
-  const stripe = useStripe();
+export default function CheckoutForm(props: Props) {
+  const stripe = useStripe()
   const elements = useElements();
 
   async function handleSubmit(event: SubmitEvent) {
     event.preventDefault()
-
     // Assign to local variables
     const stripeInstance = stripe();
     const elementsInstance = elements();
@@ -30,21 +26,29 @@ export default function CheckoutForm(props: CheckoutFormProps) {
       redirect: 'if_required',
     })
 
-    console.log('handleSubmit', { result })
+
+    console.log({
+      result, props, onSucess: props.onSucess()
+    })
 
     if (result.error) {
-      // payment failed
-      // Handle payment failure
+      // Show error to your customer (e.g., insufficient funds)
+      console.log(result.error.message)
     } else {
-      // payment succeeded
-      console.log("Payment succeeded!", { result })
-      // Handle successful payment
+      // The payment has been processed!
+      if (result.paymentIntent.status === 'succeeded') {
+        // Show a success message to your customer
+        // There's a risk of the customer closing the window before callback
+        // execution. Set up a webhook or plugin to listen for the
+        // payment_intent.succeeded event that handles any business critical
+        // post-payment actions.
+      }
     }
   }
 
 
   return (
-    <form onSubmit={handleSubmit} class="text-brand_black p-4 rounded-none flex flex-col gap-4 bg-brand_white min-h-full">
+    <form onSubmit={handleSubmit} class="text-brand_black p-4 rounded-none flex flex-col gap-4 bg-brand_white min-h-full mx-auto w-full max-h-min">
       <PaymentElement />
       <button
         class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'

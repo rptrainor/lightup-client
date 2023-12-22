@@ -1,6 +1,6 @@
 ---
 import SinglePage from "~/components/SinglePage.astro";
-
+import Layout from "~/layouts/Layout.astro";
 const PROJECT = {
   id: "e3462403-fc91-4f71-b5c3-12c28d040f89",
   title: "SafERteens Muskegon: A Bold Stand Against Youth Gun Violence",
@@ -35,4 +35,10 @@ const PROJECT = {
 };
 ---
 
-<SinglePage project={PROJECT} />
+<Layout
+  title={PROJECT.title}
+  image={PROJECT.banner.src}
+  description={PROJECT.header}
+>
+  <SinglePage project={PROJECT} />
+</Layout>

@@ -1,9 +1,11 @@
 ---
+export const prerender = true;
+
 import ThankYouLetter from "~/components/ThankYouLetter";
 import Layout from "~/layouts/Layout.astro";
-import type { Project } from "~/components/ProjectLikeButton";
 import ShareButtons from "~/components/ShareButtons";
-const project = Astro.props.project as Project;
+import { userState } from "~/stores/auth_store";
+const { projectSlug, projectBannerSrc, projectCreatorName } = Astro.props;
 ---
 
 <Layout
@@ -19,11 +21,17 @@ const project = Astro.props.project as Project;
       Your Link!
     </h2>
     <ShareButtons
-      url='https://www.apple.com/'
-      text='You are now watching MadTV'
-      image='https://cdn.topofart.com/images/artists/Rene-Magritte/paintings-wm/magritte-002.jpg'
+      url={userState().user?.id
+        ? `https://lightup.fyi/${projectSlug}/${userState().user?.id}`
+        : `https://lightup.fyi/${projectSlug}`}
+      text='I just donated to this project on LightUp. Join me in supporting this great cause!'
+      image={projectBannerSrc}
       client:only
     />
-    <ThankYouLetter project={project} client:only />
+    <ThankYouLetter
+      creatorName={projectCreatorName}
+      userName={userState().user?.full_name || userState().user?.name}
+      client:only
+    />
   </div>
 </Layout>

@@ -1,6 +1,6 @@
 ---
 import SinglePage from "~/components/SinglePage.astro";
-
+import Layout from "~/layouts/Layout.astro";
 const PROJECT = {
   id: "f7dede63-cfb0-48ed-b59d-2abc99944192",
   title:
@@ -39,5 +39,10 @@ const PROJECT = {
     "Your support for Dr. Katharine Hayhoe's work is a step towards a more informed and proactive society in the face of climate change. Help us amplify this crucial message and turn understanding into action. Donate today and join a community committed to making a real difference for our planet's future.",
 };
 ---
-
-<SinglePage project={PROJECT} />
+<Layout
+  title={PROJECT.title}
+  image={PROJECT.banner.src}
+  description={PROJECT.header}
+>
+  <SinglePage project={PROJECT} />
+</Layout>

@@ -1,5 +1,6 @@
 ---
 import SinglePage from "~/components/SinglePage.astro";
+import Layout from "~/layouts/Layout.astro";
 
 const PROJECT = {
   id: "aa879726-b172-4890-968a-992bc93d77ac",
@@ -35,8 +36,15 @@ const PROJECT = {
       body: "With ongoing development and anticipated FDA approval, the therapies pioneered by Dr. June are set to become more widely available, potentially benefiting a vast number of patients globally.",
     },
   ],
-  callToAction: "Your support is not just a donation; it's an investment in a future where cancer can be effectively combated through advanced gene therapy. Join us in backing Dr. Carl June’s transformative work, paving the way for new horizons in cancer treatment and giving hope to millions around the world.",
+  callToAction:
+    "Your support is not just a donation; it's an investment in a future where cancer can be effectively combated through advanced gene therapy. Join us in backing Dr. Carl June’s transformative work, paving the way for new horizons in cancer treatment and giving hope to millions around the world.",
 };
 ---
 
-<SinglePage project={PROJECT} />
+<Layout
+  title={PROJECT.title}
+  image={PROJECT.banner.src}
+  description={PROJECT.header}
+>
+  <SinglePage project={PROJECT} />
+</Layout>

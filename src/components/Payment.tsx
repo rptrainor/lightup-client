@@ -1,4 +1,4 @@
-import { createSignal, onMount, createEffect, Match, Switch, Show } from 'solid-js'
+import { createSignal, onMount, createEffect, Match, Switch } from 'solid-js'
 import { Elements } from 'solid-stripe'
 import { loadStripe, type Stripe } from '@stripe/stripe-js'
 import CheckoutForm from './CheckoutForm'
@@ -6,12 +6,12 @@ import { userState } from "~/stores/auth_store";
 import USDButtons from './USDButtons';
 
 type HandlePaymentIntentProps = {
-  tipPercent: number,
   amount: number,
   currency: string,
+  tipPercent: number,
   totalAmount: number,
-  referring_userId: string | undefined,
-  projectId: string
+  customerId: string,
+  customerEmail: string,
 }
 
 type CreateCustomerProps = {
@@ -37,7 +37,8 @@ type CreateSubscriptionResponse = {
 
 type PaymentProps = {
   referring_userId: string | undefined,
-  projectId: string
+  projectId: string,
+  setState: (state: "initial" | "render_button" | "render_payment" | "render_share_buttons") => void,
 }
 
 //* ABOUT PAYMENTS
@@ -48,18 +49,15 @@ type PaymentProps = {
 //* IN THIS COMPONENT TIP IS ALWAYS STORED AS A VALUE BETWEEN 0 AND 1, REPRESENTING A PERCENTAGE OF THE DONATION AMOUNT VALUE
 //* 3. THE TOTAL AMOUNT (DONATION + TIP)
 //* IN THIS COMPONENT TOTAL AMOUNT IS ALWAYS STORED AS A WHOLE DOLLAR OR EURO AMOUNT
-
 export default function Payment(props: PaymentProps) {
   const [stripe, setStripe] = createSignal<Stripe | null>(null)
   const [clientSecret, setClientSecret] = createSignal<string | undefined>(undefined)
   const [amount, setAmount] = createSignal<number>(47)
   const [tipPercent, setTimePercent] = createSignal<number>(0.2);
-  const [isCustomTip, setIsCustomTip] = createSignal(false);
-  const [currency, setCurrency] = createSignal('usd');
+  const [currency] = createSignal('usd');
   const [isRecurring, setIsRecurring] = createSignal(false);
   const [customerId, setCustomerId] = createSignal<string | undefined>(undefined);
   const [customerEmail, setCustomerEmail] = createSignal<string | undefined>(undefined);
-  const [customerName, setCustomerName] = createSignal<string | undefined>(undefined);
   const [totalAmount, setTotalAmount] = createSignal<number>(56);
 
   onMount(async () => {
@@ -82,10 +80,12 @@ export default function Payment(props: PaymentProps) {
       }
 
       const data = await response.json();
+      setCustomerId(data.customerId);
+      setCustomerEmail(data.customerEmail);
       return {
         customerId: data.customerId,
         customerEmail: data.customerEmail,
-        customerName: data.customerName,
+        customerName: data.customerName
       };
     } catch (error) {
       console.error("Error creating customer:", error);
@@ -94,10 +94,12 @@ export default function Payment(props: PaymentProps) {
   }
 
   async function createPaymentIntent({
-    tipPercent,
     amount,
     currency,
+    tipPercent,
     totalAmount,
+    customerId,
+    customerEmail,
   }: HandlePaymentIntentProps): Promise<string | undefined> {
     try {
       const response = await fetch('/api/create-payment-intent', {
@@ -105,7 +107,16 @@ export default function Payment(props: PaymentProps) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ amount, currency, tipPercent, totalAmount, referring_userId: props.referring_userId, projectId: props.projectId }),
+        body: JSON.stringify({
+          amount,
+          currency,
+          tipPercent,
+          referring_userId: props.referring_userId,
+          projectId: props.projectId,
+          totalAmount,
+          customerId,
+          customerEmail,
+        }),
       });
 
       if (!response.ok) {
@@ -122,11 +133,6 @@ export default function Payment(props: PaymentProps) {
 
   function handleTipChange(event: Event) {
     const value = (event.target as HTMLInputElement).value;
-
-    if (value === 'custom') {
-      setIsCustomTip(true)
-      return;
-    }
     setTimePercent(parseFloat(value));
   }
 
@@ -140,11 +146,7 @@ export default function Payment(props: PaymentProps) {
         return;
       }
 
-      // Now that we have checked customerResponse is not undefined, we can destructure it
-      const { customerId, customerEmail, customerName } = customerResponse;
-      setCustomerId(customerId);
-      setCustomerEmail(customerEmail);
-      setCustomerName(customerName);
+      setCustomerId(customerResponse.customerId);
     } else {
       console.error("User email is not available");
     }
@@ -181,8 +183,8 @@ export default function Payment(props: PaymentProps) {
         currency: currency(),
         tipPercent: tipPercent(),
         totalAmount: totalAmount(),
-        referring_userId: props.referring_userId,
-        projectId: props.projectId
+        customerId: currentCustomerId,
+        customerEmail: customerEmail() ?? '',
       });
       setClientSecret(secret);
     }
@@ -233,12 +235,6 @@ export default function Payment(props: PaymentProps) {
     setIsRecurring(value === 'yes');
   };
 
-  const handleCurrencyChange = (value: string) => {
-    const newAmount = value === 'usd' ? 47 : 43
-    setCurrency(value);
-    setAmount(newAmount)
-  }
-
   createEffect(() => {
     // Calculate and set total amount
     const calculatedTotalAmount = amount() + (amount() * tipPercent());
@@ -246,17 +242,6 @@ export default function Payment(props: PaymentProps) {
     const roundedTotalAmount = Math.round(calculatedTotalAmount);
     setTotalAmount(roundedTotalAmount);
   });
-
-  createEffect(() => {
-    console.log("Payment:", {
-      amount: amount(),
-      currency: currency(),
-      tipPercent: tipPercent(),
-      isCustomTip: isCustomTip(),
-      isRecurring: isRecurring(),
-      totalAmount: totalAmount(),
-    });
-  })
 
   return (
     <Switch fallback={null}>
@@ -321,12 +306,7 @@ export default function Payment(props: PaymentProps) {
       </Match>
       <Match when={stripe() && clientSecret()}>
         <Elements stripe={stripe()} clientSecret={clientSecret()}>
-          <CheckoutForm
-            customerId={customerId()}
-            customerEmail={customerEmail()}
-            customerName={customerName()}
-            setCustomerEmail={setCustomerEmail}
-          />
+          <CheckoutForm onSucess={() => props.setState("render_share_buttons")} />
         </Elements>
       </Match>
     </Switch>

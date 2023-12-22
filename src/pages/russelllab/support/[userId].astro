@@ -41,10 +41,15 @@ const PROJECT = {
 };
 ---
 
-<Layout>
+<Layout
+  title={`Join us in support of ${PROJECT.creator.name}'s research`}
+  description={`Join us in support of ${PROJECT.creator.name}'s research`}
+  image={PROJECT.banner.src}
+>
   <Payment
     client:only
     referring_userId={userId}
-    projectId='9459fd30-6eb8-4c84-8a2c-357913b38a79'
+    projectId={PROJECT.id}
+    sucessUrl={`${Astro.url.origin}/${PROJECT.slug}/grow`}
   />
 </Layout>

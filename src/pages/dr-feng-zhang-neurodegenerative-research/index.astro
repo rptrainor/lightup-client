@@ -1,6 +1,6 @@
 ---
 import SinglePage from "~/components/SinglePage.astro";
-
+import Layout from "~/layouts/Layout.astro";
 const PROJECT = {
   id: "6ded6487-4b53-47b8-999d-c29b54227b7e",
   title:
@@ -41,4 +41,10 @@ const PROJECT = {
 };
 ---
 
-<SinglePage project={PROJECT} />
+<Layout
+  title={PROJECT.title}
+  image={PROJECT.banner.src}
+  description={PROJECT.header}
+>
+  <SinglePage project={PROJECT} />
+</Layout>

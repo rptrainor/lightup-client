@@ -1,7 +1,7 @@
 import { supabase } from "~/db/connection";
 
 async function handleSignInWithEmailAuth(email: string) {
-  const { data, error } = await supabase.auth.signInWithOtp({
+  const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
       shouldCreateUser: true,

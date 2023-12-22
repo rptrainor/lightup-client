@@ -1,3 +1,5 @@
+export const prerender = true;
+
 import { createSignal } from "solid-js";
 
 type Props = {

@@ -38,16 +38,13 @@ export const POST: APIRoute = async ({ request }) => {
         error: "Total amount must be greater than zero"
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
-    console.log("customerId: ", customerId);
-    console.log("priceId: ", priceId);
+
     if (!customerId || !priceId) {
       return new Response(JSON.stringify({
         error: "Missing required parameters: 'customerId' and/or 'priceId'"
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    console.log("referring_userId: ", referring_userId);
-    console.log("projectId: ", projectId);
     const subscription = await stripe.subscriptions.create({
       customer: customerId,
       items: [{ price: priceId, quantity: totalAmount }],
@@ -63,7 +60,6 @@ export const POST: APIRoute = async ({ request }) => {
       expand: ['latest_invoice.payment_intent'],
     });
 
-    console.log("subscription: ", subscription);
     // Check if latest_invoice is null or a string
     if (!subscription.latest_invoice || typeof subscription.latest_invoice === 'string') {
       return new Response(JSON.stringify({
@@ -78,7 +74,6 @@ export const POST: APIRoute = async ({ request }) => {
         error: "Failed to retrieve client secret from payment intent"
       }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
-    console.log("paymentIntent: ", paymentIntent);
     return new Response(JSON.stringify({
       subscriptionId: subscription.id,
       clientSecret: paymentIntent.client_secret,

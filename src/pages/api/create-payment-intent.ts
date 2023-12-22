@@ -8,7 +8,14 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 export const POST: APIRoute = async ({ request }) => {
   try {
     const {
-      amount, currency, tipAmount, referring_userId, projectId, totalAmount
+      amount,
+      currency,
+      tipPercent,
+      referring_userId,
+      projectId,
+      totalAmount,
+      customerId,
+      customerEmail
     } = await request.json();
 
     if (!amount || !currency) {
@@ -30,11 +37,13 @@ export const POST: APIRoute = async ({ request }) => {
       metadata: {
         projectId,
         referring_userId,
-        tipAmount,
+        tipPercent,
         amount,
         totalAmount,
         currency
-      }
+      },
+      customer: customerId,
+      receipt_email: customerEmail,
     });
 
     if (!paymentIntent.client_secret) {

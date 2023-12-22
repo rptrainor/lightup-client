@@ -18,24 +18,17 @@ export async function addUserToPublicTable(user: User) {
 
     if (error) {
       console.error("Error in addUserToPublicTable:", error);
-      // throw new Error("Error adding/updating user");
     }
 
     return data;
   } catch (error) {
     console.error("Error in addUserToPublicTable:", error);
-    // throw new Error("Error in addUserToPublicTable");
   }
 }
 
 const handleCheckUser = async () => {
   try {
     const { data: { user } } = await supabase.auth.getUser()
-
-    // if (error) {
-    //   console.error("Error in handleCheckUser:", error);
-    //   throw new Error("Error in handleCheckUser");
-    // }
 
     if (user && Object.keys(user).length > 0) {
       // Transform the user data
@@ -61,7 +54,6 @@ const handleCheckUser = async () => {
     }
   } catch (error) {
     console.error("Error in handleCheckUser:", error);
-    // throw new Error("Error in handleCheckUser");
   }
 }
 
