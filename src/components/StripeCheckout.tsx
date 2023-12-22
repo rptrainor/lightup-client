@@ -1,6 +1,7 @@
 import { createSignal, createResource, Suspense, onMount } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 
+import CheckoutInfo from "./CheckoutInfo";
 async function postFormData(formData: FormData) {
   const response = await fetch("/api/create-price", {
     method: "POST",
@@ -10,7 +11,6 @@ async function postFormData(formData: FormData) {
 }
 
 async function createCheckoutSession(priceId: string, sustaining_membership: boolean) {
-  console.log('createCheckoutSession CALLED', { priceId, sustaining_membership })
   const response = await fetch('/api/create-checkout-session', {
     method: 'POST',
     headers: {
@@ -29,7 +29,6 @@ const StripeCheckout = () => {
     const data = new FormData(e.target as HTMLFormElement);
     const priceData = await postFormData(data);
 
-    console.log('priceData.sustaining_membership', priceData.sustaining_membership);
     if (priceData && priceData.priceId && priceData.sustaining_membership) {
       const checkoutSession = await createCheckoutSession(priceData.priceId, priceData.sustaining_membership);
 
@@ -55,10 +54,12 @@ const StripeCheckout = () => {
   });
 
   return (
-    <div class='flex flex-col px-4 mx-auto items-center'>
-      <form onSubmit={submit}>
+    <div class='flex flex-col px-4 mx-auto items-center gap-4'>
+      <CheckoutInfo />
+
+      <form onSubmit={submit} class="flex flex-col gap-2">
         <fieldset class="grid grid-cols-4 gap-2">
-          <legend class='pb-2'>Choose an amount:</legend>
+          <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
           <label class="relative flex items-center justify-center">
             <input
               checked
@@ -71,7 +72,7 @@ const StripeCheckout = () => {
               value={47}
             />
             <span class="absolute z-10 text-brand_black">&dollar;47</span>
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           <label class="relative flex items-center justify-center">
             <input
@@ -83,7 +84,7 @@ const StripeCheckout = () => {
               value={72}
             />
             <span class="absolute z-10 text-brand_black">&dollar;72</span>
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
 
           <label class="relative flex items-center justify-center">
@@ -96,7 +97,7 @@ const StripeCheckout = () => {
               value={106}
             />
             <span class="absolute z-10 text-brand_black">&dollar;106</span>
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           <label class="relative flex items-center justify-center">
             <input
@@ -108,7 +109,7 @@ const StripeCheckout = () => {
               value={39}
             />
             <span class="absolute z-10 text-brand_black">&dollar;39</span>
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           <label class="relative flex items-center justify-center">
             <input
@@ -120,7 +121,7 @@ const StripeCheckout = () => {
               value={23}
             />
             <span class="absolute z-10 text-brand_black">&dollar;23</span>
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           <label class="relative flex items-center justify-center">
             <input
@@ -132,7 +133,7 @@ const StripeCheckout = () => {
               value={17}
             />
             <span class="absolute z-10 text-brand_black">&dollar;17</span>
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           <label class="relative flex items-center justify-center">
             <input
@@ -144,7 +145,7 @@ const StripeCheckout = () => {
               value={6}
             />
             <span class="absolute z-10 text-brand_black">&dollar;6</span>
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           {/* Custom amount input */}
           <label class="relative flex flex-col items-center justify-center text-brand_black">
@@ -156,7 +157,7 @@ const StripeCheckout = () => {
               class="peer sr-only"
               value="custom"
             />
-            <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
+            <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
               <input
                 type="number"
                 min={0}
@@ -169,10 +170,8 @@ const StripeCheckout = () => {
             </div>
           </label>
         </fieldset>
-        <label class="">
-          Make it monthly!
-        </label>
         <fieldset class="grid grid-cols-2 gap-2">
+          <legend class='py-2'>Make it monthly:</legend>
           <label class="relative flex items-center justify-center">
             <input checked type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
             <span class="absolute z-10 text-brand_black">Yes, Let's go!</span>
@@ -184,30 +183,16 @@ const StripeCheckout = () => {
             <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
         </fieldset>
-        <select name='tipPercent' class="w-full border-4 border-brand_black bg-brand_white text-brand_black p-2 hover:border-brand_pink focus:border-brand_pink focus:ring focus:ring-brand_pink focus:ring-opacity-50 transition ease-in-out duration-150">
-          <option value={0}>0%</option>
-          <option value={0.05}>5%</option>
-          <option value={0.1}>10%</option>
-          <option value={0.15}>15%</option>
-          <option value={0.2} selected>20%</option>
-          <option value={0.25}>25%</option>
-          <option value={0.3}>30%</option>
-          <option value={0.35}>35%</option>
-          <option value={0.4}>40%</option>
-          <option value={0.45}>45%</option>
-          <option value={0.5}>50%</option>
-          <option value={0.55}>55%</option>
-          <option value={0.6}>60%</option>
-          <option value={0.65}>65%</option>
-          <option value={0.7}>70%</option>
-          <option value={0.75}>75%</option>
-          <option value={0.8}>80%</option>
-          <option value={0.85}>85%</option>
-          <option value={0.9}>90%</option>
-          <option value={0.95}>95%</option>
-          <option value={1}>100%</option>
-        </select>
-        <button>Send</button>
+
+        {/* Submit Button */}
+        <button type='submit'
+          class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
+        >
+          <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
+            Donate
+          </h1>
+        </button>
+
         {/* <Suspense>{response() && <p>{response().message}</p>}</Suspense> */}
       </form>
       <div id="checkout">

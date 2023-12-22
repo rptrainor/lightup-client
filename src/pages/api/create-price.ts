@@ -8,12 +8,9 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 export const POST: APIRoute = async ({ request }) => {
   try {
     const formData = await request.formData();
-    console.log('formData', formData);
     const amountValue = formData.get('donation_amount');
     const tipPercentValue = formData.get('tipPercent');
     const sustaining_membership = formData.get('sustaining_membership');
-    console.log('amountValue', amountValue);
-    console.log('tipPercentValue', tipPercentValue);
 
     if (!amountValue || typeof amountValue !== 'string' || !tipPercentValue || typeof tipPercentValue !== 'string') {
       return new Response(JSON.stringify({
@@ -86,8 +83,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(null, { status: 404, statusText: 'Price ID not found' });
     }
     const isRecurring = sustaining_membership === 'yes' ? true : false;
-    console.log('sustaining_membership', sustaining_membership);
-    console.log('isRecurring', isRecurring);
+
     return new Response(JSON.stringify({ success: true, priceId: price.id, sustaining_membership: isRecurring }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

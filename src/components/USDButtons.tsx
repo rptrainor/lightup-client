@@ -33,7 +33,7 @@ const USDButtons = (props: Props) => {
 
   return (
     <fieldset class="grid grid-cols-4 gap-2">
-      <legend class='pb-2'>Choose an amount:</legend>
+      <legend class='pb-2'>Choose an amount (100% of this amount goes to your cause):</legend>
       <label class="relative flex items-center justify-center">
         <input
           checked

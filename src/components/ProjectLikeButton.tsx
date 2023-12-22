@@ -37,7 +37,7 @@ export type Project = {
   callToAction: string,
 }
 
-type LikeButtonState = "initial" | "render_button" | "render_payment" | "render_share_buttons";
+type LikeButtonState = "initial" | "render_button" | "render_info" | "render_payment" | 'render_checkout' | "render_share_buttons";
 
 type Props = {
   projectId: string;
