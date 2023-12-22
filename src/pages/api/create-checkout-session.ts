@@ -9,10 +9,10 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    console.log('request', request);
+    console.log('create-checkout-session - request', request);
     const { priceId, sustaining_membership } = await request.json(); // Extract priceId from the request body
-    console.log('priceId', priceId);
-    console.log('sustaining_membership', sustaining_membership);
+    console.log('create-checkout-session - priceId', priceId);
+    console.log('create-checkout-session - sustaining_membership', sustaining_membership);
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
       line_items: [
@@ -21,8 +21,7 @@ export const POST: APIRoute = async ({ request }) => {
           quantity: 1,
         },
       ],
-      mode: 'subscription',
-      // mode: sustaining_membership ? 'subscription' : 'payment',
+      mode: sustaining_membership ? 'subscription' : 'payment',
       return_url: `http://localhost:8788/checkout?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
       automatic_tax: { enabled: true },
     });

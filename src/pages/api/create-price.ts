@@ -85,8 +85,10 @@ export const POST: APIRoute = async ({ request }) => {
     if (!price.id) {
       return new Response(null, { status: 404, statusText: 'Price ID not found' });
     }
-    console.log('price', price);
-    return new Response(JSON.stringify({ success: true, priceId: price.id, sustaining_membership: sustaining_membership === 'yes' }), {
+    const isRecurring = sustaining_membership === 'yes' ? true : false;
+    console.log('sustaining_membership', sustaining_membership);
+    console.log('isRecurring', isRecurring);
+    return new Response(JSON.stringify({ success: true, priceId: price.id, sustaining_membership: isRecurring }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });

@@ -10,7 +10,7 @@ async function postFormData(formData: FormData) {
 }
 
 async function createCheckoutSession(priceId: string, sustaining_membership: boolean) {
-  console.log('createCheckoutSession CALLED')
+  console.log('createCheckoutSession CALLED', { priceId, sustaining_membership })
   const response = await fetch('/api/create-checkout-session', {
     method: 'POST',
     headers: {
@@ -29,8 +29,9 @@ const StripeCheckout = () => {
     const data = new FormData(e.target as HTMLFormElement);
     const priceData = await postFormData(data);
 
+    console.log('priceData.sustaining_membership', priceData.sustaining_membership);
     if (priceData && priceData.priceId && priceData.sustaining_membership) {
-      const checkoutSession = await createCheckoutSession(priceData.priceId, priceData.sustaining_membership === 'yes' ? true : false);
+      const checkoutSession = await createCheckoutSession(priceData.priceId, priceData.sustaining_membership);
 
       if (checkoutSession.clientSecret) {
         const stripeInstance = stripe();
