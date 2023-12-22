@@ -1,7 +1,5 @@
 import { createSignal, onMount, createEffect, Match, Switch } from 'solid-js'
-import { Elements } from 'solid-stripe'
 import { loadStripe, type Stripe } from '@stripe/stripe-js'
-import CheckoutForm from './CheckoutForm'
 import { userState } from "~/stores/auth_store";
 import USDButtons from './USDButtons';
 
@@ -303,11 +301,6 @@ export default function Payment(props: PaymentProps) {
             </h1>
           </button>
         </div>
-      </Match>
-      <Match when={stripe() && clientSecret()}>
-        <Elements stripe={stripe()} clientSecret={clientSecret()}>
-          <CheckoutForm onSucess={() => props.setState("render_share_buttons")} />
-        </Elements>
       </Match>
     </Switch>
   )
