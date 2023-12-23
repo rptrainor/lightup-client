@@ -1,7 +1,6 @@
 ---
+import SinglePage from "~/components/SinglePage.astro";
 import Layout from "~/layouts/Layout.astro";
-import Payment from "~/components/Payment";
-const { userId } = Astro.params;
 const PROJECT = {
   id: "2210c227-70af-446d-862a-b432bd1938db",
   title:
@@ -42,14 +41,9 @@ const PROJECT = {
 ---
 
 <Layout
-  title={`Join us in support of ${PROJECT.creator.name}'s research`}
-  description={`Join us in support of ${PROJECT.creator.name}'s research`}
+  title={PROJECT.title}
   image={PROJECT.banner.src}
+  description={PROJECT.header}
 >
-  <Payment
-    client:only
-    referring_userId={userId}
-    projectId={PROJECT.id}
-    sucessUrl={`${Astro.url.origin}/${PROJECT.slug}/grow`}
-  />
+  <SinglePage project={PROJECT} />
 </Layout>

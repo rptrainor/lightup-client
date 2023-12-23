@@ -5,8 +5,6 @@ import type { Project } from "~/components/ProjectLikeButton";
 const project = Astro.props.project as Project;
 import ProjectLikeButton from "~/components/ProjectLikeButton";
 import InterestsBox from "~/components/InterestsBox.astro";
-import Payment from "./Payment";
-const isLiked = Astro.props.isLiked as boolean;
 ---
 
 <div class='flex flex-col items-start gap-4 max-w-6xl mx-auto mb-28'>
@@ -36,6 +34,7 @@ const isLiked = Astro.props.isLiked as boolean;
     sucessUrl={`${Astro.url.origin}/${project.slug}/grow`}
     projectBannerSrc={project.banner.src}
     projectCreatorName={project.creator.name}
+    referringUserId={Astro.params.userId ?? undefined}
     client:only
   />
 
