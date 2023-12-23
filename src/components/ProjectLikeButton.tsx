@@ -47,6 +47,7 @@ type Props = {
   sucessUrl: string;
   projectBannerSrc: string;
   projectCreatorName: string;
+  referringUserId: string | undefined
 }
 
 const ProjectLikeButton = (props: Props) => {
@@ -80,7 +81,14 @@ const ProjectLikeButton = (props: Props) => {
         <CheckoutInfo />
       </Match>
       <Match when={state() === 'render_payment'}>
-        <StripeCheckout />
+        <StripeCheckout
+          projectId={props.projectId}
+          projectSlug={props.projectSlug}
+          sucessUrl={props.sucessUrl}
+          projectBannerSrc={props.projectBannerSrc}
+          projectCreatorName={props.projectCreatorName}
+          referringUserId={props.referringUserId}
+        />
       </Match>
       <Match when={state() === 'render_button'}>
         <button onClick={handleLikeProject()} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >

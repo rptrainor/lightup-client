@@ -9,21 +9,42 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { priceId, sustaining_membership, sustainabilityContributionPriceId } = await request.json(); // Extract priceId from the request body
+    const {
+      projectId,
+      projectSlug,
+      sucessUrl,
+      projectBannerSrc,
+      projectCreatorName,
+      referringUserId,
+      priceId,
+      sustaining_membership,
+      sustainabilityContributionPriceId
+    } = await request.json();
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
+      metadata: {
+        projectId,
+        projectSlug,
+        sucessUrl,
+        projectBannerSrc,
+        projectCreatorName,
+        referringUserId,
+        priceId,
+        sustaining_membership,
+        sustainabilityContributionPriceId
+      },
       line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
         {
           price: sustainabilityContributionPriceId,
           quantity: 1,
         },
-        {
-          price: priceId,
-          quantity: 1,
-        }
       ],
       mode: sustaining_membership ? 'subscription' : 'payment',
-      return_url: `http://localhost:8788/checkout?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
+      return_url: `${sucessUrl}?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
       automatic_tax: { enabled: true },
     });
     return new Response(JSON.stringify({ clientSecret: session.client_secret }), {
