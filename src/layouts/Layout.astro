@@ -4,6 +4,12 @@ export const prerender = true;
 import { ViewTransitions } from "astro:transitions";
 
 import "~/styles/global.css";
+
+declare global {
+  interface Window {
+    FrontChat: any; // Use a more specific type if you know the structure of FrontChat
+  }
+}
 interface Props {
   title?: string;
   description?: string;
@@ -37,6 +43,17 @@ import ProfileButton from "~/components/ProfileButton";
     <ViewTransitions />
     <PostHog />
     <script async src="https://js.stripe.com/v3/"></script>
+    <script src="https://chat-assets.frontapp.com/v1/chat.bundle.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.FrontChat) {
+          window.FrontChat('init', {chatId: '3aa11bafd47528cb82df79e039b92815', useDefaultLauncher: true});
+        } else {
+          console.error('FrontChat is not loaded');
+        }
+      });
+    </script>
+    
   </head>
   <body>
     <header>
