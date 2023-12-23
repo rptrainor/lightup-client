@@ -9,82 +9,107 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const formData = await request.formData();
     const amountValue = formData.get('donation_amount');
-    const tipPercentValue = formData.get('tipPercent');
     const sustaining_membership = formData.get('sustaining_membership');
 
-    if (!amountValue || typeof amountValue !== 'string' || !tipPercentValue || typeof tipPercentValue !== 'string') {
+    if (!amountValue || typeof amountValue !== 'string') {
       return new Response(JSON.stringify({
-        error: "Invalid or missing parameters: 'amount' and/or 'tipPercent'"
+        error: "Invalid or missing parameters: 'amount'"
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     const amount = parseFloat(amountValue);
-    const tipPercent = parseFloat(tipPercentValue);
     const currency = 'usd';
 
-    if (isNaN(amount) || isNaN(tipPercent)) {
+    if (isNaN(amount)) {
       return new Response(JSON.stringify({
         error: "Invalid numeric values for 'amount' and/or 'tipPercent'"
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const totalAmount = calculateTotalAmount(amount, tipPercent);
-    const totalAmountString = (totalAmount * 100).toFixed(0); // Convert to cents and to string
+    const sustainabilityContribution = amount * 0.20; // 20% of the donation
+    const sustainabilityContributionString = sustainabilityContribution.toFixed(2); // Convert to cents and to string
+    const amountString = amount.toFixed(2); // Convert to cents and to string
+
+    const amountInCents = Math.round(amount * 100); // Convert dollars to cents
+    const sustainabilityContributionInCents = Math.round(sustainabilityContribution * 100); // Convert dollars to cents
+
+    console.log({ amountInCents, sustainabilityContributionInCents, amount, sustainabilityContribution });
+
 
     const interval: Stripe.PriceCreateParams.Recurring.Interval = sustaining_membership === 'yes' ? 'month' : 'day'; // or another appropriate value
     const taxBehavior: Stripe.PriceCreateParams.TaxBehavior = 'exclusive'; // Or 'inclusive'/'unspecified' as per your requirement
 
-    const pricePayload = sustaining_membership === 'yes' ? {
+    const sustaining_contribution_payload: Stripe.PriceCreateParams = sustaining_membership === 'yes' ? {
       currency,
-      unit_amount_decimal: totalAmountString,
+      unit_amount_decimal: sustainabilityContributionInCents.toString(),
       tax_behavior: taxBehavior,
       recurring: {
         interval
       },
-      metadata: {
-        donation_amount: amount.toString(),
-        currency,
-        tipPercent: tipPercent.toString(),
-      },
+      metadata: {},
       product_data: {
-        name: 'Donation',
-        statement_descriptor: 'Donation via Lightup',
+        name: 'Sustainability contribution',
+        statement_descriptor: 'Sustainability Lightup',
         tax_code: 'txcd_90000001',
-        metadata: {
-          donation_amount: amount.toString(),
-          currency,
-          tipPercent: tipPercent.toString(),
-        }
+        metadata: {}
       },
     } : {
       currency,
-      unit_amount_decimal: totalAmountString,
+      unit_amount_decimal: sustainabilityContributionInCents.toString(),
       tax_behavior: taxBehavior,
-      metadata: {
-        donation_amount: amount.toString(),
-        currency,
-        tipPercent: tipPercent.toString(),
+      metadata: {},
+      product_data: {
+        name: 'Sustainability contribution',
+        statement_descriptor: 'Sustainability Lightup',
+        tax_code: 'txcd_90000001',
+        metadata: {}
       },
+    }
+
+    const metadata = {
+      donation_amount: amountString,
+      currency: currency,
+    };
+
+    const pricePayload: Stripe.PriceCreateParams = sustaining_membership === 'yes' ? {
+      currency,
+      unit_amount_decimal: amountInCents.toString(),
+      tax_behavior: taxBehavior,
+      recurring: {
+        interval
+      },
+      metadata: metadata,
+      product_data: {
+        name: 'Donation',
+        statement_descriptor: 'Donation | Lightup',
+        tax_code: 'txcd_90000001',
+      },
+    } : {
+      currency,
+      unit_amount_decimal: amountInCents.toString(),
+      tax_behavior: taxBehavior,
+      metadata: metadata,
       product_data: {
         name: 'Donation',
         statement_descriptor: 'Donation via Lightup',
         tax_code: 'txcd_90000001',
-        metadata: {
-          donation_amount: amount.toString(),
-          currency,
-          tipPercent: tipPercent.toString(),
-        }
       },
-    }
+    };
 
     const price = await stripe.prices.create(pricePayload);
+    const sustainabilityContributionPrice = await stripe.prices.create(sustaining_contribution_payload);
 
     if (!price.id) {
       return new Response(null, { status: 404, statusText: 'Price ID not found' });
     }
     const isRecurring = sustaining_membership === 'yes' ? true : false;
 
-    return new Response(JSON.stringify({ success: true, priceId: price.id, sustaining_membership: isRecurring }), {
+    return new Response(JSON.stringify({
+      success: true,
+      priceId: price.id,
+      sustainabilityContributionPriceId: sustainabilityContributionPrice.id,
+      sustaining_membership: isRecurring
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -93,15 +118,3 @@ export const POST: APIRoute = async ({ request }) => {
   }
 };
 
-function calculateTotalAmount(amount: number, tipPercent: number): number {
-  // Convert the tip percent into a decimal if it's in percentage form
-  if (tipPercent > 1) {
-    tipPercent = tipPercent / 100;
-  }
-
-  // Calculate the tip amount
-  const tipAmount = amount * tipPercent;
-
-  // Calculate the total amount by adding the tip amount to the original amount
-  return Math.round((amount + tipAmount) * 100) / 100;
-}

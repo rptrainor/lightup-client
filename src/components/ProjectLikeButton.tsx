@@ -9,6 +9,8 @@ import ShareButtons from "~/components/ShareButtons";
 import Payment from "./Payment";
 import handleSignInWithGoogleAuth from "~/utilities/handleSignInWithGoogle";
 import { set } from "zod";
+import CheckoutInfo from "./CheckoutInfo";
+import StripeCheckout from "./StripeCheckout";
 
 type Area = {
   header: string,
@@ -74,12 +76,11 @@ const ProjectLikeButton = (props: Props) => {
 
   return (
     <Switch fallback={null}>
+      <Match when={state() === 'render_info'}>
+        <CheckoutInfo />
+      </Match>
       <Match when={state() === 'render_payment'}>
-        <Payment
-          projectId={props.projectId}
-          referring_userId={undefined}
-          setState={setState}
-        />
+        <StripeCheckout />
       </Match>
       <Match when={state() === 'render_button'}>
         <button onClick={handleLikeProject()} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >

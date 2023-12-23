@@ -9,14 +9,18 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { priceId, sustaining_membership } = await request.json(); // Extract priceId from the request body
+    const { priceId, sustaining_membership, sustainabilityContributionPriceId } = await request.json(); // Extract priceId from the request body
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
       line_items: [
         {
-          price: priceId, // Use the received priceId here
+          price: sustainabilityContributionPriceId,
           quantity: 1,
         },
+        {
+          price: priceId,
+          quantity: 1,
+        }
       ],
       mode: sustaining_membership ? 'subscription' : 'payment',
       return_url: `http://localhost:8788/checkout?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed

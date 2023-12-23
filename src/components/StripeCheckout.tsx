@@ -1,7 +1,6 @@
-import { createSignal, createResource, Suspense, onMount } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 
-import CheckoutInfo from "./CheckoutInfo";
 async function postFormData(formData: FormData) {
   const response = await fetch("/api/create-price", {
     method: "POST",
@@ -10,13 +9,13 @@ async function postFormData(formData: FormData) {
   return await response.json();
 }
 
-async function createCheckoutSession(priceId: string, sustaining_membership: boolean) {
+async function createCheckoutSession(priceId: string, sustaining_membership: boolean, sustainabilityContributionPriceId: string) {
   const response = await fetch('/api/create-checkout-session', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ priceId, sustaining_membership }),
+    body: JSON.stringify({ priceId, sustaining_membership, sustainabilityContributionPriceId }),
   });
   return await response.json();
 }
@@ -29,8 +28,8 @@ const StripeCheckout = () => {
     const data = new FormData(e.target as HTMLFormElement);
     const priceData = await postFormData(data);
 
-    if (priceData && priceData.priceId && priceData.sustaining_membership) {
-      const checkoutSession = await createCheckoutSession(priceData.priceId, priceData.sustaining_membership);
+    if (priceData && priceData.priceId && priceData.sustaining_membership && priceData.sustainabilityContributionPriceId) {
+      const checkoutSession = await createCheckoutSession(priceData.priceId, priceData.sustaining_membership, priceData.sustainabilityContributionPriceId);
 
       if (checkoutSession.clientSecret) {
         const stripeInstance = stripe();
@@ -55,8 +54,6 @@ const StripeCheckout = () => {
 
   return (
     <div class='flex flex-col px-4 mx-auto items-center gap-4'>
-      <CheckoutInfo />
-
       <form onSubmit={submit} class="flex flex-col gap-2">
         <fieldset class="grid grid-cols-4 gap-2">
           <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
