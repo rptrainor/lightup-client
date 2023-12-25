@@ -1,4 +1,7 @@
-const CheckoutInfo = () => {
+type Props = {
+  onClick: () => void;
+}
+const CheckoutInfo = (props: Props) => {
   return (
     <div class="max-w-prose bg-brand_white flex flex-col p-4 border-solid border-4 border-brand_black">
       <h2 class="text-2xl font-bold text-center text-brand_black">
@@ -25,12 +28,13 @@ const CheckoutInfo = () => {
           Continue to earn 10% from all Sustainability Contributions made with your link — forever! A lucrative way to make ongoing, extra money while championing the science you care about.
         </p>
       </div>
-      <button type='submit'
+      <button 
+        onClick={props.onClick}
         class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
       >
-        <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
+        <h2 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
           Start Donating, Start Earning
-        </h1>
+        </h2>
       </button>
     </div>
   );

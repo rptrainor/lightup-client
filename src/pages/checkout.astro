@@ -4,7 +4,8 @@ import Layout from "~/layouts/Layout.astro";
 ---
 
 <Layout>
-  <StripeCheckout
+  <StripeCheckout client:load />
+  <!-- <StripeCheckout
     projectId='42'
     projectSlug='saferteens'
     sucessUrl='http://localhost:8788/saferteens/grow'
@@ -12,5 +13,5 @@ import Layout from "~/layouts/Layout.astro";
     projectCreatorName='John Doe'
     referringUserId='1234'
     client:only
-  />
+  /> -->
 </Layout>

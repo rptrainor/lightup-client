@@ -64,13 +64,10 @@ const ProfileModal = () => {
               <button onClick={handleRouteToStripeCustomerPortal} class="bg-brand_pink text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
                 <h4>Manage Lightup subscription</h4>
               </button>
-              <button onClick={handleLogout} class="bg-brand_blue text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
-                <h4>Log out of Lightup</h4>
+              <button onClick={handleEmailClick} class="bg-brand_yellow text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
+                <h4>Email Ryan at ryan@lightup.fyi</h4>
               </button>
             </div>
-            <button onClick={handleEmailClick} class="bg-brand_yellow text-brand_black text-center border-4 border-brand_black px-4 py-2 w-full">
-              <h4>Email Ryan</h4>
-            </button>
             <h3>
               Also, while you're here, let's shine a light on Sci-Hub's mission to provide free and unrestricted access to all scientific knowledge
             </h3>

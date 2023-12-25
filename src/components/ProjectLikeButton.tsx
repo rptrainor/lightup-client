@@ -1,14 +1,8 @@
 import { createSignal, createEffect, Switch, Match } from "solid-js";
 
-import { userState } from "~/stores/auth_store";
-import checkLikeStatus from "~/utilities/checkLikeStatus";
-import likeProject from "~/utilities/likeProject";
 import ThankYouLetter from "~/components/ThankYouLetter";
 import ShareButtons from "~/components/ShareButtons";
 
-import Payment from "./Payment";
-import handleSignInWithGoogleAuth from "~/utilities/handleSignInWithGoogle";
-import { set } from "zod";
 import CheckoutInfo from "./CheckoutInfo";
 import StripeCheckout from "./StripeCheckout";
 
@@ -51,34 +45,16 @@ type Props = {
 }
 
 const ProjectLikeButton = (props: Props) => {
-  const [state, setState] = createSignal<LikeButtonState>("initial");
-
-  const handleLikeProject = () => async () => {
-    setState("render_payment");
-    const userId = userState().user?.id;
-    if (!userId) {
-      handleSignInWithGoogleAuth();
-      return;
-    }
-    likeProject({ userId: userId, projectId: props.projectId });
-  };
-
-  createEffect(async () => {
-    const userId = userState().user?.id;
-    if (userId) {
-      const status = await checkLikeStatus({ userId: userId, projectId: props.projectId });
-      setState(status ? "render_payment" : "render_button")
-    }
-  });
+  const [state, setState] = createSignal<LikeButtonState>("render_button");
 
   createEffect(() => {
-    console.log({ state: state() })
+    console.log('state: ', state());
   });
 
   return (
     <Switch fallback={null}>
       <Match when={state() === 'render_info'}>
-        <CheckoutInfo />
+        <CheckoutInfo onClick={() => setState("render_payment")} />
       </Match>
       <Match when={state() === 'render_payment'}>
         <StripeCheckout
@@ -91,7 +67,7 @@ const ProjectLikeButton = (props: Props) => {
         />
       </Match>
       <Match when={state() === 'render_button'}>
-        <button onClick={handleLikeProject()} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
+        <button onClick={() => setState("render_payment")} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 fixed sm:sticky sm:top-0 bottom-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
           <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
             <span>Like</span>
             <div class="bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all">
@@ -111,15 +87,12 @@ const ProjectLikeButton = (props: Props) => {
             Your Link!
           </h2>
           <ShareButtons
-            url={userState().user?.id
-              ? `https://lightup.fyi/${props.projectSlug}/${userState().user?.id}`
-              : `https://lightup.fyi/${props.projectSlug}`}
+            url={`https://lightup.fyi/${props.projectSlug}`}
             text='I just donated to this project on LightUp. Join me in supporting this great cause!'
             image={props.projectBannerSrc}
           />
           <ThankYouLetter
             creatorName={props.projectCreatorName}
-            userName={userState().user?.full_name ?? userState().user?.name}
           />
         </div>
       </Match>

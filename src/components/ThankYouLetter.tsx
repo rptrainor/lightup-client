@@ -1,8 +1,5 @@
-import { Show } from "solid-js";
-
 type Props = {
   creatorName: string;
-  userName: string | undefined;
 }
 
 const ThankYouLetter = (props: Props) => {
@@ -10,9 +7,7 @@ const ThankYouLetter = (props: Props) => {
     <div
       class='flex flex-col gap-4 bg-brand_white p-4 border-solid border-4 border-brand_black text-brand_black'
     >
-      <Show when={props.userName} fallback={<p>Hi,</p>}>
-        <p>Hi {props.userName},</p>
-      </Show>
+      <p>Hi,</p>
       <p>
         {
           `Thank you for your generosity! You've just made a significant impact on ${props.creatorName

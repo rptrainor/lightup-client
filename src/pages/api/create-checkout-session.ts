@@ -47,6 +47,7 @@ export const POST: APIRoute = async ({ request }) => {
       return_url: `${sucessUrl}?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
       automatic_tax: { enabled: true },
     });
+    
     return new Response(JSON.stringify({ clientSecret: session.client_secret }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
