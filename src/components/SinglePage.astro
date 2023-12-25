@@ -35,7 +35,7 @@ import InterestsBox from "~/components/InterestsBox.astro";
     projectBannerSrc={project.banner.src}
     projectCreatorName={project.creator.name}
     referringUserId={Astro.params.userId ?? undefined}
-    client:only
+    client:only="solid-js"
   />
 
   <!-- Description -->

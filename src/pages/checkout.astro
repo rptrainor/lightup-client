@@ -4,14 +4,13 @@ import Layout from "~/layouts/Layout.astro";
 ---
 
 <Layout>
-  <StripeCheckout client:load />
-  <!-- <StripeCheckout
+  <StripeCheckout
     projectId='42'
     projectSlug='saferteens'
     sucessUrl='http://localhost:8788/saferteens/grow'
     projectBannerSrc='https://images.unsplash.com/photo-1622837137197-8b7b2b5b5b0f?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzNnx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=60'
     projectCreatorName='John Doe'
     referringUserId='1234'
-    client:only
-  /> -->
+    client:only='solid-js'
+  />
 </Layout>

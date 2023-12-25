@@ -7,11 +7,14 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const formData = await request.formData();
-    const amountValue = formData.get('donation_amount');
-    const sustaining_membership = formData.get('sustaining_membership');
+    const body = await request.json();
+    const amountValue = body.amountValue;
+    const isSustainingMembership = body.isSustainingMembership;
+    // const formData = await request.formData();
+    // const amountValue = formData.get('donation_amount');
+    // const sustaining_membership = formData.get('sustaining_membership');
 
-    if (!amountValue || typeof amountValue !== 'string') {
+    if (!amountValue) {
       return new Response(JSON.stringify({
         error: "Invalid or missing parameters: 'amount'"
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
@@ -36,10 +39,10 @@ export const POST: APIRoute = async ({ request }) => {
     console.log({ amountInCents, sustainabilityContributionInCents, amount, sustainabilityContribution });
 
 
-    const interval: Stripe.PriceCreateParams.Recurring.Interval = sustaining_membership === 'yes' ? 'month' : 'day'; // or another appropriate value
+    const interval: Stripe.PriceCreateParams.Recurring.Interval = isSustainingMembership === 'yes' ? 'month' : 'day'; // or another appropriate value
     const taxBehavior: Stripe.PriceCreateParams.TaxBehavior = 'exclusive'; // Or 'inclusive'/'unspecified' as per your requirement
 
-    const sustaining_contribution_payload: Stripe.PriceCreateParams = sustaining_membership === 'yes' ? {
+    const sustaining_contribution_payload: Stripe.PriceCreateParams = isSustainingMembership === 'yes' ? {
       currency,
       unit_amount_decimal: sustainabilityContributionInCents.toString(),
       tax_behavior: taxBehavior,
@@ -71,7 +74,7 @@ export const POST: APIRoute = async ({ request }) => {
       currency: currency,
     };
 
-    const pricePayload: Stripe.PriceCreateParams = sustaining_membership === 'yes' ? {
+    const pricePayload: Stripe.PriceCreateParams = isSustainingMembership === 'yes' ? {
       currency,
       unit_amount_decimal: amountInCents.toString(),
       tax_behavior: taxBehavior,
@@ -102,7 +105,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (!price.id) {
       return new Response(null, { status: 404, statusText: 'Price ID not found' });
     }
-    const isRecurring = sustaining_membership === 'yes' ? true : false;
+    const isRecurring = isSustainingMembership === 'yes' ? true : false;
 
     return new Response(JSON.stringify({
       success: true,

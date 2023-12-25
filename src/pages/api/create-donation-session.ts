@@ -8,15 +8,26 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 export const POST: APIRoute = async ({ request }) => {
   try {
     // Extracting data from the request
-    const formData = await request.formData();
-    const projectId = formData.get('projectId');
-    const projectSlug = formData.get('projectSlug');
-    const sucessUrl = formData.get('sucessUrl');
-    const projectBannerSrc = formData.get('projectBannerSrc');
-    const projectCreatorName = formData.get('projectCreatorName');
-    const referringUserId = formData.get('referringUserId');
-    const amountValue = formData.get('donation_amount');
-    const sustaining_membership = formData.get('sustaining_membership');
+    const body = await request.json();
+    const {
+      projectId,
+      projectSlug,
+      sucessUrl,
+      projectBannerSrc,
+      projectCreatorName,
+      referringUserId,
+      amountValue,
+      sustaining_membership
+    } = body;
+
+    // const projectId = formData.get('projectId');
+    // const projectSlug = formData.get('projectSlug');
+    // const sucessUrl = formData.get('sucessUrl');
+    // const projectBannerSrc = formData.get('projectBannerSrc');
+    // const projectCreatorName = formData.get('projectCreatorName');
+    // const referringUserId = formData.get('referringUserId');
+    // const amountValue = formData.get('donation_amount');
+    // const sustaining_membership = formData.get('sustaining_membership');
 
     // Check for required fields
     if (!projectId || !projectSlug || !sucessUrl || !amountValue) {
@@ -53,7 +64,16 @@ export const POST: APIRoute = async ({ request }) => {
       recurring: {
         interval
       },
-      metadata: {},
+      metadata: {
+        projectId,
+        projectSlug,
+        sucessUrl,
+        projectBannerSrc,
+        projectCreatorName,
+        referringUserId,
+        amountValue,
+        sustaining_membership
+      },
       product_data: {
         name: 'Sustainability contribution',
         statement_descriptor: 'Sustainability Lightup',
@@ -64,7 +84,16 @@ export const POST: APIRoute = async ({ request }) => {
       currency,
       unit_amount_decimal: sustainabilityContributionInCents.toString(),
       tax_behavior: taxBehavior,
-      metadata: {},
+      metadata: {
+        projectId,
+        projectSlug,
+        sucessUrl,
+        projectBannerSrc,
+        projectCreatorName,
+        referringUserId,
+        amountValue,
+        sustaining_membership
+      },
       product_data: {
         name: 'Sustainability contribution',
         statement_descriptor: 'Sustainability Lightup',
@@ -76,6 +105,14 @@ export const POST: APIRoute = async ({ request }) => {
     const metadata = {
       donation_amount: amountString,
       currency: currency,
+      projectId,
+      projectSlug,
+      sucessUrl,
+      projectBannerSrc,
+      projectCreatorName,
+      referringUserId,
+      amountValue,
+      sustaining_membership
     };
 
     const pricePayload: Stripe.PriceCreateParams = sustaining_membership === 'yes' ? {

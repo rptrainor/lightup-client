@@ -23,11 +23,8 @@ const { projectSlug, projectBannerSrc, projectCreatorName } = Astro.props;
       url={`https://lightup.fyi/${projectSlug}`}
       text='I just donated to this project on LightUp. Join me in supporting this great cause!'
       image={projectBannerSrc}
-      client:only
+      client:only='solid-js'
     />
-    <ThankYouLetter
-      creatorName={projectCreatorName}
-      client:only
-    />
+    <ThankYouLetter creatorName={projectCreatorName} client:only='solid-js' />
   </div>
 </Layout>
