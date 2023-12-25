@@ -115,7 +115,7 @@ export default function StripeCheckout(props: Props) {
   });
 
   return (
-    <div class='flex flex-col px-4 mx-auto items-center gap-4'>
+    <div class='flex flex-col px-4 mx-auto gap-4'>
       <fieldset class="grid grid-cols-4 gap-2">
         <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
         <label class="relative flex items-center justify-center">
@@ -131,7 +131,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;47</span>
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-[4.5rem] sm:w-full md:w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -144,7 +144,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;72</span>
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
 
         <label class="relative flex items-center justify-center">
@@ -158,7 +158,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;106</span>
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -171,7 +171,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;39</span>
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -184,7 +184,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;23</span>
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -197,7 +197,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;17</span>
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -210,7 +210,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;6</span>
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         {/* Custom amount input */}
         <label class="relative flex flex-col items-center justify-center text-brand_black">
@@ -223,7 +223,7 @@ export default function StripeCheckout(props: Props) {
             value="custom"
 
           />
-          <div class="w-[4.5rem] sm:w-[5.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
             <input
               type="number"
               min={0}
