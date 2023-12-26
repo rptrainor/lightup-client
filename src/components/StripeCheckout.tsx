@@ -1,6 +1,6 @@
 import { createSignal, createResource, createEffect, onMount, createMemo } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
-import { formatCurrency } from "~/utilities/formatCurrency";
+import { set } from "zod";
 
 type StripePayload = {
   amountValue: number;
@@ -11,6 +11,7 @@ type StripePayload = {
   projectBannerSrc: string;
   projectCreatorName: string;
   referringUserId: string | undefined;
+  isCheckingOut: boolean;
 };
 
 type Props = {
@@ -23,7 +24,7 @@ type Props = {
 };
 
 async function postFormData(stripePayload: StripePayload) {
-  if (!stripePayload.amountValue) {
+  if (!stripePayload.isCheckingOut) {
     return;
   }
   const response = await fetch("/api/create-donation-session", {
@@ -39,10 +40,11 @@ async function postFormData(stripePayload: StripePayload) {
 
 export default function StripeCheckout(props: Props) {
   const [stripe, setStripe] = createSignal<Stripe | null>(null);
-  const [amountValue, setAmountValue] = createSignal(0);
+  const [amountValue, setAmountValue] = createSignal(47);
   const [isSustainingMembership, setIsSustainingMembership] = createSignal(false);
+  const [customAmountSelected, setCustomAmountSelected] = createSignal(false);
   const [stripePayload, setStripePayload] = createSignal<StripePayload>({
-    amountValue: 0,
+    amountValue: 47,
     isSustainingMembership: false,
     projectId: props.projectId,
     projectSlug: props.projectSlug,
@@ -50,8 +52,19 @@ export default function StripeCheckout(props: Props) {
     projectBannerSrc: props.projectBannerSrc,
     projectCreatorName: props.projectCreatorName,
     referringUserId: props.referringUserId,
+    isCheckingOut: false,
   });
   const [response] = createResource(stripePayload, postFormData);
+
+  const handleCustomAmountRadioChange = () => {
+    setCustomAmountSelected(true);
+    setAmountValue(0); // Reset or set to a default custom amount
+  };
+
+  const handlePresetAmountRadioChange = (amount: number) => {
+    setCustomAmountSelected(false);
+    setAmountValue(amount);
+  };
 
   const handleAmountChange = (amount: number) => {
     setAmountValue(amount);
@@ -80,8 +93,8 @@ export default function StripeCheckout(props: Props) {
       projectBannerSrc: props.projectBannerSrc,
       projectCreatorName: props.projectCreatorName,
       referringUserId: props.referringUserId,
+      isCheckingOut: true,
     });
-    // postFormData(stripePayload());
   }
 
   onMount(async () => {
@@ -121,11 +134,12 @@ export default function StripeCheckout(props: Props) {
 
   createEffect(() => {
     console.log('response()', response());
+    console.log('isCustomSelected()', isCustomSelected());
   });
 
   return (
     <div class='flex flex-col px-4 mx-auto gap-4'>
-      <fieldset class="grid grid-cols-4 gap-2">
+      <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
         <label class="relative flex items-center justify-center">
           <input
@@ -140,7 +154,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;47</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -150,10 +164,10 @@ export default function StripeCheckout(props: Props) {
             role="radio"
             class="peer sr-only"
             value={72}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
+            onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;72</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
 
         <label class="relative flex items-center justify-center">
@@ -164,10 +178,10 @@ export default function StripeCheckout(props: Props) {
             role="radio"
             class="peer sr-only"
             value={106}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
+            onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;106</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -177,10 +191,10 @@ export default function StripeCheckout(props: Props) {
             role="radio"
             class="peer sr-only"
             value={39}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
+            onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;39</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -190,10 +204,10 @@ export default function StripeCheckout(props: Props) {
             role="radio"
             class="peer sr-only"
             value={23}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
+            onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;23</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -203,10 +217,10 @@ export default function StripeCheckout(props: Props) {
             role="radio"
             class="peer sr-only"
             value={17}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
+            onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;17</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -219,32 +233,39 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;6</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
-        {/* Custom amount input */}
+        {/* Custom amount radio input */}
         <label class="relative flex items-center justify-center">
           <input
             type="radio"
-            id="6"
+            id="custom_amount"
             name="donation_amount"
             role="radio"
             class="peer sr-only"
-            value={6}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
+            onChange={handleCustomAmountRadioChange}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;6</span>
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <span class="absolute z-10 text-brand_black">Custom</span>
+          <div class={`w-full h-12 flex items-center justify-center transition-colors ${!customAmountSelected() ? "ring-0 bg-brand_white border-brand_black" : "peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"}`}>
+            {/* Embedded custom amount input field */}
+            <input
+              type="number"
+              class="w-full h-full border-none text-center z-50 text-brand_black"
+              placeholder="Amount"
+              onInput={handleCustomAmountChange}
+            />
+          </div>
         </label>
       </fieldset>
       <fieldset class="grid grid-cols-2 gap-2">
         <legend class='py-2'>Make it monthly:</legend>
         <label class="relative flex items-center justify-center">
-          <input checked type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
+          <input checked={isSustainingMembership()} onChange={() => setIsSustainingMembership(true)} type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
           <span class="absolute z-10 text-brand_black">Yes, Let's go!</span>
           <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         <label class="relative flex items-center justify-center">
-          <input type="radio" id="no" name="sustaining_membership" role="radio" class="peer sr-only" value={"no"} />
+          <input checked={!isSustainingMembership()} onChange={() => setIsSustainingMembership(false)} type="radio" id="no" name="sustaining_membership" role="radio" class="peer sr-only" value={"no"} />
           <span class="absolute z-10 text-brand_black">No, give once</span>
           <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
