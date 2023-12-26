@@ -42,8 +42,8 @@ import ProfileButton from "~/components/ProfileButton";
     <ViewTransitions />
     <PostHog />
     <script async src="https://js.stripe.com/v3/"></script>
-    <script src="https://chat-assets.frontapp.com/v1/chat.bundle.js"></script>
-    <script>
+    <script defer src="https://chat-assets.frontapp.com/v1/chat.bundle.js"></script>
+    <script defer>
       document.addEventListener('DOMContentLoaded', () => {
         if (window.FrontChat) {
           window.FrontChat('init', {chatId: '3aa11bafd47528cb82df79e039b92815', useDefaultLauncher: true});

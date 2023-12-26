@@ -2,7 +2,6 @@ import { defineConfig, passthroughImageService } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import solidJs from "@astrojs/solid-js";
 import sitemap from "@astrojs/sitemap";
-
 import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
@@ -11,10 +10,10 @@ export default defineConfig({
   output: "server",
   prefetch: true,
   image: {
-    service: passthroughImageService()
+    service: passthroughImageService(),
   },
   adapter: cloudflare({
-    imageService: "passthrough"
+    imageService: "passthrough",
   }),
-  integrations: [solidJs(), sitemap(), tailwind()]
+  integrations: [solidJs(), sitemap(), tailwind()],
 });
