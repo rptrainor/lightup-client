@@ -1,4 +1,4 @@
-import { createSignal, createResource, onMount, createEffect } from "solid-js";
+import { createSignal, createResource, onMount, createEffect, Show } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 
 type StripePayload = {
@@ -98,151 +98,152 @@ const StripeCheckout = (props: Props) => {
 
   return (
     <div class='flex flex-col px-4 mx-auto gap-4'>
-      <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
-        <label class="relative flex items-center justify-center">
-          <input
-            checked
-            aria-checked="true"
-            type="radio"
-            id="47"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            value={47}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
-          />
-          <span class="absolute z-10 text-brand_black">47</span>
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
-        </label>
-        <label class="relative flex items-center justify-center">
-          <input
-            type="radio"
-            id="72"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            value={72}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
-          />
-          <span class="absolute z-10 text-brand_black">72</span>
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
-        </label>
-
-        <label class="relative flex items-center justify-center">
-          <input
-            type="radio"
-            id="106"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            value={106}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
-          />
-          <span class="absolute z-10 text-brand_black">106</span>
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
-        </label>
-        <label class="relative flex items-center justify-center">
-          <input
-            type="radio"
-            id="39"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            value={39}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
-          />
-          <span class="absolute z-10 text-brand_black">39</span>
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
-        </label>
-        <label class="relative flex items-center justify-center">
-          <input
-            type="radio"
-            id="23"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            value={23}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
-          />
-          <span class="absolute z-10 text-brand_black">23</span>
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
-        </label>
-        <label class="relative flex items-center justify-center">
-          <input
-            type="radio"
-            id="17"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            value={17}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
-          />
-          <span class="absolute z-10 text-brand_black">17</span>
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
-        </label>
-        <label class="relative flex items-center justify-center">
-          <input
-            type="radio"
-            id="6"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            value={6}
-            onChange={(e) => handleAmountChange(Number(e.target.value))}
-          />
-          <span class="absolute z-10 text-brand_black">6</span>
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
-        </label>
-        {/* Custom amount radio input with number input inside */}
-        <label class="relative flex items-center justify-center">
-          <input
-            type="radio"
-            id="custom_amount"
-            name="donation_amount"
-            role="radio"
-            class="peer sr-only"
-            checked={customAmountSelected()}
-            onChange={(e) => handleAmountChange(Number(e.target.value), true)}
-          />
-          <div class={`w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 ${customAmountSelected() ? "bg-brand_pink ring-2 ring-brand_pink ring-offset-2 ring-offset-brand_white border-solid placeholder:text-brand_white border-brand_black border-4" : ""}`}>
-            {/* Embedded custom amount number input */}
+      <Show when={!response()?.clientSecret}>
+        <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
+          <label class="relative flex items-center justify-center">
             <input
-              type="number"
-              min={1}
-              class={`w-full h-full border-none text-center text-brand_black ${customAmountSelected() ? "placeholder:text-brand_white bg-brand_pink" : ""}`}
-              placeholder="Amount"
-              onInput={(e) => handleAmountChange(Number(e.target.value), true)}
-              onFocus={(e) => handleAmountChange(Number(e.target.value), true)}
+              checked
+              aria-checked="true"
+              type="radio"
+              id="47"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              value={47}
+              onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-          </div>
-        </label>
-      </fieldset>
-      <fieldset class="grid grid-cols-2 gap-2">
-        <legend class='py-2'>Make it monthly:</legend>
-        <label class="relative flex items-center justify-center">
-          <input checked={isSustainingMembership()} onChange={() => setIsSustainingMembership(true)} type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
-          <span class="absolute z-10 text-brand_black">Yes, Let's go!</span>
-          <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
-        </label>
-        <label class="relative flex items-center justify-center">
-          <input checked={!isSustainingMembership()} onChange={() => setIsSustainingMembership(false)} type="radio" id="no" name="sustaining_membership" role="radio" class="peer sr-only" value={"no"} />
-          <span class="absolute z-10 text-brand_black">No, give once</span>
-          <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
-        </label>
-      </fieldset>
+            <span class="absolute z-10 text-brand_black">47</span>
+            <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          </label>
+          <label class="relative flex items-center justify-center">
+            <input
+              type="radio"
+              id="72"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              value={72}
+              onChange={(e) => handleAmountChange(Number(e.target.value))}
+            />
+            <span class="absolute z-10 text-brand_black">72</span>
+            <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          </label>
 
-      {/* Submit Button */}
-      <button
-        onClick={handleClick}
-        class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
-        disabled={!amountValue() || !stripe()}
-      >
-        <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
-          Donate
-        </h1>
-      </button>
+          <label class="relative flex items-center justify-center">
+            <input
+              type="radio"
+              id="106"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              value={106}
+              onChange={(e) => handleAmountChange(Number(e.target.value))}
+            />
+            <span class="absolute z-10 text-brand_black">106</span>
+            <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          </label>
+          <label class="relative flex items-center justify-center">
+            <input
+              type="radio"
+              id="39"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              value={39}
+              onChange={(e) => handleAmountChange(Number(e.target.value))}
+            />
+            <span class="absolute z-10 text-brand_black">39</span>
+            <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          </label>
+          <label class="relative flex items-center justify-center">
+            <input
+              type="radio"
+              id="23"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              value={23}
+              onChange={(e) => handleAmountChange(Number(e.target.value))}
+            />
+            <span class="absolute z-10 text-brand_black">23</span>
+            <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          </label>
+          <label class="relative flex items-center justify-center">
+            <input
+              type="radio"
+              id="17"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              value={17}
+              onChange={(e) => handleAmountChange(Number(e.target.value))}
+            />
+            <span class="absolute z-10 text-brand_black">17</span>
+            <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          </label>
+          <label class="relative flex items-center justify-center">
+            <input
+              type="radio"
+              id="6"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              value={6}
+              onChange={(e) => handleAmountChange(Number(e.target.value))}
+            />
+            <span class="absolute z-10 text-brand_black">6</span>
+            <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          </label>
+          {/* Custom amount radio input with number input inside */}
+          <label class="relative flex items-center justify-center">
+            <input
+              type="radio"
+              id="custom_amount"
+              name="donation_amount"
+              role="radio"
+              class="peer sr-only"
+              checked={customAmountSelected()}
+              onChange={(e) => handleAmountChange(Number(e.target.value), true)}
+            />
+            <div class={`w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 ${customAmountSelected() ? "bg-brand_pink ring-2 ring-brand_pink ring-offset-2 ring-offset-brand_white border-solid placeholder:text-brand_white border-brand_black border-4" : ""}`}>
+              {/* Embedded custom amount number input */}
+              <input
+                type="number"
+                min={1}
+                class={`w-full h-full border-none text-center text-brand_black ${customAmountSelected() ? "placeholder:text-brand_white bg-brand_pink" : ""}`}
+                placeholder="Amount"
+                onInput={(e) => handleAmountChange(Number(e.target.value), true)}
+                onFocus={(e) => handleAmountChange(Number(e.target.value), true)}
+              />
+            </div>
+          </label>
+        </fieldset>
+        <fieldset class="grid grid-cols-2 gap-2">
+          <legend class='py-2'>Make it monthly:</legend>
+          <label class="relative flex items-center justify-center">
+            <input checked={isSustainingMembership()} onChange={() => setIsSustainingMembership(true)} type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
+            <span class="absolute z-10 text-brand_black">Yes, Let's go!</span>
+            <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          </label>
+          <label class="relative flex items-center justify-center">
+            <input checked={!isSustainingMembership()} onChange={() => setIsSustainingMembership(false)} type="radio" id="no" name="sustaining_membership" role="radio" class="peer sr-only" value={"no"} />
+            <span class="absolute z-10 text-brand_black">No, give once</span>
+            <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          </label>
+        </fieldset>
 
+        {/* Submit Button */}
+        <button
+          onClick={handleClick}
+          class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
+          disabled={!amountValue() || !stripe()}
+        >
+          <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
+            Donate
+          </h1>
+        </button>
+      </Show>
       {/* CHECKOUT FORM */}
       <div id="checkout">
         {/* Checkout will insert the payment form here */}
