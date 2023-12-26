@@ -52,10 +52,6 @@ const ProjectLikeButton = (props: Props) => {
     }
   });
 
-  createEffect(() => {
-    console.log('state: ', state());
-  });
-
   return (
     <Switch fallback={null}>
       <Match when={state() === 'render_payment'}>

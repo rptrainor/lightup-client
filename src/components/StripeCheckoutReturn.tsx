@@ -35,7 +35,6 @@ const StripeCheckoutReturn = (props: Props) => {
 
   createEffect(() => {
     if (response()) {
-      console.log('response: ', response());
       if (response().status === 'open') {
         props.onError();
       } else if (response().status === 'complete') {

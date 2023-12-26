@@ -42,9 +42,6 @@ export const POST: APIRoute = async ({ request }) => {
     const amountInCents = Math.round(amount * 100); // Convert dollars to cents
     const sustainabilityContributionInCents = Math.round(sustainabilityContribution * 100); // Convert dollars to cents
 
-    console.log({ amountInCents, sustainabilityContributionInCents, amount, sustainabilityContribution });
-
-
     const interval: Stripe.PriceCreateParams.Recurring.Interval = sustaining_membership === 'yes' ? 'month' : 'day'; // or another appropriate value
     const taxBehavior: Stripe.PriceCreateParams.TaxBehavior = 'exclusive'; // Or 'inclusive'/'unspecified' as per your requirement
 

@@ -96,11 +96,6 @@ const StripeCheckout = (props: Props) => {
     }
   });
 
-  createEffect(() => {
-    console.log('amountValue', amountValue());
-    console.log('isSustainingMembership', isSustainingMembership());
-  });
-
   return (
     <div class='flex flex-col px-4 mx-auto gap-4'>
       <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
