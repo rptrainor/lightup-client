@@ -140,6 +140,7 @@ const USDButtons = (props: Props) => {
           checked={isCustomSelected()}
           onChange={handleCustomAmountChange}
         />
+        <span class="absolute z-10 text-brand_black">&dollar;420</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
           <input
             type="number"

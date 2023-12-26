@@ -1,5 +1,6 @@
-import { createSignal, createResource, createEffect, onMount } from "solid-js";
+import { createSignal, createResource, createEffect, onMount, createMemo } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
+import { formatCurrency } from "~/utilities/formatCurrency";
 
 type StripePayload = {
   amountValue: number;
@@ -110,6 +111,14 @@ export default function StripeCheckout(props: Props) {
     }
   });
 
+  const formattedAmount = createMemo(() => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      // You can add more options for formatting here
+    }).format(amountValue());
+  });
+
   createEffect(() => {
     console.log('response()', response());
   });
@@ -213,28 +222,18 @@ export default function StripeCheckout(props: Props) {
           <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
         {/* Custom amount input */}
-        <label class="relative flex flex-col items-center justify-center text-brand_black">
+        <label class="relative flex items-center justify-center">
           <input
             type="radio"
-            id="custom_amount_radio"
+            id="6"
             name="donation_amount"
             role="radio"
             class="peer sr-only"
-            value="custom"
-
+            value={6}
+            onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
-          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
-            <input
-              type="number"
-              min={0}
-              incremental
-              id="custom_amount"
-              name="custom_amount"
-              // placeholder="$"
-              onChange={(e) => handleAmountChange(Number(e.target.value))}
-              class="w-full h-full text-center border-0 peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black p-2 peer-focus:border-brand_pink peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-brand_pink transition-colors disabled:bg-gray-100 disabled:text-gray-500"
-            />
-          </div>
+          <span class="absolute z-10 text-brand_black">&dollar;6</span>
+          <div class="w-[4.5rem] sm:w-full md:w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
         </label>
       </fieldset>
       <fieldset class="grid grid-cols-2 gap-2">
@@ -264,6 +263,6 @@ export default function StripeCheckout(props: Props) {
       <div id="checkout">
         {/* Checkout will insert the payment form here */}
       </div>
-    </div>
+    </div >
   );
 }
