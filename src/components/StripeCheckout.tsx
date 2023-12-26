@@ -36,8 +36,12 @@ async function postFormData(stripePayload: StripePayload) {
   return await response.json();
 }
 
-export default function StripeCheckout(props: Props) {
-  const stripePayload = () => ({
+const StripeCheckout = (props: Props) => {
+  const [stripe, setStripe] = createSignal<Stripe | null>(null);
+  const [amountValue, setAmountValue] = createSignal(47);
+  const [isSustainingMembership, setIsSustainingMembership] = createSignal(false);
+  const [customAmountSelected, setCustomAmountSelected] = createSignal(false);
+  const [stripePayload, setStripePayload] = createSignal<StripePayload>({
     amountValue: amountValue(),
     isSustainingMembership: isSustainingMembership(),
     projectId: props.projectId,
@@ -46,14 +50,9 @@ export default function StripeCheckout(props: Props) {
     projectBannerSrc: props.projectBannerSrc,
     projectCreatorName: props.projectCreatorName,
     referringUserId: props.referringUserId,
-    isCheckingOut: true,
+    isCheckingOut: false,
   });
-
-  const [stripe, setStripe] = createSignal<Stripe | null>(null);
-  const [amountValue, setAmountValue] = createSignal(47);
-  const [isSustainingMembership, setIsSustainingMembership] = createSignal(false);
-  const [customAmountSelected, setCustomAmountSelected] = createSignal(false);
-  const [response, { refetch }] = createResource(() => postFormData(stripePayload()));
+  const [response, { refetch }] = createResource(stripePayload, postFormData);
 
   let customAmountNumberInput: HTMLInputElement;
 
@@ -78,7 +77,7 @@ export default function StripeCheckout(props: Props) {
       referringUserId: props.referringUserId,
       isCheckingOut: true,
     };
-    postFormData(stripePayload);
+    setStripePayload(stripePayload);
   }
 
   onMount(async () => {
@@ -210,10 +209,6 @@ export default function StripeCheckout(props: Props) {
             class="peer sr-only"
             checked={customAmountSelected()}
             onChange={(e) => handleAmountChange(Number(e.target.value), true)}
-
-            // onChange={handleCustomAmountRadioChange}
-            // onFocus={handleCustomAmountRadioChange}
-            // onClick={handleCustomAmountRadioChange}
           />
           <div class={`w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 ${customAmountSelected() ? "bg-brand_pink ring-2 ring-brand_pink ring-offset-2 ring-offset-brand_white border-solid placeholder:text-brand_white border-brand_black border-4" : ""}`}>
             {/* Embedded custom amount number input */}
@@ -224,7 +219,6 @@ export default function StripeCheckout(props: Props) {
               placeholder="Amount"
               onInput={(e) => handleAmountChange(Number(e.target.value), true)}
               onFocus={(e) => handleAmountChange(Number(e.target.value), true)}
-              // onClick={(e) => handleAmountChange(Number(e.target.value), true)}
             />
           </div>
         </label>
@@ -261,3 +255,5 @@ export default function StripeCheckout(props: Props) {
     </div >
   );
 }
+
+export default StripeCheckout;
