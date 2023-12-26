@@ -59,12 +59,8 @@ export default function StripeCheckout(props: Props) {
 
   const handleCustomAmountRadioChange = () => {
     setCustomAmountSelected(true);
-    setAmountValue(0); // Reset or set to a default custom amount
-    customAmountNumberInput.focus(); // Focus on the custom amount number input
-  };
-
-  const handleCustomAmountNumberFocus = () => {
-    setCustomAmountSelected(true);
+    setAmountValue(0);
+    customAmountNumberInput.focus();
   };
 
   const handlePresetAmountRadioChange = (amount: number) => {
@@ -75,19 +71,13 @@ export default function StripeCheckout(props: Props) {
   const handleCustomAmountChange = (event: Event) => {
     const value = (event.target as HTMLInputElement).value;
     setAmountValue(value ? parseInt(value, 10) : 0);
-    // setCustomAmountValue(value ? parseInt(value, 10) : 0);
-    setCustomAmountSelected(true); // Set custom amount radio to checked when number input changes
+    setCustomAmountSelected(true);
   };
 
   const handleAmountChange = (amount: number) => {
     setCustomAmountSelected(false);
     setAmountValue(amount);
   };
-
-  // const isCustomSelected = () => {
-  //   const amount = amountValue();
-  //   return amount === null || ![47, 72, 106, 39, 23, 17, 6].includes(amount);
-  // };
 
   function handleClick(e: MouseEvent) {
     e.preventDefault();
@@ -131,14 +121,6 @@ export default function StripeCheckout(props: Props) {
       }
     }
   });
-
-  const radioInputClass = (amount: number) => {
-    console.log('customAmountSelected()', customAmountSelected());
-    console.log('amount', amount);
-    console.log('conditional', customAmountSelected() && amountValue() !== amount);
-    return `w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors ${customAmountSelected() && amountValue() !== amount ? 'bg-brand_white' : 'peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4'
-      }`;
-  };
 
   createEffect(() => {
     console.log('response()', response());
@@ -262,11 +244,8 @@ export default function StripeCheckout(props: Props) {
             <input
               type="number"
               min={0}
-              // ref={(el) => customAmountNumberInput = el}
-              // class="w-full h-full border-none text-center text-brand_black"
               class={`w-full h-full border-none text-center text-brand_black ${customAmountSelected() ? "placeholder:text-brand_white bg-brand_pink" : ""}`}
               placeholder="Amount"
-              // value={customAmou()}
               onInput={handleCustomAmountChange}
               onFocus={handleCustomAmountChange}
               onClick={handleCustomAmountChange}
