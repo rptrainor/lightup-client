@@ -1,10 +1,7 @@
 import { createSignal, createEffect, Switch, Match } from "solid-js";
 
-import ThankYouLetter from "~/components/ThankYouLetter";
-import ShareButtons from "~/components/ShareButtons";
-
-import CheckoutInfo from "./CheckoutInfo";
 import StripeCheckout from "./StripeCheckout";
+import StripeCheckoutReturn from "./StripeCheckoutReturn";
 
 type Area = {
   header: string,
@@ -41,11 +38,19 @@ type Props = {
   sucessUrl: string;
   projectBannerSrc: string;
   projectCreatorName: string;
-  referringUserId: string | undefined
+  referringUserId: string | undefined;
+  session_id: string;
+
 }
 
 const ProjectLikeButton = (props: Props) => {
   const [state, setState] = createSignal<LikeButtonState>("render_button");
+
+  createEffect(() => {
+    if (props.session_id) {
+      setState("render_share_buttons")
+    }
+  });
 
   createEffect(() => {
     console.log('state: ', state());
@@ -53,9 +58,6 @@ const ProjectLikeButton = (props: Props) => {
 
   return (
     <Switch fallback={null}>
-      <Match when={state() === 'render_info'}>
-        <CheckoutInfo onClick={() => setState("render_payment")} />
-      </Match>
       <Match when={state() === 'render_payment'}>
         <StripeCheckout
           projectId={props.projectId}
@@ -67,7 +69,7 @@ const ProjectLikeButton = (props: Props) => {
         />
       </Match>
       <Match when={state() === 'render_button'}>
-        <button onClick={() => setState("render_info")} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 sticky top-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
+        <button onClick={() => setState("render_payment")} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 sticky top-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
           <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
             <span>Like</span>
             <div class="bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all">
@@ -79,22 +81,12 @@ const ProjectLikeButton = (props: Props) => {
         </button>
       </Match>
       <Match when={state() === 'render_share_buttons'}>
-        <div class='flex flex-col max-w-6xl p-4 gap-4 mx-auto'>
-          <h1 class='text-brand_yellow'>We Shine Brighter Together</h1>
-          <h1 class='text-brand_yellow'>Thank You for Being a Light</h1>
-          <h2 class='text-center'>
-            Empower & Earn: Receive a Generous 10% Reward for Every Donation Made via
-            Your Link!
-          </h2>
-          <ShareButtons
-            url={`https://lightup.fyi/${props.projectSlug}`}
-            text='I just donated to this project on LightUp. Join me in supporting this great cause!'
-            image={props.projectBannerSrc}
-          />
-          <ThankYouLetter
-            creatorName={props.projectCreatorName}
-          />
-        </div>
+        <StripeCheckoutReturn
+          session_id={props.session_id}
+          onError={() => setState('render_payment')}
+          projectSlug={props.projectSlug}
+          projectBannerSrc={props.projectBannerSrc}
+        />
       </Match>
     </Switch>
   );

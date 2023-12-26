@@ -20,15 +20,6 @@ export const POST: APIRoute = async ({ request }) => {
       sustaining_membership
     } = body;
 
-    // const projectId = formData.get('projectId');
-    // const projectSlug = formData.get('projectSlug');
-    // const sucessUrl = formData.get('sucessUrl');
-    // const projectBannerSrc = formData.get('projectBannerSrc');
-    // const projectCreatorName = formData.get('projectCreatorName');
-    // const referringUserId = formData.get('referringUserId');
-    // const amountValue = formData.get('donation_amount');
-    // const sustaining_membership = formData.get('sustaining_membership');
-
     // Check for required fields
     if (!projectId || !projectSlug || !sucessUrl || !amountValue) {
       return new Response(JSON.stringify({

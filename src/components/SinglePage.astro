@@ -3,6 +3,7 @@ export const prerender = true;
 
 import type { Project } from "~/components/ProjectLikeButton";
 const project = Astro.props.project as Project;
+const session_id = Astro.props.session_id;
 import ProjectLikeButton from "~/components/ProjectLikeButton";
 import InterestsBox from "~/components/InterestsBox.astro";
 ---
@@ -31,10 +32,11 @@ import InterestsBox from "~/components/InterestsBox.astro";
   <ProjectLikeButton
     projectId={project.id}
     projectSlug={project.slug}
-    sucessUrl={`${Astro.url.origin}/${project.slug}/grow`}
+    sucessUrl={`${Astro.url.origin}/${project.slug}`}
     projectBannerSrc={project.banner.src}
     projectCreatorName={project.creator.name}
     referringUserId={Astro.params.userId ?? undefined}
+    session_id={session_id}
     client:only="solid-js"
   />
 
