@@ -75,6 +75,7 @@ export default function StripeCheckout(props: Props) {
   const handleCustomAmountChange = (event: Event) => {
     const value = (event.target as HTMLInputElement).value;
     setAmountValue(value ? parseInt(value, 10) : 0);
+    // setCustomAmountValue(value ? parseInt(value, 10) : 0);
     setCustomAmountSelected(true); // Set custom amount radio to checked when number input changes
   };
 
@@ -142,6 +143,7 @@ export default function StripeCheckout(props: Props) {
   createEffect(() => {
     console.log('response()', response());
     console.log('customAmountSelected()', customAmountSelected());
+    console.log('amountValue()', amountValue());
   });
 
   return (
@@ -160,7 +162,7 @@ export default function StripeCheckout(props: Props) {
             value={47}
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;47</span>
+          <span class="absolute z-10 text-brand_black">47</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
@@ -173,7 +175,7 @@ export default function StripeCheckout(props: Props) {
             value={72}
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;72</span>
+          <span class="absolute z-10 text-brand_black">72</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
 
@@ -187,7 +189,7 @@ export default function StripeCheckout(props: Props) {
             value={106}
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;106</span>
+          <span class="absolute z-10 text-brand_black">106</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
@@ -200,7 +202,7 @@ export default function StripeCheckout(props: Props) {
             value={39}
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;39</span>
+          <span class="absolute z-10 text-brand_black">39</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
@@ -213,7 +215,7 @@ export default function StripeCheckout(props: Props) {
             value={23}
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;23</span>
+          <span class="absolute z-10 text-brand_black">23</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
@@ -226,7 +228,7 @@ export default function StripeCheckout(props: Props) {
             value={17}
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;17</span>
+          <span class="absolute z-10 text-brand_black">17</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
@@ -239,7 +241,7 @@ export default function StripeCheckout(props: Props) {
             value={6}
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">&dollar;6</span>
+          <span class="absolute z-10 text-brand_black">6</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         {/* Custom amount radio input with number input inside */}
@@ -252,22 +254,22 @@ export default function StripeCheckout(props: Props) {
             class="peer sr-only"
             checked={customAmountSelected()}
             onChange={handleCustomAmountRadioChange}
-            onFocus={handleCustomAmountNumberFocus}
-            onClick={handleCustomAmountNumberFocus}
+            onFocus={handleCustomAmountRadioChange}
+            onClick={handleCustomAmountRadioChange}
           />
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4">
+          <div class={`w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 ${customAmountSelected() ? "bg-brand_pink ring-2 ring-brand_pink ring-offset-2 ring-offset-brand_white border-solid placeholder:text-brand_white border-brand_black border-4" : ""}`}>
             {/* Embedded custom amount number input */}
             <input
               type="number"
               min={0}
               // ref={(el) => customAmountNumberInput = el}
               // class="w-full h-full border-none text-center text-brand_black"
-              class={`w-full h-full border-none text-center text-brand_black ${customAmountSelected() ? "bg-brand_pink ring-2 ring-brand_pink ring-offset-2 ring-offset-brand_white border-solid border-4" : ""}`}
+              class={`w-full h-full border-none text-center text-brand_black ${customAmountSelected() ? "placeholder:text-brand_white bg-brand_pink" : ""}`}
               placeholder="Amount"
               // value={customAmou()}
               onInput={handleCustomAmountChange}
-              onFocus={handleCustomAmountNumberFocus}
-              onClick={handleCustomAmountNumberFocus}
+              onFocus={handleCustomAmountChange}
+              onClick={handleCustomAmountChange}
             />
           </div>
         </label>
@@ -287,8 +289,10 @@ export default function StripeCheckout(props: Props) {
       </fieldset>
 
       {/* Submit Button */}
-      <button onClick={handleClick}
+      <button
+        onClick={handleClick}
         class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
+        disabled={!amountValue() || !stripe()}
       >
         <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
           Donate
