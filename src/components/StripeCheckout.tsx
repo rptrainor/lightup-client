@@ -124,13 +124,13 @@ export default function StripeCheckout(props: Props) {
     }
   });
 
-  const formattedAmount = createMemo(() => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      // You can add more options for formatting here
-    }).format(amountValue());
-  });
+  const radioInputClass = (amount: number) => {
+    console.log('customAmountSelected()', customAmountSelected());
+    console.log('amount', amount);
+    console.log('conditional', customAmountSelected() && amountValue() !== amount);
+    return `w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors ${customAmountSelected() && amountValue() !== amount ? 'bg-brand_white' : 'peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4'
+      }`;
+  };
 
   createEffect(() => {
     console.log('response()', response());
@@ -154,7 +154,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;47</span>
-          <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -167,7 +167,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;72</span>
-          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
 
         <label class="relative flex items-center justify-center">
@@ -181,7 +181,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;106</span>
-          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -194,7 +194,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;39</span>
-          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -207,7 +207,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;23</span>
-          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -220,7 +220,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;17</span>
-          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         <label class="relative flex items-center justify-center">
           <input
@@ -233,7 +233,7 @@ export default function StripeCheckout(props: Props) {
             onChange={(e) => handleAmountChange(Number(e.target.value))}
           />
           <span class="absolute z-10 text-brand_black">&dollar;6</span>
-          <div class="w-full  h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
         {/* Custom amount radio input */}
         <label class="relative flex items-center justify-center">
@@ -243,18 +243,15 @@ export default function StripeCheckout(props: Props) {
             name="donation_amount"
             role="radio"
             class="peer sr-only"
-            onChange={handleCustomAmountRadioChange}
+            checked={isCustomSelected()}
+            onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
           />
-          <span class="absolute z-10 text-brand_black">Custom</span>
-          <div class={`w-full h-12 flex items-center justify-center transition-colors ${!customAmountSelected() ? "ring-0 bg-brand_white border-brand_black" : "peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"}`}>
-            {/* Embedded custom amount input field */}
-            <input
-              type="number"
-              class="w-full h-full border-none text-center z-50 text-brand_black"
-              placeholder="Amount"
-              onInput={handleCustomAmountChange}
-            />
-          </div>
+          <input 
+          aria-label="custom"
+          class="absolute z-10 
+          text-brand_black w-16 h-5" 
+          />
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
       </fieldset>
       <fieldset class="grid grid-cols-2 gap-2">
