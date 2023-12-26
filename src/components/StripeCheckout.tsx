@@ -1,6 +1,5 @@
-import { createSignal, createResource, createEffect, onMount, createMemo } from "solid-js";
+import { createSignal, createResource, createEffect, onMount } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
-import { set } from "zod";
 
 type StripePayload = {
   amountValue: number;
@@ -56,9 +55,16 @@ export default function StripeCheckout(props: Props) {
   });
   const [response] = createResource(stripePayload, postFormData);
 
+  let customAmountNumberInput: HTMLInputElement;
+
   const handleCustomAmountRadioChange = () => {
     setCustomAmountSelected(true);
     setAmountValue(0); // Reset or set to a default custom amount
+    customAmountNumberInput.focus(); // Focus on the custom amount number input
+  };
+
+  const handleCustomAmountNumberFocus = () => {
+    setCustomAmountSelected(true);
   };
 
   const handlePresetAmountRadioChange = (amount: number) => {
@@ -66,20 +72,21 @@ export default function StripeCheckout(props: Props) {
     setAmountValue(amount);
   };
 
+  const handleCustomAmountChange = (event: Event) => {
+    const value = (event.target as HTMLInputElement).value;
+    setAmountValue(value ? parseInt(value, 10) : 0);
+    setCustomAmountSelected(true); // Set custom amount radio to checked when number input changes
+  };
+
   const handleAmountChange = (amount: number) => {
+    setCustomAmountSelected(false);
     setAmountValue(amount);
   };
 
-  const handleCustomAmountChange = (event: Event) => {
-    const value = (event.target as HTMLInputElement).value;
-    const numValue = value ? parseInt(value, 10) : 0;
-    setAmountValue(numValue);
-  };
-
-  const isCustomSelected = () => {
-    const amount = amountValue();
-    return amount === null || ![47, 72, 106, 39, 23, 17, 6].includes(amount);
-  };
+  // const isCustomSelected = () => {
+  //   const amount = amountValue();
+  //   return amount === null || ![47, 72, 106, 39, 23, 17, 6].includes(amount);
+  // };
 
   function handleClick(e: MouseEvent) {
     e.preventDefault();
@@ -134,7 +141,7 @@ export default function StripeCheckout(props: Props) {
 
   createEffect(() => {
     console.log('response()', response());
-    console.log('isCustomSelected()', isCustomSelected());
+    console.log('customAmountSelected()', customAmountSelected());
   });
 
   return (
@@ -235,7 +242,7 @@ export default function StripeCheckout(props: Props) {
           <span class="absolute z-10 text-brand_black">&dollar;6</span>
           <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
         </label>
-        {/* Custom amount radio input */}
+        {/* Custom amount radio input with number input inside */}
         <label class="relative flex items-center justify-center">
           <input
             type="radio"
@@ -243,15 +250,26 @@ export default function StripeCheckout(props: Props) {
             name="donation_amount"
             role="radio"
             class="peer sr-only"
-            checked={isCustomSelected()}
-            onChange={(e) => handlePresetAmountRadioChange(Number(e.target.value))}
+            checked={customAmountSelected()}
+            onChange={handleCustomAmountRadioChange}
+            onFocus={handleCustomAmountNumberFocus}
+            onClick={handleCustomAmountNumberFocus}
           />
-          <input 
-          aria-label="custom"
-          class="absolute z-10 
-          text-brand_black w-16 h-5" 
-          />
-          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
+          <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4">
+            {/* Embedded custom amount number input */}
+            <input
+              type="number"
+              min={0}
+              // ref={(el) => customAmountNumberInput = el}
+              // class="w-full h-full border-none text-center text-brand_black"
+              class={`w-full h-full border-none text-center text-brand_black ${customAmountSelected() ? "bg-brand_pink ring-2 ring-brand_pink ring-offset-2 ring-offset-brand_white border-solid border-4" : ""}`}
+              placeholder="Amount"
+              // value={customAmou()}
+              onInput={handleCustomAmountChange}
+              onFocus={handleCustomAmountNumberFocus}
+              onClick={handleCustomAmountNumberFocus}
+            />
+          </div>
         </label>
       </fieldset>
       <fieldset class="grid grid-cols-2 gap-2">
