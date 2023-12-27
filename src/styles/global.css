@@ -60,6 +60,7 @@ html {
   margin: 0;
   padding: 0;
   width: 100%;
+  font-family: "Montserrat-Bold", "sans";
   /* Ensure vertical scrolling is allowed */
   /* overflow-x: hidden; Only prevent horizontal overflow */
 }
@@ -67,7 +68,6 @@ html {
 body {
   line-height: 1;
   background: #0f7cc0;
-  font-family: "Montserrat-Bold", "sans";
   font-style: normal;
   transition: font-size 0.3s ease-out;
   font-weight: 700;
