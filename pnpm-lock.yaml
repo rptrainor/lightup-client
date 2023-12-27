@@ -17,6 +17,9 @@ dependencies:
   '@astrojs/tailwind':
     specifier: ^5.0.3
     version: 5.0.3(astro@4.0.5)(tailwindcss@3.3.6)
+  '@fontsource/montserrat':
+    specifier: ^5.0.16
+    version: 5.0.16
   '@stripe/stripe-js':
     specifier: ^2.2.1
     version: 2.2.1
@@ -1020,6 +1023,10 @@ packages:
   /@fastify/busboy@2.1.0:
     resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
     engines: {node: '>=14'}
+
+  /@fontsource/montserrat@5.0.16:
+    resolution: {integrity: sha512-g27g1cvkyVm74QM0HKOCnI4iifMqf/3cSJYedjbjtW/Ygb271qfDz5gGMJCl9MinD4nimDdENsU3K1vGR50S2Q==}
+    dev: false
 
   /@iarna/toml@2.2.5:
     resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
