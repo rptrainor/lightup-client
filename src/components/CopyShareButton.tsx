@@ -1,3 +1,5 @@
+import { addNotification } from '~/stores/notificationStore';
+
 type Props = {
   text: string;
   url: string;
@@ -7,8 +9,17 @@ const CopyShareButton = (props: Props) => {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(props.text + " " + props.url);
-      //TODO: TELL THE USER VIA NOTIFICATION THAT THE LINK IS COPIED
+      addNotification({
+        type: 'success',
+        header: 'Your link has been copied to your clipboard',
+        subHeader: 'You can now paste it anywhere you like!'
+      })
     } catch (error) {
+      addNotification({
+        type: 'error',
+        header: 'Something went wrong',
+        subHeader: 'Please try again'
+      })
       console.error(error);
     }
   };

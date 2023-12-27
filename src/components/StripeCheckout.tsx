@@ -1,6 +1,8 @@
 import { createSignal, createResource, onMount, createEffect, Show } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 
+import { addNotification } from '~/stores/notificationStore';
+
 type StripePayload = {
   amountValue: number;
   isSustainingMembership: boolean;
@@ -20,6 +22,7 @@ type Props = {
   projectBannerSrc: string;
   projectCreatorName: string;
   referringUserId: string | undefined;
+  onError: () => void;
 };
 
 async function postFormData(stripePayload: StripePayload) {
@@ -66,6 +69,7 @@ const StripeCheckout = (props: Props) => {
 
   function handleClick(e: MouseEvent) {
     e.preventDefault();
+    addNotification({ type: 'success', header: 'You are the best!', subHeader: 'We are generating your checkout form now' })
     const stripePayload: StripePayload = {
       amountValue: amountValue(),
       isSustainingMembership: isSustainingMembership(),
@@ -92,7 +96,10 @@ const StripeCheckout = (props: Props) => {
     if (checkoutResponse && checkoutResponse.clientSecret) {
       stripe()?.initEmbeddedCheckout({ clientSecret: checkoutResponse.clientSecret })
         .then(checkout => checkout.mount('#checkout'))
-        .catch(error => console.error('Error initializing Stripe Checkout:', error));
+        .catch(error => {
+          console.error('Error initializing Stripe Checkout:', error);
+          props.onError();
+        });
     }
   });
 

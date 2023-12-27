@@ -47,6 +47,16 @@ type Props = {
 const ProjectLikeButton = (props: Props) => {
   const [state, setState] = createSignal<LikeButtonState>("render_button");
 
+  const handleStripeCheckoutError = () => {
+    setState("render_payment")
+    addNotification({ type: 'error', header: 'Something went wrong', subHeader: 'Please try again' })
+  }
+
+  const handleStripeLikeButtonClick = () => {
+    setState("render_payment")
+    addNotification({ type: 'success', header: 'Amplify your impact with a dontation', subHeader: 'Remember, your sustainability contribution can be made back 100% when just two of your friends give with your referral link of equal or greater amounts' })
+  }
+
   createEffect(() => {
     if (props.session_id) {
       addNotification({ type: 'success', header: 'Thanks for your support!', subHeader: 'Your curiosity fuels groundbreaking research.' })
@@ -73,10 +83,11 @@ const ProjectLikeButton = (props: Props) => {
           projectBannerSrc={props.projectBannerSrc}
           projectCreatorName={props.projectCreatorName}
           referringUserId={props.referringUserId}
+          onError={handleStripeCheckoutError}
         />
       </Match>
       <Match when={state() === 'render_button'}>
-        <button onClick={() => setState("render_payment")} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 sticky top-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
+        <button onClick={handleStripeLikeButtonClick} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 sticky top-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
           <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
             <span>Like</span>
             <div class="bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all">
@@ -90,7 +101,7 @@ const ProjectLikeButton = (props: Props) => {
       <Match when={state() === 'render_share_buttons'}>
         <StripeCheckoutReturn
           session_id={props.session_id}
-          onError={() => setState('render_payment')}
+          onError={handleStripeCheckoutError}
           projectSlug={props.projectSlug}
           projectBannerSrc={props.projectBannerSrc}
         />

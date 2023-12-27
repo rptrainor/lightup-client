@@ -1,4 +1,5 @@
 import { supabase } from '~/db/connection';
+import { addNotification } from '~/stores/notificationStore';
 
 type Props = {
   userId: string;
@@ -13,7 +14,12 @@ async function checkLikeStatus({ userId, projectId }: Props) {
     .eq('project_id', projectId);
 
   if (error) {
-    console.error('Error checking like status:', error);
+    addNotification({
+      type: 'error',
+      header: 'It looks like something went wrong',
+      subHeader: 'Please try again later'
+    })
+    console.log(error);
     return null;
   }
 

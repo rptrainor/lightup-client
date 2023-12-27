@@ -1,6 +1,7 @@
 import { createSignal, createResource, createEffect } from 'solid-js';
 import ShareButtons from './ShareButtons';
 import base64Encode from '~/utilities/base64Encode';
+import { addNotification } from '~/stores/notificationStore';
 
 type PayloadProps = {
   session_id: string;
@@ -40,6 +41,11 @@ const StripeCheckoutReturn = (props: Props) => {
       } else if (response().status === 'complete') {
         setShowSuccess(true);
         setCustomerEmail(base64Encode(response().customer_details.email));
+        addNotification({
+          type: 'success',
+          header: 'Thank you for Being A Light with your Donation',
+          subHeader: 'You earn 10% back from the Sustainability Contributions for each donation made through your link. A simple, powerful way to support more research.'
+        })
       }
     }
   });
@@ -47,8 +53,17 @@ const StripeCheckoutReturn = (props: Props) => {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(`https://lightup.fyi/${props.projectSlug}/${customerEmail() ?? ''}`);
-      //TODO: TELL THE USER VIA NOTIFICATION THAT THE LINK IS COPIED
+      addNotification({
+        type: 'success',
+        header: 'Your link has been copied to your clipboard',
+        subHeader: 'You can now paste it anywhere you like!'
+      })
     } catch (error) {
+      addNotification({
+        type: 'error',
+        header: 'Something went wrong with copying your link',
+        subHeader: `https://lightup.fyi/${props.projectSlug}/${customerEmail() ?? ''}`
+      })
       console.error(error);
     }
   };

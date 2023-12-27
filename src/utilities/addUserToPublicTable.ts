@@ -1,4 +1,5 @@
 import { supabase } from '~/db/connection';
+import { addNotification } from '~/stores/notificationStore';
 import type { User } from '~/types/schema';
 
 async function addUserToPublicTable(user: User) {
@@ -8,12 +9,22 @@ async function addUserToPublicTable(user: User) {
       .upsert([{ ...user }]); // Using upsert to insert or update based on the 'id'
 
     if (error) {
-      throw new Error(error.message);
+      addNotification({
+        type: 'error',
+        header: 'It looks like something went wrong',
+        subHeader: 'Please try again later'
+      })
+      console.log(error);
     }
 
     return data;
   } catch (error) {
-    throw new Error("Error in addUserToPublicTable");
+    addNotification({
+      type: 'error',
+      header: 'It looks like something went wrong',
+      subHeader: 'Please try again later'
+    })
+    console.log(error);
   }
 }
 

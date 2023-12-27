@@ -1,4 +1,5 @@
 import { supabase } from '~/db/connection';
+import { addNotification } from '~/stores/notificationStore';
 
 type Props = {
   userId: string;
@@ -13,7 +14,11 @@ async function likeProject(props: Props) {
     ])
     .select()
   if (error) {
-    console.error('Error liking project:', error);
+    addNotification({
+      type: 'error',
+      header: 'It looks like something went wrong',
+      subHeader: 'Please try again later'
+    })
     return false;
   }
 

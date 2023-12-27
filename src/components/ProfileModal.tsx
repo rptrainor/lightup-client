@@ -1,5 +1,6 @@
 import { createSignal, Show } from "solid-js";
 import { supabase } from "~/db/connection";
+import { addNotification } from '~/stores/notificationStore';
 
 const ProfileModal = () => {
   const [isProfileModalDismissed, setIsProfileModalDismissed] = createSignal<boolean>(false);
@@ -27,6 +28,11 @@ const ProfileModal = () => {
     let { error } = await supabase.auth.signOut()
     window.location.href = window.location.origin;
     if (error) {
+      addNotification({
+        type: 'error',
+        header: 'Something went wrong',
+        subHeader: 'Please try again'
+      })
       console.error(error)
     }
   }
