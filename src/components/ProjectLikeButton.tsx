@@ -54,23 +54,13 @@ const ProjectLikeButton = (props: Props) => {
 
   const handleStripeLikeButtonClick = () => {
     setState("render_payment")
-    addNotification({ type: 'success', header: 'Amplify your impact with a dontation', subHeader: 'Remember, your sustainability contribution can be made back 100% when just two of your friends give with your referral link of equal or greater amounts' })
+    addNotification({ type: 'success', header: 'Amplify your impact with a dontation', subHeader: 'Remember, your 20% sustainability contribution can be made back 100% when just two of your friends give with your referral link of equal or greater amounts' })
   }
 
   createEffect(() => {
     if (props.session_id) {
-      addNotification({ type: 'success', header: 'Thanks for your support!', subHeader: 'Your curiosity fuels groundbreaking research.' })
       setState("render_share_buttons")
     }
-  });
-
-  onMount(() => {
-    // Somewhere in your application, e.g., in response to an event
-    addNotification({
-      type: 'success',
-      header: undefined,
-      subHeader: undefined
-    });
   });
 
   return (
