@@ -2,7 +2,7 @@
 export const prerender = true;
 
 import { ViewTransitions } from "astro:transitions";
-import '@fontsource/montserrat';
+import "@fontsource/montserrat";
 
 import "~/styles/global.css";
 
@@ -28,6 +28,7 @@ interface Props {
 
 // import PostHog from "~/components/posthog.astro";
 import ProfileButton from "~/components/ProfileButton";
+import NotificationContainer from "~/components/Notifications/NotificationContainer";
 ---
 
 <html lang='en'>
@@ -125,6 +126,7 @@ import ProfileButton from "~/components/ProfileButton";
           <ProfileButton client:only='solid-js' />
         </a>
       </nav>
+      <NotificationContainer client:only='solid-js' />
     </header>
     <main>
       <slot />

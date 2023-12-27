@@ -1,7 +1,8 @@
-import { createSignal, createEffect, Switch, Match } from "solid-js";
+import { createSignal, createEffect, Switch, Match, onMount } from "solid-js";
 
-import StripeCheckout from "./StripeCheckout";
-import StripeCheckoutReturn from "./StripeCheckoutReturn";
+import StripeCheckout from "~/components/StripeCheckout";
+import StripeCheckoutReturn from "~/components/StripeCheckoutReturn";
+import { addNotification } from '~/stores/notificationStore';
 
 type Area = {
   header: string,
@@ -52,6 +53,21 @@ const ProjectLikeButton = (props: Props) => {
     }
   });
 
+  onMount(() => {
+    // Somewhere in your application, e.g., in response to an event
+    addNotification({
+      type: 'success',
+      header: 'Success!',
+      subHeader: 'Your action was successful.'
+    });
+
+    // Adding an error notification
+    addNotification({
+      type: 'error',
+      header: 'Error',
+      subHeader: 'Something went wrong.'
+    });
+  });
   return (
     <Switch fallback={null}>
       <Match when={state() === 'render_payment'}>
