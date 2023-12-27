@@ -12,7 +12,7 @@ const SuccessNotification = (props: Props) => {
   createEffect(() => {
     timer = setTimeout(() => {
       props.onClose();
-    }, 6000);
+    }, 12000);
 
     onCleanup(() => {
       clearTimeout(timer);
@@ -21,7 +21,7 @@ const SuccessNotification = (props: Props) => {
 
   return (
     <div
-      class="pointer-events-auto w-[300px] max-w-sm overflow-hidden bg-utility_success_tint shadow-lg ring-1 ring-brand_black ring-opacity-5 transition-transform ease-out duration-300"
+      class="pointer-events-auto w-[300px] sm:w-[600px] max-w-sm overflow-hidden bg-utility_success_tint shadow-lg ring-1 ring-brand_black ring-opacity-5 transition-transform ease-out duration-300"
     >
       <div class="p-4">
         <div class="flex items-start">

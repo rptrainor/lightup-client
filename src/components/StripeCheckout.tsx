@@ -52,7 +52,7 @@ const StripeCheckout = (props: Props) => {
     referringUserId: props.referringUserId,
     isCheckingOut: false,
   });
-  const [response, { refetch }] = createResource(stripePayload, postFormData);
+  const [response] = createResource(stripePayload, postFormData);
 
   let customAmountNumberInput: HTMLInputElement;
 
@@ -97,7 +97,7 @@ const StripeCheckout = (props: Props) => {
   });
 
   return (
-    <div class='flex flex-col px-4 mx-auto gap-4'>
+    <div class='flex flex-col px-4 mx-auto gap-4 w-full'>
       <Show when={!response()?.clientSecret}>
         <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>

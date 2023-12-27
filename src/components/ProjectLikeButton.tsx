@@ -49,6 +49,7 @@ const ProjectLikeButton = (props: Props) => {
 
   createEffect(() => {
     if (props.session_id) {
+      addNotification({ type: 'success', header: 'Thanks for your support!', subHeader: 'Your curiosity fuels groundbreaking research.' })
       setState("render_share_buttons")
     }
   });
@@ -57,17 +58,11 @@ const ProjectLikeButton = (props: Props) => {
     // Somewhere in your application, e.g., in response to an event
     addNotification({
       type: 'success',
-      header: 'Success!',
-      subHeader: 'Your action was successful.'
-    });
-
-    // Adding an error notification
-    addNotification({
-      type: 'error',
-      header: 'Error',
-      subHeader: 'Something went wrong.'
+      header: undefined,
+      subHeader: undefined
     });
   });
+
   return (
     <Switch fallback={null}>
       <Match when={state() === 'render_payment'}>

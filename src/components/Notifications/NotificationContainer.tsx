@@ -19,13 +19,13 @@ const NotificationContainer = () => {
               {notification.type === 'success' ?
                 <SuccessNotification
                   onClose={() => removeNotification(notification.id)}
-                  Header={notification.header}
-                  SubHeader={notification.subHeader}
+                  Header={notification.header ?? ""}
+                  SubHeader={notification.subHeader ?? ""}
                 /> :
                 <ErrorNotification
                   onClose={() => removeNotification(notification.id)}
-                  Header={notification.header}
-                  SubHeader={notification.subHeader}
+                  Header={notification.header ?? ""}
+                  SubHeader={notification.subHeader ?? ""}
                 />
               }
             </div>
