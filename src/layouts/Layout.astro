@@ -7,7 +7,16 @@ import "~/styles/global.css";
 
 declare global {
   interface Window {
-    FrontChat: any; // Use a more specific type if you know the structure of FrontChat
+    Intercom: any; // Existing declaration
+    intercomSettings: {
+      // Adding the intercomSettings property
+      api_base: string;
+      app_id: string;
+      name?: string;
+      user_id?: string;
+      email?: string;
+      created_at?: number;
+    };
   }
 }
 interface Props {
@@ -16,14 +25,18 @@ interface Props {
   image?: string;
 }
 
-import PostHog from "~/components/posthog.astro";
+// import PostHog from "~/components/posthog.astro";
 import ProfileButton from "~/components/ProfileButton";
 ---
 
 <html lang='en'>
   <head>
     <meta charset='utf-8' />
-    <meta name='description' content={Astro.props.description || "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."} />
+    <meta
+      name='description'
+      content={Astro.props.description ||
+        "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."}
+    />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <meta
@@ -31,41 +44,84 @@ import ProfileButton from "~/components/ProfileButton";
       content={Astro.props.title ??
         "Lightup: Fueling Scientific Breakthroughs for a Better World"}
     />
-    <meta property='og:description' content={Astro.props.description || "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."} />
+    <meta
+      property='og:description'
+      content={Astro.props.description ||
+        "Lightup – a community where your involvement accelerates scientific progress and global betterment. Contribute to impactful research and be the catalyst for change."}
+    />
     <meta
       property='og:image'
       content={Astro.props.image ||
         "https://imagedelivery.net/xHZxKHrwCcaO8iTco-Njhg/4accd2f7-b876-4a25-4b18-b0a973798700/ogImage"}
     />
     <meta name='generator' content={Astro.generator} />
-    <title>{Astro.props.title ?? "Lightup: Fueling Scientific Breakthroughs for a Better World"}</title>
+    <title>
+      {
+        Astro.props.title ??
+          "Lightup: Fueling Scientific Breakthroughs for a Better World"
+      }
+    </title>
     <ViewTransitions />
-    <PostHog />
-    <script async src="https://js.stripe.com/v3/"></script>
-    <script defer src="https://chat-assets.frontapp.com/v1/chat.bundle.js"></script>
-    <script defer>
-      document.addEventListener('DOMContentLoaded', () => {
-        if (window.FrontChat) {
-          window.FrontChat('init', {chatId: '3aa11bafd47528cb82df79e039b92815', useDefaultLauncher: true});
-        } else {
-          console.error('FrontChat is not loaded');
-        }
-      });
+    <!-- <PostHog /> -->
+    <script async src='https://js.stripe.com/v3/'></script>
+    <script>
+      window.intercomSettings = {
+        api_base: "https://api-iam.intercom.io",
+        app_id: "t6yyzmj6",
+        // name: user.name, // Full name
+        // user_id: user.id, // a UUID for your user
+        // email: user.email, // the email for your user
+        // created_at: user.createdAt, // Signup date as a Unix timestamp
+      };
     </script>
-    
+
+    <script async>
+      // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/t6yyzmj6'
+      (function () {
+        var w = window;
+        var ic = w.Intercom;
+        if (typeof ic === "function") {
+          ic("reattach_activator");
+          ic("update", w.intercomSettings);
+        } else {
+          var d = document;
+          var i = function () {
+            i.c(arguments);
+          };
+          i.q = [];
+          i.c = function (args) {
+            i.q.push(args);
+          };
+          w.Intercom = i;
+          var l = function () {
+            var s = d.createElement("script");
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = "https://widget.intercom.io/widget/t6yyzmj6";
+            var x = d.getElementsByTagName("script")[0];
+            x.parentNode.insertBefore(s, x);
+          };
+          if (document.readyState === "complete") {
+            l();
+          } else if (w.attachEvent) {
+            w.attachEvent("onload", l);
+          } else {
+            w.addEventListener("load", l, false);
+          }
+        }
+      })();
+    </script>
   </head>
   <body>
     <header>
-      <nav
-        class='flex justify-between flex-nowrap p-4 mx-auto max-w-6xl z-50'
-      >
+      <nav class='flex justify-between flex-nowrap p-4 mx-auto max-w-6xl z-50'>
         <a href='/' data-astro-prefetch>
           <h1 class='text-start text-4xl font-black text-brand_yellow'>
             Lightup
           </h1>
         </a>
         <a href='/profile' data-astro-prefetch>
-          <ProfileButton client:only="solid-js" />
+          <ProfileButton client:only='solid-js' />
         </a>
       </nav>
     </header>
