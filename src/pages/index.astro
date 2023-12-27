@@ -320,7 +320,7 @@ const PROJECTS = [
     <!-- DESKTOP ONLY FEATURED BANNER - END -->
 
     <!-- MOBILE AND TABLET ONLY INTERESTS HORIZONTAL CAROUSEL - START -->
-    <div class='block lg:hidden'>
+    <div class='block xl:hidden'>
       <h3 class='text-brand_white mx-4 sm:mx-0 pl-4'>Interests</h3>
       <div class='flex overflow-x-scroll scrolling-touch gap-8 pt-4 pr-4 pl-6'>
         {
@@ -345,14 +345,14 @@ const PROJECTS = [
     <div class='my-4 flex flex-col gap-4 mx-auto'>
       <div class='grid grid-cols-4 gap-4 w-full max-w-6xl mx-auto'>
         <!-- PROJECTS COLUMN - START -->
-        <div class='col-span-4 lg:col-span-3 gap-4'>
+        <div class='col-span-4 xl:col-span-3 gap-4'>
           <h3 class='text-brand_white mx-4'>Happening on Lightup</h3>
           {PROJECTS.map((project) => <ProjectCard project={project} />)}
         </div>
         <!-- PROJECTS COLUMN - END -->
         <!-- DESKTOP ONLY INTERESTS COLUMN - START -->
-        <div class='hidden lg:block h-[6000px]'>
-          <div class='sticky top-12'>
+        <div class='hidden xl:block h-[6000px]'>
+          <div class='overflow-y-scroll'>
             <h3 class='text-brand_white mx-4 sm:mx-0'>Interests</h3>
             <div class='flex gap-4 flex-wrap py-4'>
               {
