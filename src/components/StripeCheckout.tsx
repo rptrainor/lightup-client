@@ -25,7 +25,7 @@ type Props = {
   onError: () => void;
 };
 
-async function postFormData(stripePayload: StripePayload) {
+async function postCreateStripeCheckoutSession(stripePayload: StripePayload) {
   if (!stripePayload.isCheckingOut) {
     return;
   }
@@ -55,7 +55,7 @@ const StripeCheckout = (props: Props) => {
     referringUserId: props.referringUserId,
     isCheckingOut: false,
   });
-  const [response] = createResource(stripePayload, postFormData);
+  const [response] = createResource(stripePayload, postCreateStripeCheckoutSession);
 
   let customAmountNumberInput: HTMLInputElement;
 
