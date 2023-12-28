@@ -5,7 +5,7 @@ import type { User } from '~/types/schema';
 async function addUserToPublicTable(user: User) {
   try {
     const { data, error } = await supabase
-      .from('USER')
+      .from('user')
       .upsert([{ ...user }]); // Using upsert to insert or update based on the 'id'
 
     if (error) {
@@ -14,7 +14,7 @@ async function addUserToPublicTable(user: User) {
         header: 'It looks like something went wrong',
         subHeader: 'Please try again later'
       })
-      console.log(error);
+      console.error(error);
     }
 
     return data;
@@ -24,7 +24,7 @@ async function addUserToPublicTable(user: User) {
       header: 'It looks like something went wrong',
       subHeader: 'Please try again later'
     })
-    console.log(error);
+    console.error(error);
   }
 }
 

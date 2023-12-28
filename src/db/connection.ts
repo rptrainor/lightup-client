@@ -4,7 +4,7 @@ import { addNotification } from '~/stores/notificationStore';
 
 // Constants for environment variables
 const PUBLIC_SUPABASE_URL = import.meta.env.DEV ? import.meta.env.PUBLIC_SUPABASE_URL_DEV : import.meta.env.PUBLIC_SUPABASE_URL_PROD;
-const PUBLIC_SUPABASE_ANON_KEY = import.meta.env.DEV ? import.meta.env.PUBLIC_SUPABASE_ANON_KEY : import.meta.env.PUBLIC_SUPABASE_ANON_KEY_PROD;
+const PUBLIC_SUPABASE_ANON_KEY = import.meta.env.DEV ? import.meta.env.PUBLIC_SUPABASE_ANON_KEY_DEV : import.meta.env.PUBLIC_SUPABASE_ANON_KEY_PROD;
 
 // Validate environment variables
 if (!PUBLIC_SUPABASE_URL || !PUBLIC_SUPABASE_ANON_KEY) {

@@ -1,8 +1,11 @@
-import { createSignal, createEffect, Switch, Match, onMount } from "solid-js";
+import { createSignal, createEffect, Switch, Match, createResource } from "solid-js";
 
 import StripeCheckout from "~/components/StripeCheckout";
-import StripeCheckoutReturn from "~/components/StripeCheckoutReturn";
+import ThankYou from "~/components/ThankYou";
+import { supabase } from "~/db/connection";
 import { addNotification } from '~/stores/notificationStore';
+import { handleUserUpdate } from "~/utilities/handleUserUpdate";
+import { userState } from "~/stores/authStore";
 
 type Area = {
   header: string,
@@ -33,6 +36,10 @@ export type Project = {
 
 type LikeButtonState = "initial" | "render_button" | "render_info" | "render_payment" | 'render_checkout' | "render_share_buttons";
 
+type PayloadProps = {
+  session_id: string
+}
+
 type Props = {
   projectId: string;
   projectSlug: string;
@@ -41,11 +48,21 @@ type Props = {
   projectCreatorName: string;
   referringUserId: string | undefined;
   session_id: string;
+}
 
+async function getStripeSession(payload: PayloadProps) {
+  if (!payload.session_id) {
+    return;
+  }
+  const response = await fetch(`/api/session-status?session_id=${payload.session_id}`);
+  return await response.json();
 }
 
 const ProjectLikeButton = (props: Props) => {
   const [state, setState] = createSignal<LikeButtonState>("render_button");
+  const [customerEmail, setCustomerEmail] = createSignal('');
+  const [payload, setPayload] = createSignal(props);
+  const [response] = createResource(payload, getStripeSession);
 
   const handleStripeCheckoutError = () => {
     setState("render_payment")
@@ -59,8 +76,41 @@ const ProjectLikeButton = (props: Props) => {
 
   createEffect(() => {
     if (props.session_id) {
-      setState("render_share_buttons")
+      setPayload(props);
     }
+  });
+
+  createEffect(async () => {
+    if (response()) {
+      console.log('response', response());
+      if (response().status === 'open') {
+        handleStripeCheckoutError();
+      } else if (response().status === 'complete') {
+        //TODO: CHECK IF CUSTOMER WITH EMAIL IS IN THE DATABASE
+        //TODO: IF NOT, ADD CUSTOMER TO DATABASE AS A NEW USER
+        //TODO: IF YES, UPDATE CUSTOMER'S CUSTOMER DETAILS AND CUSTOMER ID TO USER
+        setState("render_share_buttons")
+        setCustomerEmail((response().customer_details.email));
+        addNotification({
+          type: 'success',
+          header: 'Thank you for Being A Light with your Donation',
+          subHeader: 'You earn 10% back from the Sustainability Contributions for each donation made through your link. A simple, powerful way to support more research.'
+        })
+        try {
+          await handleUserUpdate(response());
+          // ... Rest of your success logic
+        } catch (error) {
+          console.error('Error handling user update:', error);
+          // Handle error
+        }
+      }
+    }
+  });
+
+  createEffect(() => {
+    console.log('state: ', state())
+    console.log('props:', { props })
+    console.log('userState', { userState: userState() })
   });
 
   return (
@@ -89,9 +139,8 @@ const ProjectLikeButton = (props: Props) => {
         </button>
       </Match>
       <Match when={state() === 'render_share_buttons'}>
-        <StripeCheckoutReturn
-          session_id={props.session_id}
-          onError={handleStripeCheckoutError}
+        <ThankYou
+          refferalLinkId="test"
           projectSlug={props.projectSlug}
           projectBannerSrc={props.projectBannerSrc}
         />

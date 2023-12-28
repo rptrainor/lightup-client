@@ -5,8 +5,6 @@ import SuccessNotification from '~/components/Notifications/SuccessNotification'
 
 const NotificationContainer = () => {
   const notifications = useNotifications();
-
-  console.log('NotificationContainer', { notifications: notifications() })
   return (
     <div
       aria-live="assertive"

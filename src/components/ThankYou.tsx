@@ -1,58 +1,19 @@
-import { createSignal, createResource, createEffect } from 'solid-js';
+// import { createSignal, createResource, createEffect } from 'solid-js';
 import ShareButtons from './ShareButtons';
-import base64Encode from '~/utilities/base64Encode';
+// import base64Encode from '~/utilities/base64Encode';
 import { addNotification } from '~/stores/notificationStore';
-
-type PayloadProps = {
-  session_id: string;
-}
+// import { handleUserUpdate } from '~/utilities/handleUserUpdate';
 
 type Props = {
-  session_id: string;
-  onError: () => void;
   projectSlug: string;
   projectBannerSrc: string;
+  refferalLinkId: string;
 }
 
-async function getStripeSession(payload: PayloadProps) {
-  if (!payload.session_id) {
-    return;
-  }
-  const response = await fetch(`/api/session-status?session_id=${payload.session_id}`);
-  return await response.json();
-}
-
-const StripeCheckoutReturn = (props: Props) => {
-  const [customerEmail, setCustomerEmail] = createSignal('');
-  const [showSuccess, setShowSuccess] = createSignal(false);
-  const [payload, setPayload] = createSignal(props);
-  const [response] = createResource(payload, getStripeSession);
-
-  createEffect(() => {
-    if (props.session_id) {
-      setPayload(props);
-    }
-  });
-
-  createEffect(() => {
-    if (response()) {
-      if (response().status === 'open') {
-        props.onError();
-      } else if (response().status === 'complete') {
-        setShowSuccess(true);
-        setCustomerEmail(base64Encode(response().customer_details.email));
-        addNotification({
-          type: 'success',
-          header: 'Thank you for Being A Light with your Donation',
-          subHeader: 'You earn 10% back from the Sustainability Contributions for each donation made through your link. A simple, powerful way to support more research.'
-        })
-      }
-    }
-  });
-
+const ThankYou = (props: Props) => {
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(`https://lightup.fyi/${props.projectSlug}/${customerEmail() ?? ''}`);
+      await navigator.clipboard.writeText(`https://lightup.fyi/${props.projectSlug}/${props.refferalLinkId}`);
       addNotification({
         type: 'success',
         header: 'Your link has been copied to your clipboard',
@@ -62,14 +23,14 @@ const StripeCheckoutReturn = (props: Props) => {
       addNotification({
         type: 'error',
         header: 'Something went wrong with copying your link',
-        subHeader: `https://lightup.fyi/${props.projectSlug}/${customerEmail() ?? ''}`
+        subHeader: `https://lightup.fyi/${props.projectSlug}/${props.refferalLinkId}`
       })
       console.error(error);
     }
   };
 
   return (
-    <div id="success" class='bg-brand_white mx-auto flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 border-solid border-4 border-brand_black' classList={{ hidden: !showSuccess() }}>
+    <div id="success" class='bg-brand_white mx-auto flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 border-solid border-4 border-brand_black'>
       <h2 class="text-2xl font-bold text-center text-brand_black">
         Thank you for Being A Light with your Donation
       </h2>
@@ -91,10 +52,10 @@ const StripeCheckoutReturn = (props: Props) => {
       </button>
       <div>
         <h3 class="font-semibold text-brand_black">Share referral link:</h3>
-        <ShareButtons text='I just donated to this project on LightUp. Join me in supporting this great cause!' url={`https://lightup.fyi/${props.projectSlug}/${customerEmail() ?? ''}`} image={props.projectBannerSrc} />
+        <ShareButtons text='I just donated to this project on LightUp. Join me in supporting this great cause!' url={`https://lightup.fyi/${props.projectSlug}/${props.refferalLinkId}`} image={props.projectBannerSrc} />
       </div>
     </div>
   );
 };
 
-export default StripeCheckoutReturn;
+export default ThankYou;

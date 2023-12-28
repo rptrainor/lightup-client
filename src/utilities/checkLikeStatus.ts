@@ -19,7 +19,7 @@ async function checkLikeStatus({ userId, projectId }: Props) {
       header: 'It looks like something went wrong',
       subHeader: 'Please try again later'
     })
-    console.log(error);
+    console.error(error);
     return null;
   }
 
