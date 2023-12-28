@@ -19,6 +19,7 @@
     "@fontsource/montserrat": "^5.0.16",
     "@stripe/stripe-js": "^2.2.1",
     "@supabase/supabase-js": "^2.39.0",
+    "@tanstack/solid-query": "^5.15.0",
     "astro": "^4.0.5",
     "solid-js": "^1.8.7",
     "stripe": "^14.9.0",

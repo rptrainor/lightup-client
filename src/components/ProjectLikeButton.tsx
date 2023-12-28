@@ -112,7 +112,7 @@ const ProjectLikeButton = (props: Props) => {
 
   createEffect(async () => {
     if (response()) {
-      console.log('response', response());
+      console.log('======> response <=======', response());
       if (response().status === 'open') {
         handleStripeCheckoutError();
       } else if (response().status === 'complete') {

@@ -146,6 +146,7 @@ export const POST: APIRoute = async ({ request }) => {
       metadata: {},
       mode: sustaining_membership === 'yes' ? 'subscription' : 'payment',
       ui_mode: 'embedded',
+      customer_creation: 'always',
       return_url: `${sucessUrl}?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
       automatic_tax: { enabled: true },
     });

@@ -6,6 +6,8 @@ const project = Astro.props.project as Project;
 const session_id = Astro.props.session_id;
 import ProjectLikeButton from "~/components/ProjectLikeButton";
 import InterestsBox from "~/components/InterestsBox.astro";
+
+console.log('referringUserId', Astro.params.userId);
 ---
 
 <div class='flex flex-col items-start gap-4 max-w-6xl mx-auto mb-28'>
