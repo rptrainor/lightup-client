@@ -8,11 +8,13 @@ type Props = {
 
 async function likeProject(props: Props) {
   const { data, error } = await supabase
-    .from('likes')
+    .from('user_like')
     .insert([
       { user_id: props.userId, project_id: props.projectId, is_liked: true },
     ])
-    .select()
+    .select();
+
+  console.log('likeProject - data:', { data });
   if (error) {
     addNotification({
       type: 'error',
