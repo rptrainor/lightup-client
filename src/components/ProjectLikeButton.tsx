@@ -17,7 +17,7 @@ import { userState } from "~/stores/authStore";
 import SolidQueryProvider from "~/components/SolidQueryProvider";
 import fetchSupabaseUser from "~/utilities/fetchSupabaseUser";
 import { queryClient } from "~/components/SolidQueryProvider";
-import useFetchSupabaseUser from "~/queries/useFetchSupabaseUser";
+import createFetchSupabaseUser from "~/queries/createFetchSupabaseUser";
 
 type Area = {
   header: string,
@@ -72,6 +72,7 @@ async function getStripeSession(payload: PayloadProps) {
 
 const ProjectLikeButton = (props: Props) => {
   const [state, setState] = createSignal<LikeButtonState>("initial");
+  const [userId, setUserId] = createSignal<string | undefined>(undefined);
   const [userLiked, setUserLiked] = createSignal<boolean | undefined>(undefined);
   const [customerEmail, setCustomerEmail] = createSignal<string | undefined>(undefined);
   const [stripeCustomerId, setStripeCustomerId] = createSignal<string | undefined>(undefined);
@@ -83,7 +84,7 @@ const ProjectLikeButton = (props: Props) => {
   //   queryFn: fetchSupabaseUser,
   //   enabled: true,
   // }))
-      const userQuery = useFetchSupabaseUser();
+      const userQuery = createFetchSupabaseUser();
 
 
   createEffect(() => {
