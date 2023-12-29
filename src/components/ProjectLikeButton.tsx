@@ -119,6 +119,12 @@ const ProjectLikeButton = (props: Props) => {
   });
 
   createEffect(() => {
+    if (state() === 'initial' && !userState().user) {
+      setState('not_logged_in_user_sees_like_button');
+    }
+  });
+
+  createEffect(() => {
     console.log('ProjectLikeButton', {
       stripeCustomerId: stripeCustomerId(),
       sessionId: sessionId(),
