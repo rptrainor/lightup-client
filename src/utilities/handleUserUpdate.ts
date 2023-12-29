@@ -29,14 +29,11 @@ export interface StripeResponse {
 export async function handleUserUpdate(stripeResponse: StripeResponse) {
   const { customer_details, customer } = stripeResponse;
   const { email, name, phone, address } = customer_details;
-
   // Check if user exists
   const { data: { user }, error } = await supabase.auth.getUser()
-
   if (error) {
     throw error;
   }
-
   if (user) {
     // Update user
     const { error } = await supabase.auth.updateUser({
@@ -57,8 +54,5 @@ export async function handleUserUpdate(stripeResponse: StripeResponse) {
     if (error) {
       throw error;
     }
-  } else {
-    // Sign in and create user
-    await handleSignInWithEmailAuth(email);
   }
 }

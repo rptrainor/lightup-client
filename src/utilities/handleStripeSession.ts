@@ -1,5 +1,4 @@
 async function getStripeSession(session_id: string | undefined) {
-  console.log('getStripeSession - session_id:', session_id);
   if (!session_id) {
     return;
   }
@@ -11,7 +10,6 @@ async function getStripeSession(session_id: string | undefined) {
 async function handleStripeSession(sessionId: string) {
   try {
     const sessionData = await getStripeSession(sessionId);
-    console.log('Stripe session data:', sessionData);
     return sessionData;
     // Handle the session data as needed
   } catch (error) {

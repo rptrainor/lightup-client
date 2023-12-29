@@ -10,6 +10,7 @@ import likeProject from "~/utilities/likeProject";
 import { userState } from "~/stores/authStore";
 import handleStripeSession from "~/utilities/handleStripeSession";
 import extractCustomerId from "~/utilities/extractCustomerId";
+import { handleSignInWithEmailAuth } from "~/utilities/handleSignInWithEmailAuth";
 
 type Area = {
   header: string,
@@ -88,12 +89,13 @@ const ProjectLikeButton = (props: Props) => {
   createEffect(() => {
     const fetchStripeSession = async () => {
       if (props.session_id) {
+        setSessionId(props.session_id);
         const sessionData = await handleStripeSession(props.session_id);
-        console.log({ sessionData });
         if (sessionData) {
+          setStripeCustomerId(sessionData.customer);
+          handleSignInWithEmailAuth(sessionData.customer_details.email);
           handleUserUpdate(sessionData);
           setStripeCustomerId(sessionData.customer);
-          setSessionId(sessionData.id);
           setCustomerEmail(sessionData.customer_details.email);
         }
       }
@@ -124,15 +126,15 @@ const ProjectLikeButton = (props: Props) => {
     }
   });
 
-  createEffect(() => {
-    console.log('ProjectLikeButton', {
-      stripeCustomerId: stripeCustomerId(),
-      sessionId: sessionId(),
-      customerEmail: customerEmail(),
-      refferalLink: refferalLink(),
-      state: state(),
-    });
-  });
+  // createEffect(() => {
+  //   console.log('ProjectLikeButton', {
+  //     stripeCustomerId: stripeCustomerId(),
+  //     sessionId: sessionId(),
+  //     customerEmail: customerEmail(),
+  //     refferalLink: refferalLink(),
+  //     state: state(),
+  //   });
+  // });
 
   return (
     <div class="w-full flex px-4 gap-4">
