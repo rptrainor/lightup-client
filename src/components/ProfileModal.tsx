@@ -68,7 +68,7 @@ const ProfileModal = () => {
             <div class="flex flex-nowrap gap-2 w-full">
 
               <button onClick={handleRouteToStripeCustomerPortal} class="bg-brand_pink text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
-                <h4>Manage Lightup subscription</h4>
+                <h4>Manage my donations</h4>
               </button>
               <button onClick={handleEmailClick} class="bg-brand_yellow text-brand_black border-4 border-brand_black px-2 sm:px-4 py-2 w-full">
                 <h4>Email Ryan at ryan@lightup.fyi</h4>
