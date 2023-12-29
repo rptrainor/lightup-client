@@ -103,6 +103,7 @@ export const INTERESTS: Interest[] = [
     INTERESTS.map((interest) => (
       <a
         data-astro-prefetch
+        aria-label={`Learn more about ${interest.name}`}
         href={`${Astro.url.origin}/${interest.slug}`}
         
       >

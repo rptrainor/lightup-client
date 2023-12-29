@@ -325,7 +325,7 @@ const PROJECTS = [
       <div class='flex overflow-x-scroll scrolling-touch gap-8 pt-4 pr-4 pl-6'>
         {
           INTERESTS.map((interest) => (
-            <a data-astro-prefetch href={`/${interest.slug}`}>
+            <a data-astro-prefetch href={`/${interest.slug}`} aria-label={`learn more about ${interest.name}`}>
               <div class='relative h-24'>
                 <div class='absolute bg-brand_pink w-full h-full -translate-x-2 -translate-y-2' />
                 <div class='relative flex items-center justify-center p-2 border-brand_pink bg-brand_white w-full border-4 z-10 h-full'>
@@ -357,7 +357,7 @@ const PROJECTS = [
             <div class='flex gap-4 flex-wrap py-4'>
               {
                 INTERESTS.map((interest) => (
-                  <a data-astro-prefetch href={`/${interest.slug}`}>
+                  <a data-astro-prefetch href={`/${interest.slug}`} aria-label={`learn more about ${interest.name}`}>
                     <div class='relative'>
                       <div class='absolute bg-brand_pink w-full h-full translate-x-2 translate-y-2' />
                       <div class='relative p-2 border-brand_pink bg-brand_white w-full border-4 z-10'>

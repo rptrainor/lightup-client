@@ -17,7 +17,7 @@ const ErrorNotification = (props: Props) => {
             </svg>
 
           </div>
-          <a href="mailto:ryan@lightup.fyi" class="ml-3 w-0 flex-1 pt-0.5">
+          <a href="mailto:ryan@lightup.fyi" class="ml-3 w-0 flex-1 pt-0.5" aria-label="email Ryan to get more help">
             <p class="text-sm text-brand_black">{props.Header ?? "Looks like somethign went wrong"}</p>
             <p class="mt-1 text-sm text-gray-600">{props.SubHeader ?? "Please try again, and"}</p>
             <p class="mt-1 text-sm text-gray-600">Click here to email us at ryan@lightup.fyi</p>
