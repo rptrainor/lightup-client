@@ -1,6 +1,9 @@
 ---
 import SinglePage from "~/components/SinglePage.astro";
 import Layout from "~/layouts/Layout.astro";
+
+const session_id = Astro.url.searchParams.get('session_id')! || '';
+
 const PROJECT = {
   id: "5",
   title:
@@ -44,5 +47,5 @@ const PROJECT = {
   image={PROJECT.banner.src}
   description={PROJECT.header}
 >
-  <SinglePage project={PROJECT} />
+  <SinglePage project={PROJECT} session_id={session_id} />
 </Layout>
