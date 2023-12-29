@@ -10,6 +10,7 @@ export default {
         brand_black: "#101214",
         brand_white: "#FFFFFF",
         brand_gray: "#9FA0A3",
+        brand_brackground: '#0f7cc0',
         utility_success: '#008F0E',
         utility_success_tint: '#D8F5DB',
         utility_success_shade: '#064210',

@@ -10,9 +10,9 @@ const RedditShareButton = (props: Props) => {
   };
 
   return (
-    <button onClick={shareOnReddit} class="bg-brand_black text-brand_white w-12 h-12 p-2 justify-center items-center border-solid border-4 border-brand_black">
+    <button onClick={shareOnReddit} class="bg-brand_black text-brand_white w-full h-12 sm:h-16 p-2 justify-center items-center border-solid border-4 border-brand_black flex">
       <span class="sr-only">Share on Reddit</span>
-      <svg class="w-6 h-6" fill="currentColor" height="800px" width="800px" version="1.1" id="Layer_1"
+      <svg class="w-6 h-6 sm:h-12 sm:w-12" fill="currentColor" height="800px" width="800px" version="1.1" id="Layer_1"
         viewBox="-268 289.4 262.6 222.6">
         <g>
           <path d="M-5.6,392.5c-4.4-23.6-30.2-34.8-50.3-21.8c-1.4,0.9-2.3,0.8-3.6,0c-15.1-8.8-31.4-14.2-48.5-17.1

@@ -10,9 +10,9 @@ const WhatsAppShareButton = (props: Props) => {
   };
 
   return (
-    <button onClick={shareOnWhatsApp} class="bg-brand_black text-brand_white w-12 h-12 p-2 justify-center items-center border-solid border-4 border-brand_black">
+    <button onClick={shareOnWhatsApp} class="bg-brand_black text-brand_white w-full h-12 sm:h-16 p-2 justify-center items-center border-solid border-4 border-brand_black flex">
       <span class="sr-only">Share on WhatsApp</span>
-      <svg fill="currentColor" class="w-6 h-6" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+      <svg fill="currentColor" class="w-6 h-6 sm:h-12 sm:w-12" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 308 308">
         <g id="XMLID_468_">
           <path id="XMLID_469_" d="M227.904,176.981c-0.6-0.288-23.054-11.345-27.044-12.781c-1.629-0.585-3.374-1.156-5.23-1.156

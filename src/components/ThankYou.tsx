@@ -31,17 +31,17 @@ const ThankYou = (props: Props) => {
 
   return (
     <div id="success" class='bg-brand_white mx-auto flex flex-col gap-2 sm:gap-4 p-2 sm:p-4 border-solid border-4 border-brand_black'>
-      <h2 class="text-2xl font-bold text-center text-brand_black">
+      <h2 class="font-bold text-center text-brand_black">
         Thank you for Being A Light with your Donation
       </h2>
-      <div>
+      <div class='flex flex-col gap-2'>
         <h3 class="font-semibold text-brand_black">Earn As You Empower:</h3>
         <p class="text-gray-600">
           You earn 10% back from the Sustainability Contributions for each donation made through your link. A simple, powerful way to support more research.
         </p>
       </div>
-      <button onClick={copyToClipboard} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 sticky top-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch>
-        <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center sm:gap-4">
+      <button onClick={copyToClipboard} class='bg-brand_pink sm:px-6 py-2 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 group z-20 max-w-[100vw]' data-astro-prefetch>
+        <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center sm:gap-4 text-3xl sm:text-5xl">
           <span>Copy my referral link</span>
           <div class="bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 transition-transform animate-wiggle">
@@ -50,7 +50,7 @@ const ThankYou = (props: Props) => {
           </div>
         </h1>
       </button>
-      <div>
+      <div class='flex flex-col gap-2'>
         <h3 class="font-semibold text-brand_black">Share referral link:</h3>
         <ShareButtons text='I just donated to this project on LightUp. Join me in supporting this great cause!' url={`https://lightup.fyi/${props.projectSlug}/${props.refferalLinkId}`} image={props.projectBannerSrc} />
       </div>

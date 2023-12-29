@@ -9,9 +9,9 @@ const FacebookShareButton = (props: Props) => {
   };
 
   return (
-    <button onClick={shareOnFacebook} class="bg-brand_black text-brand_white w-12 h-12 p-2 justify-center items-center border-solid border-4 border-brand_black">
+    <button onClick={shareOnFacebook} class="bg-brand_black text-brand_white w-full h-12 sm:h-16 p-2 justify-center items-center border-solid border-4 border-brand_black flex">
       <span class="sr-only">Share on Facebook</span>
-      <svg fill="currentColor" class="w-6 h-6" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+      <svg fill="currentColor" class="w-6 h-6 sm:h-12 sm:w-12" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 310 310">
         <g id="XMLID_834_">
           <path id="XMLID_835_" d="M81.703,165.106h33.981V305c0,2.762,2.238,5,5,5h57.616c2.762,0,5-2.238,5-5V165.765h39.064

@@ -98,13 +98,14 @@ const StripeCheckout = (props: Props) => {
         .then(checkout => checkout.mount('#checkout'))
         .catch(error => {
           console.error('Error initializing Stripe Checkout:', error);
+          setStripe(null);
           props.onError();
         });
     }
   });
 
   return (
-    <div class='flex flex-col px-4 mx-auto gap-4 w-full'>
+    <div class='flex flex-col mx-auto gap-4 w-full'>
       <Show when={!response()?.clientSecret}>
         <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
@@ -120,7 +121,7 @@ const StripeCheckout = (props: Props) => {
               value={47}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            <span class="absolute z-10 text-brand_black">47</span>
+            <span class="absolute z-10 text-brand_black text-center">47</span>
             <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
           </label>
           <label class="relative flex items-center justify-center">
@@ -133,7 +134,7 @@ const StripeCheckout = (props: Props) => {
               value={72}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            <span class="absolute z-10 text-brand_black">72</span>
+            <span class="absolute z-10 text-brand_black text-center">72</span>
             <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
           </label>
 
@@ -147,7 +148,7 @@ const StripeCheckout = (props: Props) => {
               value={106}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            <span class="absolute z-10 text-brand_black">106</span>
+            <span class="absolute z-10 text-brand_black text-center">106</span>
             <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
           </label>
           <label class="relative flex items-center justify-center">
@@ -160,7 +161,7 @@ const StripeCheckout = (props: Props) => {
               value={39}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            <span class="absolute z-10 text-brand_black">39</span>
+            <span class="absolute z-10 text-brand_black text-center">39</span>
             <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
           </label>
           <label class="relative flex items-center justify-center">
@@ -173,7 +174,7 @@ const StripeCheckout = (props: Props) => {
               value={23}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            <span class="absolute z-10 text-brand_black">23</span>
+            <span class="absolute z-10 text-brand_black text-center">23</span>
             <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
           </label>
           <label class="relative flex items-center justify-center">
@@ -186,7 +187,7 @@ const StripeCheckout = (props: Props) => {
               value={17}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            <span class="absolute z-10 text-brand_black">17</span>
+            <span class="absolute z-10 text-brand_black text-center">17</span>
             <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
           </label>
           <label class="relative flex items-center justify-center">
@@ -199,7 +200,7 @@ const StripeCheckout = (props: Props) => {
               value={6}
               onChange={(e) => handleAmountChange(Number(e.target.value))}
             />
-            <span class="absolute z-10 text-brand_black">6</span>
+            <span class="absolute z-10 text-brand_black text-center">6</span>
             <div class="w-full h-12 bg-brand_white border-brand_black flex items-center justify-center transition-colors peer-checked:bg-brand_pink peer-checked:ring-2 peer-checked:ring-brand_pink peer-checked:ring-offset-2 peer-checked:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4"></div>
           </label>
           {/* Custom amount radio input with number input inside */}
@@ -230,12 +231,12 @@ const StripeCheckout = (props: Props) => {
           <legend class='py-2'>Make it monthly:</legend>
           <label class="relative flex items-center justify-center">
             <input checked={isSustainingMembership()} onChange={() => setIsSustainingMembership(true)} type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
-            <span class="absolute z-10 text-brand_black">Yes, Let's go!</span>
+            <span class="absolute z-10 text-brand_black text-center">Yes, Let's go!</span>
             <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           <label class="relative flex items-center justify-center">
             <input checked={!isSustainingMembership()} onChange={() => setIsSustainingMembership(false)} type="radio" id="no" name="sustaining_membership" role="radio" class="peer sr-only" value={"no"} />
-            <span class="absolute z-10 text-brand_black">No, give once</span>
+            <span class="absolute z-10 text-brand_black text-center">No, give once</span>
             <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
         </fieldset>

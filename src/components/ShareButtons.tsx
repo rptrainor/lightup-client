@@ -17,7 +17,7 @@ type Props = {
 
 export default function ShareButtons(props: Props) {
   return (
-    <div class="flex gap-2 sm:gap-4 flex-wrap w-full justify-center items-baseline">
+    <div class="gap-2 sm:gap-4 flex-wrap w-full justify-center items-baseline grid grid-cols-5">
       <CopyShareButton text={props.text} url={props.url} />
       <TwitterShareButton text={props.text} url={props.url} />
       <LinkedInShareButton url={props.url} />

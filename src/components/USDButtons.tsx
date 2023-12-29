@@ -46,7 +46,7 @@ const USDButtons = (props: Props) => {
           value="47"
           onChange={() => handleAmountChange(47)}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;47</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;47</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
       </label>
       <label class="relative flex items-center justify-center">
@@ -59,7 +59,7 @@ const USDButtons = (props: Props) => {
           value="72"
           onChange={() => handleAmountChange(72)}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;72</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;72</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
       </label>
 
@@ -73,7 +73,7 @@ const USDButtons = (props: Props) => {
           value="106"
           onChange={() => handleAmountChange(106)}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;106</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;106</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
       </label>
       <label class="relative flex items-center justify-center">
@@ -86,7 +86,7 @@ const USDButtons = (props: Props) => {
           value="39"
           onChange={() => handleAmountChange(39)}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;39</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;39</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
       </label>
       <label class="relative flex items-center justify-center">
@@ -99,7 +99,7 @@ const USDButtons = (props: Props) => {
           value="23"
           onChange={() => handleAmountChange(23)}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;23</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;23</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
       </label>
       <label class="relative flex items-center justify-center">
@@ -112,7 +112,7 @@ const USDButtons = (props: Props) => {
           value="17"
           onChange={() => handleAmountChange(17)}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;17</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;17</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
       </label>
       <label class="relative flex items-center justify-center">
@@ -125,7 +125,7 @@ const USDButtons = (props: Props) => {
           value="6"
           onChange={() => handleAmountChange(6)}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;6</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;6</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
       </label>
       {/* Custom amount input */}
@@ -140,7 +140,7 @@ const USDButtons = (props: Props) => {
           checked={isCustomSelected()}
           onChange={handleCustomAmountChange}
         />
-        <span class="absolute z-10 text-brand_black">&dollar;420</span>
+        <span class="absolute z-10 text-brand_black text-center">&dollar;420</span>
         <div class="w-[4.5rem] h-12 bg-brand_white peer-checked:bg-brand_pink peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors">
           <input
             type="number"

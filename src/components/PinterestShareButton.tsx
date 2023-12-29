@@ -11,9 +11,9 @@ const PinterestShareButton = (props: Props) => {
   };
 
   return (
-    <button onClick={shareOnPinterest} class="bg-brand_black text-brand_white w-12 h-12 p-2 justify-center items-center border-solid border-4 border-brand_black">
+    <button onClick={shareOnPinterest} class="bg-brand_black text-brand_white w-full h-12 sm:h-16 p-2 justify-center items-center border-solid border-4 border-brand_black flex">
       <span class="sr-only">Share on Pinterest</span>
-      <svg class="w-6 h-6" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="800px"
+      <svg class="w-6 h-6 sm:h-12 sm:w-12" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="800px"
         height="800px" viewBox="0 0 512 512">
         <g id="7935ec95c421cee6d86eb22ecd12951c">
           <path style="display: inline;" d="M220.646,338.475C207.223,408.825,190.842,476.269,142.3,511.5

@@ -9,12 +9,12 @@ const LinkedInShareButton = (props: Props) => {
   };
 
   return (
-    <button onClick={shareOnLinkedIn} class="bg-brand_black text-brand_white w-12 h-12 p-2 justify-center items-center border-solid border-4 border-brand_black">
+    <button onClick={shareOnLinkedIn} class="bg-brand_black text-brand_white w-full h-12 sm:h-16 p-2 justify-center items-center border-solid border-4 border-brand_black flex">
       <span class="sr-only">
         Share on LinkedIn
       </span>
       <svg fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="800px"
-        height="800px" viewBox="0 0 512 512" class="w-6 h-6">
+        height="800px" viewBox="0 0 512 512" class="w-6 h-6 sm:h-12 sm:w-12">
         <g id="7935ec95c421cee6d86eb22ecd125aef">
           <path style="display: inline; fill-rule: evenodd; clip-rule: evenodd;" d="M116.504,500.219V170.654H6.975v329.564H116.504
 		L116.504,500.219z M61.751,125.674c38.183,0,61.968-25.328,61.968-56.953c-0.722-32.328-23.785-56.941-61.252-56.941
