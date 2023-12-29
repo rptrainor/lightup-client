@@ -26,12 +26,6 @@ dependencies:
   '@supabase/supabase-js':
     specifier: ^2.39.0
     version: 2.39.0
-  '@tanstack/solid-query':
-    specifier: ^5.15.0
-    version: 5.15.0(solid-js@1.8.7)
-  '@tanstack/solid-query-devtools':
-    specifier: ^5.15.0
-    version: 5.15.0(@tanstack/solid-query@5.15.0)(solid-js@1.8.7)
   astro:
     specifier: ^4.0.5
     version: 4.0.5(typescript@5.3.3)
@@ -1252,34 +1246,6 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    dev: false
-
-  /@tanstack/query-core@5.14.2:
-    resolution: {integrity: sha512-QmoJvC72sSWs3hgGis8JdmlDvqLfYGWUK4UG6OR9Q6t28JMN9m2FDwKPqoSJ9YVocELCSjMt/FGjEiLfk8000Q==}
-    dev: false
-
-  /@tanstack/query-devtools@5.15.0:
-    resolution: {integrity: sha512-oz+xBIf+fanmAQ3CZrV4t+1VZiK2nyTcH3zY3G8ukzw+LwX2QGa04ZfF+OCOVF6tPZ2dn1cekMibUb4tevf/aw==}
-    dev: false
-
-  /@tanstack/solid-query-devtools@5.15.0(@tanstack/solid-query@5.15.0)(solid-js@1.8.7):
-    resolution: {integrity: sha512-2piZ6pyD8E03muXQGh2JBMjfSi7fdKxtX93IfuzN7UUB5UhDJcISJi3ao8O8MdvvRx9m4b7YVDwtt3pk5IKxlg==}
-    peerDependencies:
-      '@tanstack/solid-query': ^5.15.0
-      solid-js: ^1.8.7
-    dependencies:
-      '@tanstack/query-devtools': 5.15.0
-      '@tanstack/solid-query': 5.15.0(solid-js@1.8.7)
-      solid-js: 1.8.7
-    dev: false
-
-  /@tanstack/solid-query@5.15.0(solid-js@1.8.7):
-    resolution: {integrity: sha512-PRqH0FxOgbVEp2V6y8lR1tj8ov0NbRDYTG0Ja5RPtDZBFtYcJ/gZomNwS9GO+sOdVUyAZF9r3XLx63FTCC5g2g==}
-    peerDependencies:
-      solid-js: ^1.6.0
-    dependencies:
-      '@tanstack/query-core': 5.14.2
-      solid-js: 1.8.7
     dev: false
 
   /@types/babel__core@7.20.5:

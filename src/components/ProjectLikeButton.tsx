@@ -1,9 +1,4 @@
 import { createSignal, createEffect, Switch, Match, createResource } from "solid-js";
-import {
-  QueryClient,
-  QueryClientProvider,
-  createQuery,
-} from '@tanstack/solid-query'
 
 import StripeCheckout from "~/components/StripeCheckout";
 import ThankYou from "~/components/ThankYou";
@@ -14,10 +9,6 @@ import { handleSignInWithEmailAuth } from "~/utilities/handleSignInWithEmailAuth
 import checkLikeStatus from "~/utilities/checkLikeStatus";
 import likeProject from "~/utilities/likeProject";
 import { userState } from "~/stores/authStore";
-import SolidQueryProvider from "~/components/SolidQueryProvider";
-import fetchSupabaseUser from "~/utilities/fetchSupabaseUser";
-import { queryClient } from "~/components/SolidQueryProvider";
-import createFetchSupabaseUser from "~/queries/createFetchSupabaseUser";
 
 type Area = {
   header: string,
@@ -72,54 +63,56 @@ async function getStripeSession(payload: PayloadProps) {
 
 const ProjectLikeButton = (props: Props) => {
   const [state, setState] = createSignal<LikeButtonState>("initial");
-  const [userId, setUserId] = createSignal<string | undefined>(undefined);
   const [userLiked, setUserLiked] = createSignal<boolean | undefined>(undefined);
   const [customerEmail, setCustomerEmail] = createSignal<string | undefined>(undefined);
   const [stripeCustomerId, setStripeCustomerId] = createSignal<string | undefined>(undefined);
-  const [refferalLink, setRefferalLink] = createSignal<string | undefined>(undefined);
-
-  // const userQuery = createQuery(() => ({
-  //   queryClient,
-  //   queryKey: ['user'],
-  //   queryFn: fetchSupabaseUser,
-  //   enabled: true,
-  // }))
-      const userQuery = createFetchSupabaseUser();
-
+  const [refferalLink, setRefferalLink] = createSignal<string | null>(null);
 
   createEffect(() => {
-    // const userId = userState().user?.id;
-    // console.log('userQuery', userQuery);
-    console.log('userQuery', userQuery);
-    console.log('userQuery.data', userQuery.data);
-    switch (state()) {
-      case 'initial':
-        if (!userQuery.data?.id) {
-          setState('not_logged_in_user_sees_like_button');
-        } else {
-          setState('logged_in_user_sees_like_button');
-        }
-        break;
-      case 'not_logged_in_user_sees_like_button':
-        break;
-      case 'not_logged_in_user_sees_stripe_checkout':
-        break;
-      case 'not_logged_in_user_sees_thank_you':
-        break;
-      case 'logged_in_user_sees_like_button':
-        break;
-      case 'logged_in_user_sees_stripe_checkout':
-        break;
-      case 'logged_in_user_sees_thank_you':
-        break;
-      default:
-        break;
+    const userId = userState().user?.id;
+    const email = userState().user?.email;
+    const customerId = stripeCustomerId();
+    console.log('userId', userId);
+
+    if (userId && email && customerId && props.projectId && refferalLink() === null) {
+      getOrCreateReferralLink({ stripeCustomerId: customerId, projectId: props.projectId, email, userId: userState().user?.id }).then((response) => {
+        console.log('getOrCreateReferralLink', response);
+        setRefferalLink(response);
+      });
     }
+    // if (state() === 'initial')
+    // switch (state()) {
+    //   case 'initial':
+    //     if (!userState().user?.id) {
+    //       setState('not_logged_in_user_sees_like_button');
+    //     } else {
+    //       setState('logged_in_user_sees_like_button');
+    //     }
+    //     break;
+    //   case 'not_logged_in_user_sees_like_button':
+    //     break;
+    //   case 'not_logged_in_user_sees_stripe_checkout':
+    //     break;
+    //   case 'not_logged_in_user_sees_thank_you':
+    //     break;
+    //   case 'logged_in_user_sees_like_button':
+    //     break;
+    //   case 'logged_in_user_sees_stripe_checkout':
+    //     break;
+    //   case 'logged_in_user_sees_thank_you':
+    //     break;
+    //   default:
+    //     break;
+    // }
   });
 
+  createEffect(() => {
+    console.log('ProjectLikeButton: userState()', userState());
+    console.log('ProjectLikeButton: referralLink()', refferalLink());
+  });
 
   return (
-    <SolidQueryProvider>
+    <div class="w-full flex px-4 gap-4">
       <Switch fallback={null}>
         <Match when={state() === 'not_logged_in_user_sees_stripe_checkout' || state() === 'logged_in_user_sees_stripe_checkout'}>
           <StripeCheckout
@@ -152,7 +145,7 @@ const ProjectLikeButton = (props: Props) => {
           />
         </Match>
       </Switch>
-    </SolidQueryProvider>
+    </div>
   );
 }
 

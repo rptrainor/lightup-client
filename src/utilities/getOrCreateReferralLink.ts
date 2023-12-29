@@ -1,16 +1,18 @@
 import { supabase } from '~/db/connection';
 
 type Props = {
-  userId: string;
+  stripeCustomerId: string;
   projectId: string;
+  email: string;
+  userId: string | undefined;
 }
 
-export async function getOrCreateReferralLink({ userId, projectId }: Props) {
+export async function getOrCreateReferralLink({ stripeCustomerId, projectId, email, userId }: Props) {
   // Check if a referral link already exists
   let { data: existingLink, error } = await supabase
-    .from('referral_link')
+    .from('referral_links')
     .select('*')
-    .eq('user_id', userId)
+    .eq('stripe_customer_id', stripeCustomerId)
     .eq('project_id', projectId)
     .maybeSingle();
 
@@ -24,9 +26,9 @@ export async function getOrCreateReferralLink({ userId, projectId }: Props) {
   } else {
     // Insert a new referral link and then select it
     const { data: newLinks, error: insertError } = await supabase
-      .from('referral_link')
+      .from('referral_links')
       .insert([
-        { user_id: userId, project_id: projectId }
+        { stripe_customer_id: stripeCustomerId, project_id: projectId, email, user_id: userId }
       ])
       .select();
 
