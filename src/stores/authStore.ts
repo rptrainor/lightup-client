@@ -11,11 +11,6 @@ type UserState =
 const [userState, setUserState] = createSignal<UserState>({ status: 'initial', user: null });
 
 const handleCheckUser = async () => {
-  const currentState = userState();
-  if (currentState.status === 'loggedIn' && currentState.user) {
-    return;
-  }
-
   try {
     const { data: { user } } = await supabase.auth.getUser()
 
