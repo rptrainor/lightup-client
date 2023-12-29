@@ -21,12 +21,13 @@ export interface StripeCustomerDetails {
 
 export interface StripeResponse {
   customer_details: StripeCustomerDetails;
+  customer: string;
   // Add other relevant fields from the Stripe response object as needed
 }
 
 
 export async function handleUserUpdate(stripeResponse: StripeResponse) {
-  const { customer_details } = stripeResponse;
+  const { customer_details, customer } = stripeResponse;
   const { email, name, phone, address } = customer_details;
 
   // Check if user exists
@@ -48,7 +49,8 @@ export async function handleUserUpdate(stripeResponse: StripeResponse) {
         address_line1: address.line1,
         address_line2: address.line2,
         postal_code: address.postal_code,
-        state: address.state
+        state: address.state,
+        stripe_customer_id: customer,
       }
     })
 

@@ -1,11 +1,10 @@
-import { createSignal, createEffect, Switch, Match, createResource } from "solid-js";
+import { createSignal, createEffect, Switch, Match } from "solid-js";
 
 import StripeCheckout from "~/components/StripeCheckout";
 import ThankYou from "~/components/ThankYou";
 import { addNotification } from '~/stores/notificationStore';
 import { handleUserUpdate } from "~/utilities/handleUserUpdate";
 import { getOrCreateReferralLink } from "~/utilities/getOrCreateReferralLink";
-import { handleSignInWithEmailAuth } from "~/utilities/handleSignInWithEmailAuth";
 import checkLikeStatus from "~/utilities/checkLikeStatus";
 import likeProject from "~/utilities/likeProject";
 import { userState } from "~/stores/authStore";
@@ -91,7 +90,8 @@ const ProjectLikeButton = (props: Props) => {
       if (props.session_id) {
         const sessionData = await handleStripeSession(props.session_id);
         console.log({ sessionData });
-        if (sessionData.customer) {
+        if (sessionData) {
+          handleUserUpdate(sessionData);
           setStripeCustomerId(sessionData.customer);
           setSessionId(sessionData.id);
           setCustomerEmail(sessionData.customer_details.email);
@@ -167,107 +167,3 @@ const ProjectLikeButton = (props: Props) => {
 }
 
 export default ProjectLikeButton;
-
-
-// {
-//   "id": "cs_test_b1mTmNcj5G2L1TlaKv5IJmV7QmumvpWLiI2j6nXbGkdmczNuGshg54tODR",
-//   "object": "checkout.session",
-//   "after_expiration": null,
-//   "allow_promotion_codes": null,
-//   "amount_subtotal": 5640,
-//   "amount_total": 5640,
-//   "automatic_tax": {
-//       "enabled": true,
-//       "status": "complete"
-//   },
-//   "billing_address_collection": null,
-//   "cancel_url": null,
-//   "client_reference_id": null,
-//   "client_secret": null,
-//   "consent": null,
-//   "consent_collection": null,
-//   "created": 1703815919,
-//   "currency": "usd",
-//   "currency_conversion": null,
-//   "custom_fields": [],
-//   "custom_text": {
-//       "after_submit": null,
-//       "shipping_address": null,
-//       "submit": null,
-//       "terms_of_service_acceptance": null
-//   },
-//   "customer": "cus_PH3gdu642Ujtnc",
-//   "customer_creation": "always",
-//   "customer_details": {
-//       "address": {
-//           "city": "Minneapolis",
-//           "country": "US",
-//           "line1": "225 South 6th St",
-//           "line2": "c/o WeWork - Capella Tower",
-//           "postal_code": "55402",
-//           "state": "MN"
-//       },
-//       "email": "rptrainor@gmail.com",
-//       "name": "Ryan Forty",
-//       "phone": null,
-//       "tax_exempt": "none",
-//       "tax_ids": []
-//   },
-//   "customer_email": null,
-//   "expires_at": 1703902319,
-//   "invoice": null,
-//   "invoice_creation": {
-//       "enabled": false,
-//       "invoice_data": {
-//           "account_tax_ids": null,
-//           "custom_fields": null,
-//           "description": null,
-//           "footer": null,
-//           "metadata": {},
-//           "rendering_options": null
-//       }
-//   },
-//   "livemode": false,
-//   "locale": null,
-//   "metadata": {},
-//   "mode": "payment",
-//   "payment_intent": "pi_3OSVYlHaHTMpqSes1VAKqLRj",
-//   "payment_link": null,
-//   "payment_method_collection": "if_required",
-//   "payment_method_configuration_details": {
-//       "id": "pmc_1Mmiq8HaHTMpqSesNh1lfH3I",
-//       "parent": null
-//   },
-//   "payment_method_options": {},
-//   "payment_method_types": [
-//       "card",
-//       "alipay",
-//       "klarna",
-//       "us_bank_account",
-//       "wechat_pay",
-//       "cashapp"
-//   ],
-//   "payment_status": "paid",
-//   "phone_number_collection": {
-//       "enabled": false
-//   },
-//   "recovered_from": null,
-//   "redirect_on_completion": "always",
-//   "return_url": "http://localhost:4321/russelllab?session_id={CHECKOUT_SESSION_ID}",
-//   "setup_intent": null,
-//   "shipping_address_collection": null,
-//   "shipping_cost": null,
-//   "shipping_details": null,
-//   "shipping_options": [],
-//   "status": "complete",
-//   "submit_type": null,
-//   "subscription": null,
-//   "success_url": null,
-//   "total_details": {
-//       "amount_discount": 0,
-//       "amount_shipping": 0,
-//       "amount_tax": 0
-//   },
-//   "ui_mode": "embedded",
-//   "url": null
-// }
