@@ -143,7 +143,16 @@ export const POST: APIRoute = async ({ request }) => {
           quantity: 1,
         }
       ],
-      metadata: {},
+      metadata: {
+        projectId,
+        projectSlug,
+        sucessUrl,
+        projectBannerSrc,
+        projectCreatorName,
+        referringUserId,
+        amountValue,
+        sustaining_membership
+      },
       mode: sustaining_membership === 'yes' ? 'subscription' : 'payment',
       ui_mode: 'embedded',
       customer_creation: 'always',
