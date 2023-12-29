@@ -26,7 +26,7 @@ interface Props {
   image?: string;
 }
 
-// import PostHog from "~/components/posthog.astro";
+import PostHog from "~/components/posthog.astro";
 import ProfileButton from "~/components/ProfileButton";
 import NotificationContainer from "~/components/Notifications/NotificationContainer";
 ---
@@ -64,8 +64,8 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
       }
     </title>
     <ViewTransitions />
-    <!-- <PostHog /> -->
-    <script async src='https://js.stripe.com/v3/'></script>
+    <PostHog />
+    <script defer src='https://js.stripe.com/v3/'></script>
     <script>
       window.intercomSettings = {
         api_base: "https://api-iam.intercom.io",
@@ -77,7 +77,7 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
       };
     </script>
 
-    <script async>
+    <script defer>
       // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/t6yyzmj6'
       (function () {
         var w = window;
