@@ -1,5 +1,4 @@
 import { supabase } from '~/db/connection';
-import { handleSignInWithEmailAuth } from './handleSignInWithEmailAuth';
 
 export interface StripeAddress {
   city: string | null;

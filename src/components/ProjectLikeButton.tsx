@@ -87,13 +87,20 @@ const ProjectLikeButton = (props: Props) => {
   };
 
   createEffect(() => {
+    const userId = userState().user?.id;
+    const email = customerEmail();
+    if (!userId && email) {
+      handleSignInWithEmailAuth(email);
+    }
+  })
+
+  createEffect(() => {
     const fetchStripeSession = async () => {
       if (props.session_id) {
         setSessionId(props.session_id);
         const sessionData = await handleStripeSession(props.session_id);
         if (sessionData) {
           setStripeCustomerId(sessionData.customer);
-          handleSignInWithEmailAuth(sessionData.customer_details.email);
           handleUserUpdate(sessionData);
           setStripeCustomerId(sessionData.customer);
           setCustomerEmail(sessionData.customer_details.email);
