@@ -1,13 +1,19 @@
+import type { RefferalLink } from '~/components/ProjectLikeButton';
 import { supabase } from '~/db/connection';
 
 type Props = {
-  stripeCustomerId: string;
+  stripeCustomerId: string | null;
   projectId: string;
-  email: string;
+  email: string | undefined;
   userId: string | undefined;
 }
 
-export async function getOrCreateReferralLink({ stripeCustomerId, projectId, email, userId }: Props) {
+export async function getOrCreateReferralLink({ stripeCustomerId, projectId, email, userId }: Props): Promise<RefferalLink | null> {
+
+  if (!stripeCustomerId) {
+    return null;
+  }
+  
   // Check if a referral link already exists
   let { data: existingLink, error } = await supabase
     .from('referral_links')

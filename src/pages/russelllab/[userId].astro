@@ -1,6 +1,9 @@
 ---
 import SinglePage from "~/components/SinglePage.astro";
 import Layout from "~/layouts/Layout.astro";
+
+const session_id = Astro.url.searchParams.get('session_id')! || '';
+
 const PROJECT = {
   id: "2",
   title: "Inspiring Future Scientists: Support Russell Lab's Outreach Mission",
@@ -37,8 +40,6 @@ const PROJECT = {
   callToAction:
     "Be a part of this transformative journey. Your support enables the Russell Lab to expand its outreach and deepen its impact, inspiring future generations and nurturing a diverse scientific community. Donate today and join us in shaping a brighter, more inclusive future in science.",
 };
-
-
 ---
 
 <Layout
@@ -46,5 +47,5 @@ const PROJECT = {
   image={PROJECT.banner.src}
   description={PROJECT.header}
 >
-  <SinglePage project={PROJECT} />
+  <SinglePage project={PROJECT} session_id={session_id} />
 </Layout>

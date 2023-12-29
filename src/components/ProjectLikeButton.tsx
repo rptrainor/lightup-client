@@ -9,6 +9,8 @@ import { handleSignInWithEmailAuth } from "~/utilities/handleSignInWithEmailAuth
 import checkLikeStatus from "~/utilities/checkLikeStatus";
 import likeProject from "~/utilities/likeProject";
 import { userState } from "~/stores/authStore";
+import handleStripeSession from "~/utilities/handleStripeSession";
+import extractCustomerId from "~/utilities/extractCustomerId";
 
 type Area = {
   header: string,
@@ -37,11 +39,18 @@ export type Project = {
   callToAction: string,
 }
 
-type LikeButtonState = "initial" | "not_logged_in_user_sees_like_button" | "not_logged_in_user_sees_stripe_checkout" | "not_logged_in_user_sees_thank_you" | "logged_in_user_sees_like_button" | "logged_in_user_sees_stripe_checkout" | "logged_in_user_sees_thank_you"
+export type RefferalLink = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  stripe_customer_id: string | null;
+  email: string | null;
+  user_id: string | null;
+  project_id: string | null;
+};
 
-type PayloadProps = {
-  session_id: string
-}
+type LikeButtonState = "initial" | "not_logged_in_user_sees_like_button" | "not_logged_in_user_sees_stripe_checkout" | "not_logged_in_user_sees_thank_you" | "logged_in_user_sees_like_button" | "logged_in_user_sees_stripe_checkout" | "logged_in_user_sees_thank_you"
 
 type Props = {
   projectId: string;
@@ -53,67 +62,82 @@ type Props = {
   session_id: string;
 }
 
-async function getStripeSession(payload: PayloadProps) {
-  if (!payload.session_id) {
-    return;
-  }
-  const response = await fetch(`/api/session-status?session_id=${payload.session_id}`);
-  return await response.json();
-}
-
 const ProjectLikeButton = (props: Props) => {
   const [state, setState] = createSignal<LikeButtonState>("initial");
-  const [userLiked, setUserLiked] = createSignal<boolean | undefined>(undefined);
-  const [customerEmail, setCustomerEmail] = createSignal<string | undefined>(undefined);
-  const [stripeCustomerId, setStripeCustomerId] = createSignal<string | undefined>(undefined);
-  const [refferalLink, setRefferalLink] = createSignal<string | null>(null);
+  const [userLiked, setUserLiked] = createSignal<boolean | null>(null);
+  const [sessionId, setSessionId] = createSignal<string | null>(null);
+  const [customerEmail, setCustomerEmail] = createSignal<string | null>(null);
+  const [stripeCustomerId, setStripeCustomerId] = createSignal<string | null>(null);
+  const [refferalLink, setRefferalLink] = createSignal<RefferalLink | null>(null);
+
+  const handleStripeCheckoutError = () => {
+    setState('initial')
+    addNotification({ type: 'error', header: 'Looks like something went wrong', subHeader: 'There was an error processing your payment. Please try again.' });
+  };
+
+  const handleLikeButtonClick = () => {
+    setUserLiked(true);
+    if (userState().user?.id && props.projectId) {
+      likeProject({ projectId: props.projectId, userId: userState().user?.id }).then(() => {
+        setState('logged_in_user_sees_stripe_checkout');
+      });
+    } else {
+      setState('not_logged_in_user_sees_stripe_checkout');
+    }
+  };
+
+  createEffect(() => {
+    const fetchStripeSession = async () => {
+      if (props.session_id) {
+        const sessionData = await handleStripeSession(props.session_id);
+        console.log({ sessionData });
+        if (sessionData.customer) {
+          setStripeCustomerId(sessionData.customer);
+          setSessionId(sessionData.id);
+          setCustomerEmail(sessionData.customer_details.email);
+        }
+      }
+    };
+    fetchStripeSession();
+  });
 
   createEffect(() => {
     const userId = userState().user?.id;
     const email = userState().user?.email;
     const customerId = stripeCustomerId();
-    console.log('userId', userId);
-
     if (userId && email && customerId && props.projectId && refferalLink() === null) {
-      getOrCreateReferralLink({ stripeCustomerId: customerId, projectId: props.projectId, email, userId: userState().user?.id }).then((response) => {
-        console.log('getOrCreateReferralLink', response);
+      getOrCreateReferralLink({ stripeCustomerId: stripeCustomerId(), projectId: props.projectId, email: userState().user?.email, userId: userId }).then((response) => {
+        setState('logged_in_user_sees_thank_you');
         setRefferalLink(response);
       });
+    } else if (userId && props.projectId) {
+      checkLikeStatus({ projectId: props.projectId, userId: userId }).then((response) => {
+        setState(response ? 'logged_in_user_sees_stripe_checkout' : 'logged_in_user_sees_like_button');
+        setUserLiked(response);
+      });
     }
-    // if (state() === 'initial')
-    // switch (state()) {
-    //   case 'initial':
-    //     if (!userState().user?.id) {
-    //       setState('not_logged_in_user_sees_like_button');
-    //     } else {
-    //       setState('logged_in_user_sees_like_button');
-    //     }
-    //     break;
-    //   case 'not_logged_in_user_sees_like_button':
-    //     break;
-    //   case 'not_logged_in_user_sees_stripe_checkout':
-    //     break;
-    //   case 'not_logged_in_user_sees_thank_you':
-    //     break;
-    //   case 'logged_in_user_sees_like_button':
-    //     break;
-    //   case 'logged_in_user_sees_stripe_checkout':
-    //     break;
-    //   case 'logged_in_user_sees_thank_you':
-    //     break;
-    //   default:
-    //     break;
-    // }
   });
 
   createEffect(() => {
-    console.log('ProjectLikeButton: userState()', userState());
-    console.log('ProjectLikeButton: referralLink()', refferalLink());
+    console.log('ProjectLikeButton', {
+      stripeCustomerId: stripeCustomerId(),
+      sessionId: sessionId(),
+      customerEmail: customerEmail(),
+      refferalLink: refferalLink(),
+      state: state(),
+    });
   });
 
   return (
     <div class="w-full flex px-4 gap-4">
       <Switch fallback={null}>
+        <Match when={stripeCustomerId()}>
+          <ThankYou
+            refferalLinkId={extractCustomerId(stripeCustomerId() ?? "")}
+            projectSlug={props.projectSlug}
+            projectBannerSrc={props.projectBannerSrc}
+          />
+        </Match>
         <Match when={state() === 'not_logged_in_user_sees_stripe_checkout' || state() === 'logged_in_user_sees_stripe_checkout'}>
           <StripeCheckout
             projectId={props.projectId}
@@ -122,11 +146,11 @@ const ProjectLikeButton = (props: Props) => {
             projectBannerSrc={props.projectBannerSrc}
             projectCreatorName={props.projectCreatorName}
             referringUserId={props.referringUserId}
-            onError={(() => console.log('onError'))}
+            onError={handleStripeCheckoutError}
           />
         </Match>
         <Match when={state() === 'not_logged_in_user_sees_like_button' || state() === 'logged_in_user_sees_like_button'}>
-          <button onClick={(() => handleSignInWithEmailAuth('rptrainor@gmail.com'))} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 sticky top-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
+          <button onClick={handleLikeButtonClick} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2 sticky top-0 left-0 right-0 group z-20 max-w-[100vw]' data-astro-prefetch >
             <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
               <span>Like</span>
               <div class="bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all">
@@ -137,16 +161,113 @@ const ProjectLikeButton = (props: Props) => {
             </h1>
           </button>
         </Match>
-        <Match when={state() === 'not_logged_in_user_sees_thank_you' || state() === 'logged_in_user_sees_thank_you'}>
-          <ThankYou
-            refferalLinkId={'refferalLinkId()'}
-            projectSlug={props.projectSlug}
-            projectBannerSrc={props.projectBannerSrc}
-          />
-        </Match>
       </Switch>
     </div>
   );
 }
 
 export default ProjectLikeButton;
+
+
+// {
+//   "id": "cs_test_b1mTmNcj5G2L1TlaKv5IJmV7QmumvpWLiI2j6nXbGkdmczNuGshg54tODR",
+//   "object": "checkout.session",
+//   "after_expiration": null,
+//   "allow_promotion_codes": null,
+//   "amount_subtotal": 5640,
+//   "amount_total": 5640,
+//   "automatic_tax": {
+//       "enabled": true,
+//       "status": "complete"
+//   },
+//   "billing_address_collection": null,
+//   "cancel_url": null,
+//   "client_reference_id": null,
+//   "client_secret": null,
+//   "consent": null,
+//   "consent_collection": null,
+//   "created": 1703815919,
+//   "currency": "usd",
+//   "currency_conversion": null,
+//   "custom_fields": [],
+//   "custom_text": {
+//       "after_submit": null,
+//       "shipping_address": null,
+//       "submit": null,
+//       "terms_of_service_acceptance": null
+//   },
+//   "customer": "cus_PH3gdu642Ujtnc",
+//   "customer_creation": "always",
+//   "customer_details": {
+//       "address": {
+//           "city": "Minneapolis",
+//           "country": "US",
+//           "line1": "225 South 6th St",
+//           "line2": "c/o WeWork - Capella Tower",
+//           "postal_code": "55402",
+//           "state": "MN"
+//       },
+//       "email": "rptrainor@gmail.com",
+//       "name": "Ryan Forty",
+//       "phone": null,
+//       "tax_exempt": "none",
+//       "tax_ids": []
+//   },
+//   "customer_email": null,
+//   "expires_at": 1703902319,
+//   "invoice": null,
+//   "invoice_creation": {
+//       "enabled": false,
+//       "invoice_data": {
+//           "account_tax_ids": null,
+//           "custom_fields": null,
+//           "description": null,
+//           "footer": null,
+//           "metadata": {},
+//           "rendering_options": null
+//       }
+//   },
+//   "livemode": false,
+//   "locale": null,
+//   "metadata": {},
+//   "mode": "payment",
+//   "payment_intent": "pi_3OSVYlHaHTMpqSes1VAKqLRj",
+//   "payment_link": null,
+//   "payment_method_collection": "if_required",
+//   "payment_method_configuration_details": {
+//       "id": "pmc_1Mmiq8HaHTMpqSesNh1lfH3I",
+//       "parent": null
+//   },
+//   "payment_method_options": {},
+//   "payment_method_types": [
+//       "card",
+//       "alipay",
+//       "klarna",
+//       "us_bank_account",
+//       "wechat_pay",
+//       "cashapp"
+//   ],
+//   "payment_status": "paid",
+//   "phone_number_collection": {
+//       "enabled": false
+//   },
+//   "recovered_from": null,
+//   "redirect_on_completion": "always",
+//   "return_url": "http://localhost:4321/russelllab?session_id={CHECKOUT_SESSION_ID}",
+//   "setup_intent": null,
+//   "shipping_address_collection": null,
+//   "shipping_cost": null,
+//   "shipping_details": null,
+//   "shipping_options": [],
+//   "status": "complete",
+//   "submit_type": null,
+//   "subscription": null,
+//   "success_url": null,
+//   "total_details": {
+//       "amount_discount": 0,
+//       "amount_shipping": 0,
+//       "amount_tax": 0
+//   },
+//   "ui_mode": "embedded",
+//   "url": null
+// }

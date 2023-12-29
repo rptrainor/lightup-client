@@ -19,7 +19,6 @@ const handleCheckUser = async () => {
   try {
     const { data: { user } } = await supabase.auth.getUser()
 
-    console.log("handleCheckUser - user:", { user })
     if (user && Object.keys(user).length > 0) {
       // Transform the user data
       const transformedUser: User = {

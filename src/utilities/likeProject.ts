@@ -2,19 +2,20 @@ import { supabase } from '~/db/connection';
 import { addNotification } from '~/stores/notificationStore';
 
 type Props = {
-  userId: string;
+  userId: string | undefined;
   projectId: string;
 }
 
-async function likeProject(props: Props) {
-  const { data, error } = await supabase
-    .from('user_like')
+async function likeProject(props: Props): Promise<boolean | null> {
+  if (!props.userId) {
+    return null;
+  }
+  const { error } = await supabase
+    .from('user_likes')
     .insert([
-      { user_id: props.userId, project_id: props.projectId, is_liked: true },
+      { user_id: props.userId, project_id: props.projectId },
     ])
-    .select();
 
-  console.log('likeProject - data:', { data });
   if (error) {
     addNotification({
       type: 'error',
@@ -24,7 +25,7 @@ async function likeProject(props: Props) {
     return false;
   }
 
-  return data;
+  return true;
 }
 
 export default likeProject

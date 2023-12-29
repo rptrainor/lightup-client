@@ -2,18 +2,20 @@ import { supabase } from '~/db/connection';
 import { addNotification } from '~/stores/notificationStore';
 
 type Props = {
-  userId: string;
+  userId: string | undefined;
   projectId: string;
 }
 
-async function checkLikeStatus({ userId, projectId }: Props) {
+async function checkLikeStatus({ userId, projectId }: Props): Promise<boolean | null> {
+  if (!userId) {
+    return null;
+  }
   const { data, error } = await supabase
-    .from('user_like')
+    .from('user_likes')
     .select("*")
     .eq('user_id', userId)
     .eq('project_id', projectId);
 
-  console.log('checkLikeStatus - data:', { data })
   if (error) {
     addNotification({
       type: 'error',
