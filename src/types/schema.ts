@@ -14,7 +14,7 @@ type UserMetadata = {
 export interface User {
   id: string;
   created_at: string | undefined;
-  email: string | undefined;  // Make email optional
+  email: string | undefined;
   phone: string | undefined;
   user_metadata: UserMetadata;
 }
