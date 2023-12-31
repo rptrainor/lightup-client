@@ -1,5 +1,6 @@
 import { assign, createMachine } from "xstate";
 import { type User } from "~/types/schema";
+import createUserLike from "~/utilities/createUserLike";
 import getReferralLinkFromDB from "~/utilities/getReferralLinkFromDB";
 import getUserLikeFromDB from "~/utilities/getUserLikeFromDB";
 type UserLikes = {
@@ -113,7 +114,7 @@ export const machine = createMachine(
             project_id: context.project_id,
           }),
           onDone: {
-            target: "LoggedInUserHasUserLikeInDB",
+            target: "LoggedInUserHasUserLikeInContext",
             actions: assign({
               user_likes: (context, event) => ({
                 ...context.user_likes,
@@ -121,11 +122,35 @@ export const machine = createMachine(
               }),
             }),
           },
-          onError: "LoggedInUserDoesNotHaveUserLikeInDB"
+          onError: "LoggedInUserHasNotLiked"
         },
       },
-      LoggedInUserHasUserLikeInDB: {},
-      LoggedInUserDoesNotHaveUserLikeInDB: {},
+      LoggedInUserHasNotLiked: {
+        on: {
+          USER_CLICKED_LIKE: {
+            target: "LoggedInUserHasClickedLike",
+          },
+        }
+      },
+      LoggedInUserHasClickedLike: {
+        invoke: {
+          id: "createUserLike",
+          src: (context) => createUserLike({
+            user_id: context.user.id,
+            project_id: context.project_id,
+          }),
+          onDone: {
+            target: "LoggedInUserHasUserLikeInContext",
+            actions: assign({
+              user_likes: (context, event) => ({
+                ...context.user_likes,
+                [context.project_id]: event.data,
+              }),
+            }),
+          },
+          onError: "LoggedInUserHasNotLiked"
+        },
+      },
       LoggedInUserHasReferralLink: {
         type: "final",
       },
