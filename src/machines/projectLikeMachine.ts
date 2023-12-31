@@ -1,8 +1,13 @@
 import { assign, createMachine } from "xstate";
 import { type User } from "~/types/schema";
+import createReferralLink from "~/utilities/createReferralLink";
+import createStripeCheckoutSession from "~/utilities/createStripeCheckoutSession";
 import createUserLike from "~/utilities/createUserLike";
 import getReferralLinkFromDB from "~/utilities/getReferralLinkFromDB";
+import getStripeSession from "~/utilities/getStripeSession";
 import getUserLikeFromDB from "~/utilities/getUserLikeFromDB";
+import updateUserInDB from "~/utilities/updateUserinDB";
+
 type UserLikes = {
   [key: string]: string | undefined;
 };
@@ -14,22 +19,44 @@ type ReferralLinks = {
 interface ProjectLikeMachineContext {
   user: User;
   project_id: string;
+  referring_id: string;
   user_likes: UserLikes;
   referral_links: ReferralLinks;
   stripe_client_secret: string;
-  donation_amount: string;
+  stripe_session_id: string;
+  project_donation_amount: number;
   project_donation_is_recurring: boolean;
 }
+
+type UserClickedDonate = {
+  type: 'USER_CLICKED_DONATE';
+};
 
 type UserClickedLikeEvent = {
   type: 'USER_CLICKED_LIKE';
 };
 interface UserUpdatesDonationAmountEvent {
-  type: 'USER_UPDATES_DONATION_AMOUNT';
+  type: 'USER_UPDATES_project_donation_amount';
+  data: number;
+}
+
+interface UserUpdatesIsRecurringEvent {
+  type: 'USER_UPDATES_IS_RECURRING';
+  data: boolean;
+}
+
+interface SessionIdReceived {
+  type: 'SESSION_ID_RECEIVED';
   data: string;
 }
 
-export const machine = createMachine<ProjectLikeMachineContext, UserUpdatesDonationAmountEvent | UserClickedLikeEvent>(
+export const machine = createMachine<ProjectLikeMachineContext,
+  UserUpdatesDonationAmountEvent |
+  UserClickedLikeEvent |
+  UserUpdatesIsRecurringEvent |
+  UserClickedDonate |
+  SessionIdReceived
+>(
   {
     context: {
       user: {
@@ -55,7 +82,8 @@ export const machine = createMachine<ProjectLikeMachineContext, UserUpdatesDonat
       user_likes: {} as UserLikes,
       referral_links: {} as ReferralLinks,
       stripe_client_secret: "",
-      donation_amount: "",
+      stripe_session_id: "",
+      project_donation_amount: 0,
       project_donation_is_recurring: false,
     } as ProjectLikeMachineContext,
     id: "projectLike",
@@ -115,13 +143,103 @@ export const machine = createMachine<ProjectLikeMachineContext, UserUpdatesDonat
       },
       LoggedInUserHasUserLikeInContext: {
         on: {
-          USER_UPDATES_DONATION_AMOUNT: {
+          USER_UPDATES_project_donation_amount: {
             actions: assign({
-              donation_amount: (_, event) => event.data as string,
+              project_donation_amount: (_, event) => event.data,
             }),
+          },
+          USER_UPDATES_IS_RECURRING: {
+            actions: assign({
+              project_donation_is_recurring: (_, event) => event.data,
+            }),
+          },
+          USER_CLICKED_DONATE: {
+            target: "LoggedInUserHasClickedDonate",
           },
         }
       },
+      LoggedInUserHasClickedDonate: {
+        invoke: {
+          id: "createStripeCheckoutSession",
+          src: (context) => createStripeCheckoutSession({
+            project_id: context.project_id,
+            referring_id: context.referring_id,
+            project_donation_amount: context.project_donation_amount,
+            project_donation_is_recurring: context.project_donation_is_recurring,
+            sucess_url: window.location.href,
+          }),
+          onDone: {
+            target: "LoggedInUserHasStripeClientSecretInContext",
+            actions: assign({
+              stripe_client_secret: (_, event) => event.data,
+            }),
+          },
+          onError: "LoggedInUserDoesNotHaveStripeClientSecretInContext"
+        },
+      },
+      LoggedInUserHasStripeClientSecretInContext: {
+        on: {
+          SESSION_ID_RECEIVED: {
+            target: 'LoggedInUserHasSessionId',
+            actions: assign({
+              stripe_session_id: (_, event) => event.data,
+            })
+          },
+        }
+      },
+      LoggedInUserHasSessionId: {
+        invoke: {
+          id: "getStripeSession",
+          src: (context) => getStripeSession(context.stripe_session_id),
+          onDone: {
+            target: "LoggedInUserHasStripeSessionObject",
+            actions: assign({
+              stripe_session_id: (_, event) => event.data,
+              user: (context, event) => ({
+                ...context.user,
+                email: event.data.customer_details.email,
+                user_metadata: {
+                  ...context.user.user_metadata,
+                  stripe_customer_id: event.data.customer,
+                  email: event.data.customer_details.email,
+                  name: event.data.customer_details.name,
+                  phone: event.data.customer_details.phone,
+                  city: event.data.customer_details.address.city,
+                  country: event.data.customer_details.address.country,
+                  address_line1: event.data.customer_details.address.line1,
+                  address_line2: event.data.customer_details.address.line2,
+                  postal_code: event.data.customer_details.address.postal_code,
+                  state: event.data.customer_details.address.state,
+                },
+              }),
+            }),
+          },
+          onError: "LoggedInUserDoesNotHaveStripeSession"
+        },
+      },
+      LoggedInUserHasStripeSessionObject: {
+        invoke: {
+          id: 'createReferralLink',
+          src: (context) => createReferralLink({
+            user_id: context.user.id,
+            project_id: context.project_id,
+            referring_id: context.referring_id,
+            email: context.user.email,
+            stripe_customer_id: context.user.user_metadata.stripe_customer_id,
+          }),
+          onDone: {
+            target: "LoggedInUserHasReferralLink",
+            actions: assign({
+              referral_links: (context, event) => ({
+                ...context.referral_links,
+                [context.project_id]: event.data,
+              }),
+            }),
+          }
+        }
+      },
+      LoggedInUserDoesNotHaveStripeSession: {},
+      LoggedInUserDoesNotHaveStripeClientSecretInContext: {},
       LoggedInUserDoesNotHaveUserLikeInContext: {
         invoke: {
           id: "getUserLike",
@@ -168,8 +286,20 @@ export const machine = createMachine<ProjectLikeMachineContext, UserUpdatesDonat
         },
       },
       LoggedInUserHasReferralLink: {
-        type: "final",
+        invoke: {
+          id: "updateUserInDB",
+          src: (context) => updateUserInDB(context.user),
+          onDone: {
+            target: "LoggedInUserSuccessfullyUpdatedInDB",
+            actions: assign({
+              user: (_, event) => event.data,
+            }),
+          },
+          onError: "LoggedInUserFailedToUpdateInDB"
+        },
       },
+      LoggedInUserFailedToUpdateInDB: {},
+      LoggedInUserSuccessfullyUpdatedInDB: {},
       UserIsNotInContext: {},
     },
   },

@@ -10,24 +10,21 @@ export const POST: APIRoute = async ({ request }) => {
     // Extracting data from the request
     const body = await request.json();
     const {
-      projectId,
-      projectSlug,
-      sucessUrl,
-      projectBannerSrc,
-      projectCreatorName,
-      referringUserId,
-      amountValue,
-      sustaining_membership
+      project_id,
+      referring_id,
+      project_donation_amount,
+      project_donation_is_recurring,
+      sucess_url,
     } = body;
 
     // Check for required fields
-    if (!projectId || !projectSlug || !sucessUrl || !amountValue) {
+    if (!project_id || !sucess_url || !project_donation_amount) {
       return new Response(JSON.stringify({
         error: "Missing required parameters"
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const amount = parseFloat(amountValue as string);
+    const amount = parseFloat(project_donation_amount as string);
     const currency = 'usd';
 
     if (isNaN(amount)) {
@@ -42,10 +39,10 @@ export const POST: APIRoute = async ({ request }) => {
     const amountInCents = Math.round(amount * 100); // Convert dollars to cents
     const sustainabilityContributionInCents = Math.round(sustainabilityContribution * 100); // Convert dollars to cents
 
-    const interval: Stripe.PriceCreateParams.Recurring.Interval = sustaining_membership === 'yes' ? 'month' : 'day'; // or another appropriate value
+    const interval: Stripe.PriceCreateParams.Recurring.Interval = project_donation_is_recurring === 'yes' ? 'month' : 'day'; // or another appropriate value
     const taxBehavior: Stripe.PriceCreateParams.TaxBehavior = 'exclusive'; // Or 'inclusive'/'unspecified' as per your requirement
 
-    const sustaining_contribution_payload: Stripe.PriceCreateParams = sustaining_membership === 'yes' ? {
+    const sustaining_contribution_payload: Stripe.PriceCreateParams = project_donation_is_recurring === 'yes' ? {
       currency,
       unit_amount_decimal: sustainabilityContributionInCents.toString(),
       tax_behavior: taxBehavior,
@@ -53,14 +50,11 @@ export const POST: APIRoute = async ({ request }) => {
         interval
       },
       metadata: {
-        projectId,
-        projectSlug,
-        sucessUrl,
-        projectBannerSrc,
-        projectCreatorName,
-        referringUserId,
-        amountValue,
-        sustaining_membership
+        project_id,
+        sucess_url,
+        referring_id,
+        project_donation_amount,
+        project_donation_is_recurring
       },
       product_data: {
         name: 'Sustainability contribution',
@@ -73,14 +67,11 @@ export const POST: APIRoute = async ({ request }) => {
       unit_amount_decimal: sustainabilityContributionInCents.toString(),
       tax_behavior: taxBehavior,
       metadata: {
-        projectId,
-        projectSlug,
-        sucessUrl,
-        projectBannerSrc,
-        projectCreatorName,
-        referringUserId,
-        amountValue,
-        sustaining_membership
+        project_id,
+        sucess_url,
+        referring_id,
+        project_donation_amount,
+        project_donation_is_recurring
       },
       product_data: {
         name: 'Sustainability contribution',
@@ -93,17 +84,14 @@ export const POST: APIRoute = async ({ request }) => {
     const metadata = {
       donation_amount: amountString,
       currency: currency,
-      projectId,
-      projectSlug,
-      sucessUrl,
-      projectBannerSrc,
-      projectCreatorName,
-      referringUserId,
-      amountValue,
-      sustaining_membership
+      project_id,
+      sucess_url,
+      referring_id,
+      project_donation_amount,
+      project_donation_is_recurring
     };
 
-    const pricePayload: Stripe.PriceCreateParams = sustaining_membership === 'yes' ? {
+    const pricePayload: Stripe.PriceCreateParams = project_donation_is_recurring === 'yes' ? {
       currency,
       unit_amount_decimal: amountInCents.toString(),
       tax_behavior: taxBehavior,
@@ -144,19 +132,16 @@ export const POST: APIRoute = async ({ request }) => {
         }
       ],
       metadata: {
-        projectId,
-        projectSlug,
-        sucessUrl,
-        projectBannerSrc,
-        projectCreatorName,
-        referringUserId,
-        amountValue,
-        sustaining_membership
+        project_id,
+        sucess_url,
+        referring_id,
+        project_donation_amount,
+        project_donation_is_recurring
       },
-      mode: sustaining_membership === 'yes' ? 'subscription' : 'payment',
+      mode: project_donation_is_recurring === 'yes' ? 'subscription' : 'payment',
       ui_mode: 'embedded',
       customer_creation: 'always',
-      return_url: `${sucessUrl}?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
+      return_url: `${sucess_url}?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
       automatic_tax: { enabled: true },
     });
 

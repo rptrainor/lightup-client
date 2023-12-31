@@ -102,7 +102,6 @@ const ProjectLikeButton = (props: Props) => {
         if (sessionData) {
           setStripeCustomerId(sessionData.customer);
           handleUserUpdate(sessionData);
-          setStripeCustomerId(sessionData.customer);
           setCustomerEmail(sessionData.customer_details.email);
         }
       }
