@@ -17,11 +17,19 @@ interface ProjectLikeMachineContext {
   user_likes: UserLikes;
   referral_links: ReferralLinks;
   stripe_client_secret: string;
-  project_donation_amount: string;
+  donation_amount: string;
   project_donation_is_recurring: boolean;
 }
 
-export const machine = createMachine(
+type UserClickedLikeEvent = {
+  type: 'USER_CLICKED_LIKE';
+};
+interface UserUpdatesDonationAmountEvent {
+  type: 'USER_UPDATES_DONATION_AMOUNT';
+  data: string;
+}
+
+export const machine = createMachine<ProjectLikeMachineContext, UserUpdatesDonationAmountEvent | UserClickedLikeEvent>(
   {
     context: {
       user: {
@@ -47,7 +55,7 @@ export const machine = createMachine(
       user_likes: {} as UserLikes,
       referral_links: {} as ReferralLinks,
       stripe_client_secret: "",
-      project_donation_amount: "",
+      donation_amount: "",
       project_donation_is_recurring: false,
     } as ProjectLikeMachineContext,
     id: "projectLike",
@@ -105,7 +113,15 @@ export const machine = createMachine(
           }
         ]
       },
-      LoggedInUserHasUserLikeInContext: {},
+      LoggedInUserHasUserLikeInContext: {
+        on: {
+          USER_UPDATES_DONATION_AMOUNT: {
+            actions: assign({
+              donation_amount: (_, event) => event.data as string,
+            }),
+          },
+        }
+      },
       LoggedInUserDoesNotHaveUserLikeInContext: {
         invoke: {
           id: "getUserLike",
@@ -166,8 +182,8 @@ export const machine = createMachine(
         }
         return false;
       },
-      isReferralLinkInContext: (context, event) => {
-        if (context.referral_links[event.project_id] !== undefined) {
+      isReferralLinkInContext: (context) => {
+        if (context.referral_links[context.project_id] !== undefined) {
           return true;
         }
         return false;
