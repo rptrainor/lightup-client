@@ -1,5 +1,6 @@
-import { createMachine } from "xstate";
+import { assign, createMachine } from "xstate";
 import { type User } from "~/types/schema";
+import getReferralLinkFromDB from "~/utilities/getReferralLinkFromDB";
 type UserLikes = {
   [key: string]: string | undefined;
 };
@@ -53,7 +54,7 @@ export const machine = createMachine(
       Idle: {
         always: [
           {
-            guard: "isProjectInContext",
+            cond: "isUserInContext",
             target: "LoggedInUserIsInContext",
           },
           {
@@ -64,7 +65,7 @@ export const machine = createMachine(
       LoggedInUserIsInContext: {
         always: [
           {
-            guard: "isReferralLinkInContext",
+            cond: "isReferralLinkInContext",
             target: "LoggedInUserHasReferralLink",
           },
           {
@@ -75,7 +76,10 @@ export const machine = createMachine(
       LoggedInUserDoesNotHaveReferralLinkInContext: {
         invoke: {
           id: "getReferralLink",
-          src: (context, event) => getReferralLinkFromDB(context),
+          src: (context) => getReferralLinkFromDB({
+            stripe_customer_id: context.user.user_metadata.stripe_customer_id,
+            project_id: context.project_id,
+          }),
           onDone: {
             target: "LoggedInUserHasReferralLink",
             actions: assign({
@@ -97,15 +101,14 @@ export const machine = createMachine(
   },
   {
     actions: {},
-    actors: {},
     guards: {
-      isUserInContext: ({ context }) => {
+      isUserInContext: (context) => {
         if (context.user.id !== "") {
           return true;
         }
         return false;
       },
-      isReferralLinkInContext: ({ context, event }) => {
+      isReferralLinkInContext: (context, event) => {
         if (context.referral_links[event.project_id] !== undefined) {
           return true;
         }

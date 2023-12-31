@@ -1,7 +1,7 @@
 import { supabase } from "~/db/connection";
 
 type Props = {
-  stripe_customer_id: string | null;
+  stripe_customer_id: string | undefined;
   project_id: string;
 }
 
