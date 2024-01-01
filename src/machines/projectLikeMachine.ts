@@ -7,6 +7,7 @@ import getReferralLinkFromDB from "~/utilities/getReferralLinkFromDB";
 import getStripeSession from "~/utilities/getStripeSession";
 import getUserFromDB from "~/utilities/getUserFromDB";
 import getUserLikeFromDB from "~/utilities/getUserLikeFromDB";
+import signInOrCreateUser from "~/utilities/signInOrCreateUser";
 import updateUserInDB from "~/utilities/updateUserinDB";
 
 type UserLikes = {
@@ -366,9 +367,80 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
             }),
           },
           USER_CLICKED_DONATE: {
-            target: "LoggedInUserHasClickedDonate",
+            target: "NotLoggedInUserHasClickedDonate",
           },
         }
+      },
+      NotLoggedInUserHasClickedDonate: {
+        invoke: {
+          id: "createStripeCheckoutSession",
+          src: (context) => createStripeCheckoutSession({
+            project_id: context.project_id,
+            referring_id: context.referring_id,
+            project_donation_amount: context.project_donation_amount,
+            project_donation_is_recurring: context.project_donation_is_recurring,
+            sucess_url: window.location.href,
+          }),
+          onDone: {
+            target: "NotLoggedInUserHasStripeClientSecretInContext",
+            actions: assign({
+              stripe_client_secret: (_, event) => event.data,
+            }),
+          },
+          onError: "Idle"
+        },
+      },
+      NotLoggedInUserHasStripeClientSecretInContext: {
+        on: {
+          SESSION_ID_RECEIVED: {
+            target: 'NotLoggedInUserHasSessionId',
+            actions: assign({
+              stripe_session_id: (_, event) => event.data,
+            })
+          },
+        }
+      },
+      NotLoggedInUserHasSessionId: {
+        invoke: {
+          id: "getStripeSession",
+          src: (context) => getStripeSession(context.stripe_session_id),
+          onDone: {
+            target: "NotLoggedInUserHasStripeSessionObject",
+            actions: assign({
+              stripe_session_id: (_, event) => event.data,
+              user: (context, event) => ({
+                ...context.user,
+                email: event.data.customer_details.email,
+                user_metadata: {
+                  ...context.user.user_metadata,
+                  stripe_customer_id: event.data.customer,
+                  email: event.data.customer_details.email,
+                  name: event.data.customer_details.name,
+                  phone: event.data.customer_details.phone,
+                  city: event.data.customer_details.address.city,
+                  country: event.data.customer_details.address.country,
+                  address_line1: event.data.customer_details.address.line1,
+                  address_line2: event.data.customer_details.address.line2,
+                  postal_code: event.data.customer_details.address.postal_code,
+                  state: event.data.customer_details.address.state,
+                },
+              }),
+            }),
+          },
+          onError: "Idle"
+        },
+      },
+      NotLoggedInUserHasStripeSessionObject: {
+        invoke: {
+          id: 'signInOrCreateUser',
+          src: (context) => signInOrCreateUser(context.user.email),
+          onDone: {
+            target: 'Idle',
+          },
+          onError: {
+            target: 'Idle',
+          },
+        },
       },
     },
   },
