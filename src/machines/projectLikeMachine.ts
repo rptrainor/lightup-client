@@ -5,6 +5,7 @@ import createStripeCheckoutSession from "~/utilities/createStripeCheckoutSession
 import createUserLike from "~/utilities/createUserLike";
 import getReferralLinkFromDB from "~/utilities/getReferralLinkFromDB";
 import getStripeSession from "~/utilities/getStripeSession";
+import getUserFromDB from "~/utilities/getUserFromDB";
 import getUserLikeFromDB from "~/utilities/getUserLikeFromDB";
 import updateUserInDB from "~/utilities/updateUserinDB";
 
@@ -30,13 +31,21 @@ interface ProjectLikeMachineContext {
 
 type UserClickedDonate = {
   type: 'USER_CLICKED_DONATE';
+  data: string;
 };
 
 type UserClickedLikeEvent = {
   type: 'USER_CLICKED_LIKE';
+  data: string;
 };
+
+type NotLoggedInUserHasClickedLikeEvent = {
+  type: 'NOT_LOGGED_IN_USER_CLICKED_LIKE';
+  data: string;
+};
+
 interface UserUpdatesDonationAmountEvent {
-  type: 'USER_UPDATES_project_donation_amount';
+  type: 'USER_UPDATES_PROJECT_DONATION_AMOUNT';
   data: number;
 }
 
@@ -50,12 +59,13 @@ interface SessionIdReceived {
   data: string;
 }
 
-export const machine = createMachine<ProjectLikeMachineContext,
+const projectLikeMachine = createMachine<ProjectLikeMachineContext,
   UserUpdatesDonationAmountEvent |
   UserClickedLikeEvent |
   UserUpdatesIsRecurringEvent |
   UserClickedDonate |
-  SessionIdReceived
+  SessionIdReceived |
+  NotLoggedInUserHasClickedLikeEvent
 >(
   {
     context: {
@@ -86,7 +96,7 @@ export const machine = createMachine<ProjectLikeMachineContext,
       project_donation_amount: 0,
       project_donation_is_recurring: false,
     } as ProjectLikeMachineContext,
-    id: "projectLike",
+    id: "projectLikeMachine",
     initial: "Idle",
     states: {
       Idle: {
@@ -143,7 +153,7 @@ export const machine = createMachine<ProjectLikeMachineContext,
       },
       LoggedInUserHasUserLikeInContext: {
         on: {
-          USER_UPDATES_project_donation_amount: {
+          USER_UPDATES_PROJECT_DONATION_AMOUNT: {
             actions: assign({
               project_donation_amount: (_, event) => event.data,
             }),
@@ -295,12 +305,71 @@ export const machine = createMachine<ProjectLikeMachineContext,
               user: (_, event) => event.data,
             }),
           },
-          onError: "LoggedInUserFailedToUpdateInDB"
+          onError: "Idle"
         },
       },
-      LoggedInUserFailedToUpdateInDB: {},
-      LoggedInUserSuccessfullyUpdatedInDB: {},
-      UserIsNotInContext: {},
+      LoggedInUserSuccessfullyUpdatedInDB: {
+        type: "final",
+      },
+      UserIsNotInContext: {
+        invoke: {
+          id: "getUserFromDB",
+          src: () => getUserFromDB(),
+          onDone: {
+            target: "LoggedInUserIsInContext",
+            actions: assign({
+              user: (_, event) => event.data,
+            }),
+          },
+          onError: "NotLoggedInUserInitial"
+        }
+      },
+      NotLoggedInUserInitial: {
+        always: [
+          {
+            cond: "isReferralLinkInContext",
+            target: "NotLoggedInUserHasReferralLink",
+          },
+          {
+            cond: "IsUserLikeInContext",
+            target: "NotLoggedInUserHasUserLikeInContext",
+          },
+          {
+            target: "NotLoggedInUserShowingLikeButton"
+          }
+        ]
+      },
+      NotLoggedInUserHasReferralLink: {},
+      NotLoggedInUserShowingLikeButton: {
+        on: {
+          NOT_LOGGED_IN_USER_CLICKED_LIKE: {
+            actions: assign({
+              user_likes: (context, event) => ({
+                ...context.user_likes,
+                [context.project_id]: event.data,
+              }),
+            }),
+            target: "NotLoggedInUserHasUserLikeInContext",
+          },
+        }
+      },
+      NotLoggedInUserHasUserLikeInContext: {
+        on: {
+          USER_UPDATES_PROJECT_DONATION_AMOUNT: {
+            actions: assign({
+              project_donation_amount: (_, event) => event.data,
+            }),
+          },
+          USER_UPDATES_IS_RECURRING: {
+            actions: assign({
+              project_donation_is_recurring: (_, event) => event.data,
+            }),
+          },
+          USER_CLICKED_DONATE: {
+            target: "LoggedInUserHasClickedDonate",
+          },
+        }
+      },
     },
   },
   {
@@ -322,3 +391,5 @@ export const machine = createMachine<ProjectLikeMachineContext,
     delays: {},
   },
 );
+
+export default projectLikeMachine;

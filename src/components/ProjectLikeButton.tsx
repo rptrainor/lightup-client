@@ -1,4 +1,5 @@
 import { createSignal, createEffect, Switch, Match } from "solid-js";
+import { useMachine } from '@xstate/solid';
 
 import StripeCheckout from "~/components/StripeCheckout";
 import ThankYou from "~/components/ThankYou";
@@ -11,6 +12,7 @@ import { userState } from "~/stores/authStore";
 import handleStripeSession from "~/utilities/handleStripeSession";
 import extractCustomerId from "~/utilities/extractCustomerId";
 import { handleSignInWithEmailAuth } from "~/utilities/handleSignInWithEmailAuth";
+import projectLikeMachine from "~/machines/projectLikeMachine";
 
 type Area = {
   header: string,
@@ -63,7 +65,8 @@ type Props = {
 }
 
 const ProjectLikeButton = (props: Props) => {
-  const [state, setState] = createSignal<LikeButtonState>("initial");
+  const [state, send] = useMachine(projectLikeMachine);
+  const [localState, setState] = createSignal<LikeButtonState>("initial");
   const [userLiked, setUserLiked] = createSignal<boolean | null>(null);
   const [sessionId, setSessionId] = createSignal<string | null>(null);
   const [customerEmail, setCustomerEmail] = createSignal<string | null>(null);
@@ -127,7 +130,7 @@ const ProjectLikeButton = (props: Props) => {
   });
 
   createEffect(() => {
-    if (state() === 'initial' && !userState().user) {
+    if (localState() === 'initial' && !userState().user) {
       setState('not_logged_in_user_sees_like_button');
     }
   });
@@ -136,11 +139,13 @@ const ProjectLikeButton = (props: Props) => {
     //* THIS IS FOR DEBUGGING
     //* MAKE SURE YOU COMMENT THIS OUT BEFORE COMMITING
     console.log('ProjectLikeButton', {
-      stripeCustomerId: stripeCustomerId(),
-      sessionId: sessionId(),
-      customerEmail: customerEmail(),
-      refferalLink: refferalLink(),
-      state: state(),
+      // stripeCustomerId: stripeCustomerId(),
+      // sessionId: sessionId(),
+      // customerEmail: customerEmail(),
+      // refferalLink: refferalLink(),
+      // state: localState(),
+      state: state.value,
+      context: state.context,
     });
   });
 
@@ -154,7 +159,7 @@ const ProjectLikeButton = (props: Props) => {
             projectBannerSrc={props.projectBannerSrc}
           />
         </Match>
-        <Match when={state() === 'not_logged_in_user_sees_stripe_checkout' || state() === 'logged_in_user_sees_stripe_checkout'}>
+        <Match when={localState() === 'not_logged_in_user_sees_stripe_checkout' || localState() === 'logged_in_user_sees_stripe_checkout'}>
           <StripeCheckout
             projectId={props.projectId}
             projectSlug={props.projectSlug}
@@ -165,7 +170,7 @@ const ProjectLikeButton = (props: Props) => {
             onError={handleStripeCheckoutError}
           />
         </Match>
-        <Match when={state() === 'not_logged_in_user_sees_like_button' || state() === 'logged_in_user_sees_like_button'}>
+        <Match when={localState() === 'not_logged_in_user_sees_like_button' || localState() === 'logged_in_user_sees_like_button'}>
           <button onClick={handleLikeButtonClick} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'>
             <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
               <span>Like</span>
