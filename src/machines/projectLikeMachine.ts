@@ -112,11 +112,9 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         on: {
           INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT: {
             target: 'InitializingProjectLikeMachineContext',
-            actions: assign((_, event) => (
-              // console.log('INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT - project_id', {event}),
-              {
-                project_id: event.data,
-              })),
+            actions: assign((_, event) => ({
+              project_id: event.data,
+            })),
           }
         }
       },
@@ -152,9 +150,7 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserHasReferralLink",
             actions: assign({
-              referral_links: (context, event) => (
-                console.log('LoggedInUserDoesNotHaveReferralLinkInContext - referral_links', { context, event }),
-                {
+              referral_links: (context, event) => ({
                   ...context.referral_links,
                   [context.project_id]: event.data,
                 }),
@@ -180,18 +176,12 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         on: {
           USER_UPDATES_PROJECT_DONATION_AMOUNT: {
             actions: assign({
-              project_donation_amount: (_, event) => {
-                // console.log('LoggedInUserHasUserLikeInContext - project_donation_amount', { event })
-                return event.data
-              }
+              project_donation_amount: (_, event) => event.data
             }),
           },
           USER_UPDATES_IS_RECURRING: {
             actions: assign({
-              project_donation_is_recurring: (_, event) => {
-                // console.log('LoggedInUserHasUserLikeInContext - project_donation_is_recurring', { event })
-                return event.data
-              },
+              project_donation_is_recurring: (_, event) => event.data,
             }),
           },
           USER_CLICKED_DONATE: {
@@ -212,10 +202,7 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserHasStripeClientSecretInContext",
             actions: assign({
-              stripe_client_secret: (_, event) => {
-                // console.log('LoggedInUserHasClickedDonate - stripe_client_secret', { event })
-                return event.data
-              },
+              stripe_client_secret: (_, event) => event.data,
             }),
           },
           onError: "LoggedInUserDoesNotHaveStripeClientSecretInContext"
@@ -530,27 +517,19 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
     actions: {},
     guards: {
       isUserInContext: (context) => {
-        console.log('isUserInContext', { context });
-        console.log('isUserInContext', { "context.user.id !== ''": context.user.id !== "" });
         if (context.user.id !== "") {
           return true;
         }
         return false;
       },
       isReferralLinkInContext: (context) => {
-        console.log('Guard isReferralLinkInContext is being called', { context });
-        console.log('💛 isReferralLinkInContext', { context });
         if (context.referral_links[context.project_id] !== undefined) {
-          console.log('💛 isReferralLinkInContext - TRUE', { "context.referral_links[context.project_id]": context.referral_links[context.project_id] });
           return true;
         }
-        console.log('💛 isReferralLinkInContext - FALSE', { "context.referral_links[context.project_id]": context.referral_links[context.project_id] })
         return false;
       },
       IsUserLikeInContext: (context) => {
-        console.log('IsUserLikeInContext', { context });
         if (context.user_likes[context.project_id] !== undefined) {
-          console.log('IsUserLikeInContext', { "context.user_likes[context.project_id]": context.user_likes[context.project_id] });
           return true;
         }
         return false;

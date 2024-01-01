@@ -1,20 +1,20 @@
 type UserMetadata = {
-  deleted_at: string | undefined;
-  updated_at: string | undefined;
-  avatar_url: string | undefined;
-  full_name: string | undefined;
-  city: string | undefined;
-  country: string | undefined;
-  address_line1: string | undefined;
-  address_line2: string | undefined;
-  postal_code: string | undefined;
-  state: string | undefined;
-  stripe_customer_id: string | undefined;
+  deleted_at: string | null;
+  updated_at: string | null;
+  avatar_url: string | null;
+  full_name: string | null;
+  city: string | null;
+  country: string | null;
+  address_line1: string | null;
+  address_line2: string | null;
+  postal_code: string | null;
+  state: string | null;
+  stripe_customer_id: string | null;
 };
 export interface User {
-  id: string;
-  created_at: string | undefined;
-  email: string | undefined;
-  phone: string | undefined;
+  id: string | null;
+  created_at: string | null;
+  email: string | null;
+  phone: string | null;
   user_metadata: UserMetadata;
 }
