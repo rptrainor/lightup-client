@@ -141,25 +141,25 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         ]
       },
       LoggedInUserDoesNotHaveReferralLinkInContext: {
-        invoke: {
-          id: "getReferralLink",
-          src: (context) => getReferralLinkFromDB({
-            stripe_customer_id: context.user.user_metadata.stripe_customer_id,
-            project_id: context.project_id
-          }),
-          onDone: {
-            target: "LoggedInUserHasReferralLink",
-            actions: assign({
-              referral_links: (context, event) => ({
-                  ...context.referral_links,
-                  [context.project_id]: event.data,
-                }),
-            }),
-          },
-          onError: {
-            target: "LoggedInUserDoesNotHaveReferralLinkInDB"
-          }
-        },
+        // invoke: {
+        //   id: "getReferralLink",
+        //   src: (context) => getReferralLinkFromDB({
+        //     stripe_customer_id: context.user.user_metadata.stripe_customer_id,
+        //     project_id: context.project_id
+        //   }),
+        //   onDone: {
+        //     target: "LoggedInUserHasReferralLink",
+        //     actions: assign({
+        //       referral_links: (context, event) => ({
+        //           ...context.referral_links,
+        //           [context.project_id]: event.data,
+        //         }),
+        //     }),
+        //   },
+        //   onError: {
+        //     target: "LoggedInUserDoesNotHaveReferralLinkInDB"
+        //   }
+        // },
       },
       LoggedInUserDoesNotHaveReferralLinkInDB: {
         always: [
@@ -258,52 +258,52 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         },
       },
       LoggedInUserHasStripeSessionObject: {
-        invoke: {
-          id: 'createReferralLink',
-          src: (context) => createReferralLink({
-            user_id: context.user.id,
-            project_id: context.project_id,
-            referring_id: context.referring_id,
-            email: context.user.email,
-            stripe_customer_id: context.user.user_metadata.stripe_customer_id,
-          }),
-          onDone: {
-            target: "LoggedInUserHasReferralLink",
-            actions: assign({
-              referral_links: (context, event) => {
-                // console.log('LoggedInUserHasStripeSessionObject - referral_links', { context, event })
-                return ({
-                  ...context.referral_links,
-                  [context.project_id]: event.data,
-                })
-              },
-            }),
-          }
-        }
+        // invoke: {
+        //   id: 'createReferralLink',
+        //   src: (context) => createReferralLink({
+        //     user_id: context.user.id,
+        //     project_id: context.project_id,
+        //     referring_id: context.referring_id,
+        //     email: context.user.email,
+        //     stripe_customer_id: context.user.user_metadata.stripe_customer_id,
+        //   }),
+        //   onDone: {
+        //     target: "LoggedInUserHasReferralLink",
+        //     actions: assign({
+        //       referral_links: (context, event) => {
+        //         // console.log('LoggedInUserHasStripeSessionObject - referral_links', { context, event })
+        //         return ({
+        //           ...context.referral_links,
+        //           [context.project_id]: event.data,
+        //         })
+        //       },
+        //     }),
+        //   }
+        // }
       },
       LoggedInUserDoesNotHaveStripeSession: {},
       LoggedInUserDoesNotHaveStripeClientSecretInContext: {},
       LoggedInUserDoesNotHaveUserLikeInContext: {
-        invoke: {
-          id: "getUserLike",
-          src: (context) => getUserLikeFromDB({
-            user_id: context.user.id,
-            project_id: context.project_id,
-          }),
-          onDone: {
-            target: "LoggedInUserHasUserLikeInContext",
-            actions: assign({
-              user_likes: (context, event) => {
-                // console.log('LoggedInUserDoesNotHaveUserLikeInContext - user_likes', { context, event })
-                return ({
-                  ...context.user_likes,
-                  [context.project_id]: event.data,
-                })
-              },
-            }),
-          },
-          onError: "LoggedInUserHasNotLiked"
-        },
+        // invoke: {
+        //   id: "getUserLike",
+        //   src: (context) => getUserLikeFromDB({
+        //     user_id: context.user.id,
+        //     project_id: context.project_id,
+        //   }),
+        //   onDone: {
+        //     target: "LoggedInUserHasUserLikeInContext",
+        //     actions: assign({
+        //       user_likes: (context, event) => {
+        //         // console.log('LoggedInUserDoesNotHaveUserLikeInContext - user_likes', { context, event })
+        //         return ({
+        //           ...context.user_likes,
+        //           [context.project_id]: event.data,
+        //         })
+        //       },
+        //     }),
+        //   },
+        //   onError: "LoggedInUserHasNotLiked"
+        // },
       },
       LoggedInUserHasNotLiked: {
         on: {
@@ -313,26 +313,26 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         }
       },
       LoggedInUserHasClickedLike: {
-        invoke: {
-          id: "createUserLike",
-          src: (context) => createUserLike({
-            user_id: context.user.id,
-            project_id: context.project_id,
-          }),
-          onDone: {
-            target: "LoggedInUserHasUserLikeInContext",
-            actions: assign({
-              user_likes: (context, event) => {
-                // console.log('LoggedInUserHasClickedLike - user_likes', { context, event });
-                return ({
-                  ...context.user_likes,
-                  [context.project_id]: event.data,
-                })
-              },
-            }),
-          },
-          onError: "LoggedInUserHasNotLiked"
-        },
+        // invoke: {
+        //   id: "createUserLike",
+        //   src: (context) => createUserLike({
+        //     user_id: context.user.id,
+        //     project_id: context.project_id,
+        //   }),
+        //   onDone: {
+        //     target: "LoggedInUserHasUserLikeInContext",
+        //     actions: assign({
+        //       user_likes: (context, event) => {
+        //         // console.log('LoggedInUserHasClickedLike - user_likes', { context, event });
+        //         return ({
+        //           ...context.user_likes,
+        //           [context.project_id]: event.data,
+        //         })
+        //       },
+        //     }),
+        //   },
+        //   onError: "LoggedInUserHasNotLiked"
+        // },
       },
       LoggedInUserHasReferralLink: {
         invoke: {
@@ -500,16 +500,16 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         },
       },
       NotLoggedInUserHasStripeSessionObject: {
-        invoke: {
-          id: 'signInOrCreateUser',
-          src: (context) => signInOrCreateUser(context.user.email),
-          onDone: {
-            target: 'Idle',
-          },
-          onError: {
-            target: 'Idle',
-          },
-        },
+        // invoke: {
+        //   id: 'signInOrCreateUser',
+        //   src: (context) => signInOrCreateUser(context.user.email),
+        //   onDone: {
+        //     target: 'Idle',
+        //   },
+        //   onError: {
+        //     target: 'Idle',
+        //   },
+        // },
       },
     },
   },

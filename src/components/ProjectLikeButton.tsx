@@ -1,19 +1,12 @@
 import { createSignal, createEffect, Switch, Match, onMount } from "solid-js";
-import { useMachine } from '@xstate/solid';
 
 import StripeCheckout from "~/components/StripeCheckout";
 import ThankYou from "~/components/ThankYou";
 import { addNotification } from '~/stores/notificationStore';
 import { handleUserUpdate } from "~/utilities/handleUserUpdate";
-import { getOrCreateReferralLink } from "~/utilities/getOrCreateReferralLink";
-import checkLikeStatus from "~/utilities/checkLikeStatus";
-import likeProject from "~/utilities/likeProject";
-// import { userState } from "~/stores/authStore";
 import handleStripeSession from "~/utilities/handleStripeSession";
 import extractCustomerId from "~/utilities/extractCustomerId";
-import { handleSignInWithEmailAuth } from "~/utilities/handleSignInWithEmailAuth";
-import projectLikeMachine from "~/machines/projectLikeMachine";
-
+import { state, context } from '~/stores/projectLikeStore'
 type Area = {
   header: string,
   body: string
@@ -65,7 +58,6 @@ type Props = {
 }
 
 const ProjectLikeButton = (props: Props) => {
-  const [state, send] = useMachine(projectLikeMachine);
   const [localState, setState] = createSignal<LikeButtonState>("initial");
   const [userLiked, setUserLiked] = createSignal<boolean | null>(null);
   const [sessionId, setSessionId] = createSignal<string | null>(null);
@@ -139,27 +131,12 @@ const ProjectLikeButton = (props: Props) => {
     //* THIS IS FOR DEBUGGING
     //* MAKE SURE YOU COMMENT THIS OUT BEFORE COMMITING
     console.log('ProjectLikeButton MACHINE', {
-      // stripeCustomerId: stripeCustomerId(),
-      // sessionId: sessionId(),
-      // customerEmail: customerEmail(),
-      // refferalLink: refferalLink(),
-      // state: localState(),
-      state: state.value,
-      user: state.context.user,
-      'user.user_metadata': state.context.user?.user_metadata,
-      project_id: state.context.project_id,
-      user_likes: state.context.user_likes,
-      referral_links: state.context.referral_links,
-      stripe_client_secret: state.context.stripe_client_secret,
-      stripe_session_id: state.context.stripe_session_id,
-      stripe_customer_id: state.context.stripe_customer_id,
-      project_donation_amount: state.context.project_donation_amount,
-      project_donation_is_recurring: state.context.project_donation_is_recurring,
+
     });
   });
 
   onMount(() => {
-    send('INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT', { data: props.projectId })
+
   });
 
   return (

@@ -66,13 +66,23 @@ const initialContext: ProjectLikeMachineContext = {
   error_retry_count: 0,
 };
 
-
 type GuardType = () => boolean;
 type TransitionFunctionType = () => void;
 
 // State and context signals
 const [state, setState] = createSignal<String>('Idle');
 const [context, setContext] = createSignal<ProjectLikeMachineContext>(initialContext);
+
+const updateProjectIdAndResetContext = (newProjectId: string) => {
+  setContext({
+    ...context(),
+    project_id: newProjectId,
+    stripe_client_secret: null,
+    stripe_session_id: null,
+    error_retry_count: 0,
+  });
+  setState('Idle'); // Resetting to the initial state
+};
 
 // State transition functions
 const transitionToIdle: TransitionFunctionType = () => setState('Idle');
@@ -84,13 +94,14 @@ const transitionToNotLoggedInUserHasReferralLinkInContext: TransitionFunctionTyp
 const transitionToNotLoggedInUserHasUserLikeInContext: TransitionFunctionType = () => setState('NotLoggedInUserHasUserLikeInContext');
 const transitionToNotLoggedInUserHasStripeClientSecretInContext: TransitionFunctionType = () => setState('NotLoggedInUserHasStripeClientSecretInContext');
 const transitionToNotLoggedInUserHasStripeSessionIdInContext: TransitionFunctionType = () => setState('NotLoggedInUserHasStripeSessionIdInContext');
-
+const transitionToStripeSessionObjectIsInContext: TransitionFunctionType = () => setState('StripeSessionObjectIsInContext');
+const transitionToError: TransitionFunctionType = () => setState('Error');
 // Async actions
 const getUserFromDB = async () => {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
     console.log('getUserFromDB error', error);
-    setState('Error');
+    //TODO: Handle error
   }
   const user = data.user;
 
@@ -131,11 +142,37 @@ const getStripeSession = async () => {
   const response = await fetch(`/api/session-status?session_id=${stripe_session_id}`);
   const stripe_session = await response.json();
   if (stripe_session.status === 'complete') {
-    
+    const stripe_customer_id = stripe_session.customer;
+    const stripe_session_id = stripe_session.id;
+    const user_updated_with_stripe_customer_data = {
+      ...context().user,
+      email: stripe_session.customer_details.email,
+      phone: stripe_session.customer_details.phone,
+      user_metadata: {
+        ...context().user.user_metadata,
+        stripe_customer_id: stripe_session.customer,
+        email: stripe_session.customer_details.email,
+        name: stripe_session.customer_details.name,
+        phone: stripe_session.customer_details.phone,
+        city: stripe_session.customer_details.address.city,
+        country: stripe_session.customer_details.address.country,
+        address_line1: stripe_session.customer_details.address.line1,
+        address_line2: stripe_session.customer_details.address.line2,
+        postal_code: stripe_session.customer_details.address.postal_code,
+        state: stripe_session.customer_details.address.state,
+      }
+    };
+    setContext(c => ({
+      ...c,
+      user: user_updated_with_stripe_customer_data,
+      stripe_customer_id,
+      stripe_session_id,
+    }));
+    transitionToStripeSessionObjectIsInContext();
   } else if (stripe_session.status === 'expired') {
-
+    transitionToError();
   } else {
-    
+    return;
   }
 
 };
@@ -222,6 +259,8 @@ createEffect(() => {
       // FETCH STRIPE SESSION OBJECT FROM STRIPE API VIA API ROUTE
       getStripeSession();
       break;
+    case 'StripeSessionObjectIsInContext':
+
     case 'Error':
       handleErrorState();
       break;
