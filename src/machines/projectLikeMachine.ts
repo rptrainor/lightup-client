@@ -26,9 +26,15 @@ interface ProjectLikeMachineContext {
   referral_links: ReferralLinks;
   stripe_client_secret: string;
   stripe_session_id: string;
+  stripe_customer_id: string;
   project_donation_amount: number;
   project_donation_is_recurring: boolean;
 }
+
+type INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT = {
+  type: 'INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT';
+  data: string;
+};
 
 type UserClickedDonate = {
   type: 'USER_CLICKED_DONATE';
@@ -66,7 +72,8 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
   UserUpdatesIsRecurringEvent |
   UserClickedDonate |
   SessionIdReceived |
-  NotLoggedInUserHasClickedLikeEvent
+  NotLoggedInUserHasClickedLikeEvent |
+  INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT
 >(
   {
     context: {
@@ -90,10 +97,11 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         },
       } as User,
       project_id: "",
-      user_likes: {} as UserLikes,
-      referral_links: {} as ReferralLinks,
+      user_likes: {},
+      referral_links: {},
       stripe_client_secret: "",
       stripe_session_id: "",
+      stripe_customer_id: "",
       project_donation_amount: 0,
       project_donation_is_recurring: false,
     } as ProjectLikeMachineContext,
@@ -101,6 +109,18 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
     initial: "Idle",
     states: {
       Idle: {
+        on: {
+          INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT: {
+            target: 'InitializingProjectLikeMachineContext',
+            actions: assign((_, event) => (
+              // console.log('INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT - project_id', {event}),
+              {
+                project_id: event.data,
+              })),
+          }
+        }
+      },
+      InitializingProjectLikeMachineContext: {
         always: [
           {
             cond: "isUserInContext",
@@ -127,18 +147,22 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           id: "getReferralLink",
           src: (context) => getReferralLinkFromDB({
             stripe_customer_id: context.user.user_metadata.stripe_customer_id,
-            project_id: context.project_id,
+            project_id: context.project_id
           }),
           onDone: {
             target: "LoggedInUserHasReferralLink",
             actions: assign({
-              referral_links: (context, event) => ({
-                ...context.referral_links,
-                [context.project_id]: event.data,
-              }),
+              referral_links: (context, event) => (
+                console.log('LoggedInUserDoesNotHaveReferralLinkInContext - referral_links', { context, event }),
+                {
+                  ...context.referral_links,
+                  [context.project_id]: event.data,
+                }),
             }),
           },
-          onError: "LoggedInUserDoesNotHaveReferralLinkInDB"
+          onError: {
+            target: "LoggedInUserDoesNotHaveReferralLinkInDB"
+          }
         },
       },
       LoggedInUserDoesNotHaveReferralLinkInDB: {
@@ -156,12 +180,18 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         on: {
           USER_UPDATES_PROJECT_DONATION_AMOUNT: {
             actions: assign({
-              project_donation_amount: (_, event) => event.data,
+              project_donation_amount: (_, event) => {
+                // console.log('LoggedInUserHasUserLikeInContext - project_donation_amount', { event })
+                return event.data
+              }
             }),
           },
           USER_UPDATES_IS_RECURRING: {
             actions: assign({
-              project_donation_is_recurring: (_, event) => event.data,
+              project_donation_is_recurring: (_, event) => {
+                // console.log('LoggedInUserHasUserLikeInContext - project_donation_is_recurring', { event })
+                return event.data
+              },
             }),
           },
           USER_CLICKED_DONATE: {
@@ -182,7 +212,10 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserHasStripeClientSecretInContext",
             actions: assign({
-              stripe_client_secret: (_, event) => event.data,
+              stripe_client_secret: (_, event) => {
+                // console.log('LoggedInUserHasClickedDonate - stripe_client_secret', { event })
+                return event.data
+              },
             }),
           },
           onError: "LoggedInUserDoesNotHaveStripeClientSecretInContext"
@@ -193,7 +226,10 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           SESSION_ID_RECEIVED: {
             target: 'LoggedInUserHasSessionId',
             actions: assign({
-              stripe_session_id: (_, event) => event.data,
+              stripe_session_id: (_, event) => {
+                // console.log('LoggedInUserHasStripeClientSecretInContext - stripe_session_id', { event })
+                return event.data
+              },
             })
           },
         }
@@ -205,24 +241,30 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserHasStripeSessionObject",
             actions: assign({
-              stripe_session_id: (_, event) => event.data,
-              user: (context, event) => ({
-                ...context.user,
-                email: event.data.customer_details.email,
-                user_metadata: {
-                  ...context.user.user_metadata,
-                  stripe_customer_id: event.data.customer,
+              stripe_session_id: (_, event) => {
+                // console.log('LoggedInUserHasSessionId - stripe_session_id', { event })
+                return event.data
+              },
+              user: (context, event) => {
+                // console.log('LoggedInUserHasSessionId - user', { context, event })
+                return ({
+                  ...context.user,
                   email: event.data.customer_details.email,
-                  name: event.data.customer_details.name,
-                  phone: event.data.customer_details.phone,
-                  city: event.data.customer_details.address.city,
-                  country: event.data.customer_details.address.country,
-                  address_line1: event.data.customer_details.address.line1,
-                  address_line2: event.data.customer_details.address.line2,
-                  postal_code: event.data.customer_details.address.postal_code,
-                  state: event.data.customer_details.address.state,
-                },
-              }),
+                  user_metadata: {
+                    ...context.user.user_metadata,
+                    stripe_customer_id: event.data.customer,
+                    email: event.data.customer_details.email,
+                    name: event.data.customer_details.name,
+                    phone: event.data.customer_details.phone,
+                    city: event.data.customer_details.address.city,
+                    country: event.data.customer_details.address.country,
+                    address_line1: event.data.customer_details.address.line1,
+                    address_line2: event.data.customer_details.address.line2,
+                    postal_code: event.data.customer_details.address.postal_code,
+                    state: event.data.customer_details.address.state,
+                  },
+                })
+              },
             }),
           },
           onError: "LoggedInUserDoesNotHaveStripeSession"
@@ -241,10 +283,13 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserHasReferralLink",
             actions: assign({
-              referral_links: (context, event) => ({
-                ...context.referral_links,
-                [context.project_id]: event.data,
-              }),
+              referral_links: (context, event) => {
+                // console.log('LoggedInUserHasStripeSessionObject - referral_links', { context, event })
+                return ({
+                  ...context.referral_links,
+                  [context.project_id]: event.data,
+                })
+              },
             }),
           }
         }
@@ -261,10 +306,13 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserHasUserLikeInContext",
             actions: assign({
-              user_likes: (context, event) => ({
-                ...context.user_likes,
-                [context.project_id]: event.data,
-              }),
+              user_likes: (context, event) => {
+                // console.log('LoggedInUserDoesNotHaveUserLikeInContext - user_likes', { context, event })
+                return ({
+                  ...context.user_likes,
+                  [context.project_id]: event.data,
+                })
+              },
             }),
           },
           onError: "LoggedInUserHasNotLiked"
@@ -287,10 +335,13 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserHasUserLikeInContext",
             actions: assign({
-              user_likes: (context, event) => ({
-                ...context.user_likes,
-                [context.project_id]: event.data,
-              }),
+              user_likes: (context, event) => {
+                // console.log('LoggedInUserHasClickedLike - user_likes', { context, event });
+                return ({
+                  ...context.user_likes,
+                  [context.project_id]: event.data,
+                })
+              },
             }),
           },
           onError: "LoggedInUserHasNotLiked"
@@ -303,7 +354,10 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserSuccessfullyUpdatedInDB",
             actions: assign({
-              user: (_, event) => event.data,
+              user: (_, event) => {
+                // console.log('LoggedInUserHasReferralLink - user', { event });
+                return event.data
+              },
             }),
           },
           onError: "Idle"
@@ -319,7 +373,10 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "LoggedInUserIsInContext",
             actions: assign({
-              user: (_, event) => event.data,
+              user: (_, event) => {
+                console.log('UserIsNotInContext - user', { event });
+                return event.data
+              },
             }),
           },
           onError: "NotLoggedInUserInitial"
@@ -345,10 +402,13 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         on: {
           NOT_LOGGED_IN_USER_CLICKED_LIKE: {
             actions: assign({
-              user_likes: (context, event) => ({
-                ...context.user_likes,
-                [context.project_id]: event.data,
-              }),
+              user_likes: (context, event) => {
+                // console.log('NotLoggedInUserShowingLikeButton - createUserLike', { context, event });
+                return ({
+                  ...context.user_likes,
+                  [context.project_id]: event.data,
+                })
+              },
             }),
             target: "NotLoggedInUserHasUserLikeInContext",
           },
@@ -358,12 +418,18 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
         on: {
           USER_UPDATES_PROJECT_DONATION_AMOUNT: {
             actions: assign({
-              project_donation_amount: (_, event) => event.data,
+              project_donation_amount: (_, event) => {
+                // console.log('NotLoggedInUserHasUserLikeInContext - createUserLike', { event });
+                return event.data
+              },
             }),
           },
           USER_UPDATES_IS_RECURRING: {
             actions: assign({
-              project_donation_is_recurring: (_, event) => event.data,
+              project_donation_is_recurring: (_, event) => {
+                // console.log('NotLoggedInUserHasUserLikeInContext - createUserLike', { event });
+                return event.data
+              }
             }),
           },
           USER_CLICKED_DONATE: {
@@ -384,7 +450,10 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "NotLoggedInUserHasStripeClientSecretInContext",
             actions: assign({
-              stripe_client_secret: (_, event) => event.data,
+              stripe_client_secret: (_, event) => {
+                // console.log('NotLoggedInUserHasClickedDonate - stripe_client_secret', { event });
+                return event.data
+              },
             }),
           },
           onError: "Idle"
@@ -395,7 +464,10 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           SESSION_ID_RECEIVED: {
             target: 'NotLoggedInUserHasSessionId',
             actions: assign({
-              stripe_session_id: (_, event) => event.data,
+              stripe_session_id: (_, event) => {
+                // console.log('NotLoggedInUserHasStripeClientSecretInContext - stripe_session_id', { event });
+                return event.data
+              },
             })
           },
         }
@@ -407,24 +479,34 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
           onDone: {
             target: "NotLoggedInUserHasStripeSessionObject",
             actions: assign({
-              stripe_session_id: (_, event) => event.data,
-              user: (context, event) => ({
-                ...context.user,
-                email: event.data.customer_details.email,
-                user_metadata: {
-                  ...context.user.user_metadata,
-                  stripe_customer_id: event.data.customer,
+              stripe_customer_id: (_, event) => {
+                // console.log('getStripeSession - stripe_customer_id', { event });
+                return event.data.customer
+              },
+              stripe_session_id: (_, event) => {
+                // console.log('getStripeSession - stripe_session_id', { event });
+                return event.data
+              },
+              user: (context, event) => {
+                // console.log('getStripeSession - user', { context, event });
+                return ({
+                  ...context.user,
                   email: event.data.customer_details.email,
-                  name: event.data.customer_details.name,
-                  phone: event.data.customer_details.phone,
-                  city: event.data.customer_details.address.city,
-                  country: event.data.customer_details.address.country,
-                  address_line1: event.data.customer_details.address.line1,
-                  address_line2: event.data.customer_details.address.line2,
-                  postal_code: event.data.customer_details.address.postal_code,
-                  state: event.data.customer_details.address.state,
-                },
-              }),
+                  user_metadata: {
+                    ...context.user.user_metadata,
+                    stripe_customer_id: event.data.customer,
+                    email: event.data.customer_details.email,
+                    name: event.data.customer_details.name,
+                    phone: event.data.customer_details.phone,
+                    city: event.data.customer_details.address.city,
+                    country: event.data.customer_details.address.country,
+                    address_line1: event.data.customer_details.address.line1,
+                    address_line2: event.data.customer_details.address.line2,
+                    postal_code: event.data.customer_details.address.postal_code,
+                    state: event.data.customer_details.address.state,
+                  },
+                })
+              },
             }),
           },
           onError: "Idle"
@@ -448,17 +530,31 @@ const projectLikeMachine = createMachine<ProjectLikeMachineContext,
     actions: {},
     guards: {
       isUserInContext: (context) => {
+        console.log('isUserInContext', { context });
+        console.log('isUserInContext', { "context.user.id !== ''": context.user.id !== "" });
         if (context.user.id !== "") {
           return true;
         }
         return false;
       },
       isReferralLinkInContext: (context) => {
+        console.log('Guard isReferralLinkInContext is being called', { context });
+        console.log('💛 isReferralLinkInContext', { context });
         if (context.referral_links[context.project_id] !== undefined) {
+          console.log('💛 isReferralLinkInContext - TRUE', { "context.referral_links[context.project_id]": context.referral_links[context.project_id] });
+          return true;
+        }
+        console.log('💛 isReferralLinkInContext - FALSE', { "context.referral_links[context.project_id]": context.referral_links[context.project_id] })
+        return false;
+      },
+      IsUserLikeInContext: (context) => {
+        console.log('IsUserLikeInContext', { context });
+        if (context.user_likes[context.project_id] !== undefined) {
+          console.log('IsUserLikeInContext', { "context.user_likes[context.project_id]": context.user_likes[context.project_id] });
           return true;
         }
         return false;
-      },
+      }
     },
     delays: {},
   },

@@ -1,4 +1,4 @@
-import { createSignal, createEffect, Switch, Match } from "solid-js";
+import { createSignal, createEffect, Switch, Match, onMount } from "solid-js";
 import { useMachine } from '@xstate/solid';
 
 import StripeCheckout from "~/components/StripeCheckout";
@@ -8,7 +8,7 @@ import { handleUserUpdate } from "~/utilities/handleUserUpdate";
 import { getOrCreateReferralLink } from "~/utilities/getOrCreateReferralLink";
 import checkLikeStatus from "~/utilities/checkLikeStatus";
 import likeProject from "~/utilities/likeProject";
-import { userState } from "~/stores/authStore";
+// import { userState } from "~/stores/authStore";
 import handleStripeSession from "~/utilities/handleStripeSession";
 import extractCustomerId from "~/utilities/extractCustomerId";
 import { handleSignInWithEmailAuth } from "~/utilities/handleSignInWithEmailAuth";
@@ -78,24 +78,24 @@ const ProjectLikeButton = (props: Props) => {
     addNotification({ type: 'error', header: 'Looks like something went wrong', subHeader: 'There was an error processing your payment. Please try again.' });
   };
 
-  const handleLikeButtonClick = () => {
-    setUserLiked(true);
-    if (userState().user?.id && props.projectId) {
-      likeProject({ projectId: props.projectId, userId: userState().user?.id }).then(() => {
-        setState('logged_in_user_sees_stripe_checkout');
-      });
-    } else {
-      setState('not_logged_in_user_sees_stripe_checkout');
-    }
-  };
+  // const handleLikeButtonClick = () => {
+  //   setUserLiked(true);
+  //   if (userState().user?.id && props.projectId) {
+  //     likeProject({ projectId: props.projectId, userId: userState().user?.id }).then(() => {
+  //       setState('logged_in_user_sees_stripe_checkout');
+  //     });
+  //   } else {
+  //     setState('not_logged_in_user_sees_stripe_checkout');
+  //   }
+  // };
 
-  createEffect(() => {
-    const userId = userState().user?.id;
-    const email = customerEmail();
-    if (!userId && email) {
-      handleSignInWithEmailAuth(email);
-    }
-  })
+  // createEffect(() => {
+  //   const userId = userState().user?.id;
+  //   const email = customerEmail();
+  //   if (!userId && email) {
+  //     handleSignInWithEmailAuth(email);
+  //   }
+  // })
 
   createEffect(() => {
     const fetchStripeSession = async () => {
@@ -112,41 +112,54 @@ const ProjectLikeButton = (props: Props) => {
     fetchStripeSession();
   });
 
-  createEffect(() => {
-    const userId = userState().user?.id;
-    const email = userState().user?.email;
-    const customerId = stripeCustomerId();
-    if (userId && email && customerId && props.projectId && refferalLink() === null) {
-      getOrCreateReferralLink({ stripeCustomerId: stripeCustomerId(), projectId: props.projectId, email: userState().user?.email, userId: userId }).then((response) => {
-        setState('logged_in_user_sees_thank_you');
-        setRefferalLink(response);
-      });
-    } else if (userId && props.projectId) {
-      checkLikeStatus({ projectId: props.projectId, userId: userId }).then((response) => {
-        setState(response ? 'logged_in_user_sees_stripe_checkout' : 'logged_in_user_sees_like_button');
-        setUserLiked(response);
-      });
-    }
-  });
+  // createEffect(() => {
+  //   const userId = userState().user?.id;
+  //   const email = userState().user?.email;
+  //   const customerId = stripeCustomerId();
+  //   if (userId && email && customerId && props.projectId && refferalLink() === null) {
+  //     getOrCreateReferralLink({ stripeCustomerId: stripeCustomerId(), projectId: props.projectId, email: userState().user?.email, userId: userId }).then((response) => {
+  //       setState('logged_in_user_sees_thank_you');
+  //       setRefferalLink(response);
+  //     });
+  //   } else if (userId && props.projectId) {
+  //     checkLikeStatus({ projectId: props.projectId, userId: userId }).then((response) => {
+  //       setState(response ? 'logged_in_user_sees_stripe_checkout' : 'logged_in_user_sees_like_button');
+  //       setUserLiked(response);
+  //     });
+  //   }
+  // });
 
-  createEffect(() => {
-    if (localState() === 'initial' && !userState().user) {
-      setState('not_logged_in_user_sees_like_button');
-    }
-  });
+  // createEffect(() => {
+  //   if (localState() === 'initial' && !userState().user) {
+  //     setState('not_logged_in_user_sees_like_button');
+  //   }
+  // });
 
   createEffect(() => {
     //* THIS IS FOR DEBUGGING
     //* MAKE SURE YOU COMMENT THIS OUT BEFORE COMMITING
-    console.log('ProjectLikeButton', {
+    console.log('ProjectLikeButton MACHINE', {
       // stripeCustomerId: stripeCustomerId(),
       // sessionId: sessionId(),
       // customerEmail: customerEmail(),
       // refferalLink: refferalLink(),
       // state: localState(),
       state: state.value,
-      context: state.context,
+      user: state.context.user,
+      'user.user_metadata': state.context.user?.user_metadata,
+      project_id: state.context.project_id,
+      user_likes: state.context.user_likes,
+      referral_links: state.context.referral_links,
+      stripe_client_secret: state.context.stripe_client_secret,
+      stripe_session_id: state.context.stripe_session_id,
+      stripe_customer_id: state.context.stripe_customer_id,
+      project_donation_amount: state.context.project_donation_amount,
+      project_donation_is_recurring: state.context.project_donation_is_recurring,
     });
+  });
+
+  onMount(() => {
+    send('INITIALIZE_PROJECT_LIKE_MACHINE_CONTEXT', { data: props.projectId })
   });
 
   return (
@@ -171,7 +184,7 @@ const ProjectLikeButton = (props: Props) => {
           />
         </Match>
         <Match when={localState() === 'not_logged_in_user_sees_like_button' || localState() === 'logged_in_user_sees_like_button'}>
-          <button onClick={handleLikeButtonClick} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'>
+          <button onClick={() => {}} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'>
             <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
               <span>Like</span>
               <div class="bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all">

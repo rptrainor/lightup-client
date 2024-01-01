@@ -5,11 +5,11 @@ type Props = {
   project_id: string;
 }
 
-const getReferralLinkFromDB = async ({stripe_customer_id, project_id}: Props) => {
+const getReferralLinkFromDB = async ({ stripe_customer_id, project_id }: Props) => {
   if (!stripe_customer_id) {
-    return null;
+    throw new Error('stripe_customer_id is required');
   }
-  
+
   // Check if a referral link already exists
   let { data: existingLink, error } = await supabase
     .from('referral_links')
@@ -22,6 +22,7 @@ const getReferralLinkFromDB = async ({stripe_customer_id, project_id}: Props) =>
     throw error;
   }
 
+  console.log('getReferralLinkFromDB', { existingLink });
   return existingLink;
 };
 
