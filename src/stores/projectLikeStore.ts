@@ -97,7 +97,6 @@ const [context, setContext] = createStore<ProjectLikeMachineContext>(initialCont
 
 // Function to update project_id and reset context
 const updateProjectIdAndResetContext = (newProjectId: string) => {
-  console.log('updateProjectIdAndResetContext', newProjectId);
   setContext('project_id', newProjectId);
   // Reset other parts of the context if needed
   setContext('stripe_client_secret', null);
@@ -436,7 +435,6 @@ const handleErrorState = () => {
 
 // Guard (should always return a boolean)
 const isProjectIdInContext: GuardType = () => {
-  console.log('isProjectIdInContext', context.project_id);
   const project_id = context.project_id;
   if (!project_id) {
     return false;

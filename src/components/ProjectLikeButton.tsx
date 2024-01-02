@@ -69,21 +69,21 @@ const ProjectLikeButton = (props: Props) => {
   createEffect(() => {
     //* THIS IS FOR DEBUGGING
     //* MAKE SURE YOU COMMENT THIS OUT BEFORE COMMITING
-    console.log('ProjectLikeButton MACHINE', {
-      state: state(),
-      user_id: context.user.id,
-      email: context.user.email,
-      user_likes: context.user_likes[context.project_id ?? ''],
-      referral_links: context.referral_links[context.project_id ?? ''],
-      stripe_client_secret: context.stripe_client_secret,
-      stripe_session_id: context.stripe_session_id,
-      referring_id: context.referring_id,
-      project_id: context.project_id,
-    });
+    // console.log('ProjectLikeButton MACHINE', {
+    //   state: state(),
+    //   user_id: context.user.id,
+    //   email: context.user.email,
+    //   user_likes: context.user_likes[context.project_id ?? ''],
+    //   referral_links: context.referral_links[context.project_id ?? ''],
+    //   stripe_client_secret: context.stripe_client_secret,
+    //   stripe_session_id: context.stripe_session_id,
+    //   referring_id: context.referring_id,
+    //   project_id: context.project_id,
+    // });
   });
 
   onMount(() => {
-    console.log('ProjectLikeButton MOUNTED');
+    // console.log('ProjectLikeButton MOUNTED');
     updateProjectIdAndResetContext(props.projectId)
   });
 
