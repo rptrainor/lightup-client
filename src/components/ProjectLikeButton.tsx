@@ -1,12 +1,11 @@
-import { createSignal, createEffect, Switch, Match, onMount } from "solid-js";
+import { createEffect, Switch, Match, onMount } from "solid-js";
 
 import StripeCheckout from "~/components/StripeCheckout";
 import ThankYou from "~/components/ThankYou";
 import { addNotification } from '~/stores/notificationStore';
-import { handleUserUpdate } from "~/utilities/handleUserUpdate";
-import handleStripeSession from "~/utilities/handleStripeSession";
 import extractCustomerId from "~/utilities/extractCustomerId";
-import { state, context, updateProjectIdAndResetContext } from '~/stores/projectLikeStore'
+import { state, context, updateProjectIdAndResetContext, transitionToError } from '~/stores/projectLikeStore'
+
 type Area = {
   header: string,
   body: string
@@ -45,8 +44,6 @@ export type RefferalLink = {
   project_id: string | null;
 };
 
-type LikeButtonState = "initial" | "not_logged_in_user_sees_like_button" | "not_logged_in_user_sees_stripe_checkout" | "not_logged_in_user_sees_thank_you" | "logged_in_user_sees_like_button" | "logged_in_user_sees_stripe_checkout" | "logged_in_user_sees_thank_you"
-
 type Props = {
   projectId: string;
   projectSlug: string;
@@ -58,74 +55,13 @@ type Props = {
 }
 
 const ProjectLikeButton = (props: Props) => {
-  const [localState, setState] = createSignal<LikeButtonState>("initial");
-  const [userLiked, setUserLiked] = createSignal<boolean | null>(null);
-  const [sessionId, setSessionId] = createSignal<string | null>(null);
-  const [customerEmail, setCustomerEmail] = createSignal<string | null>(null);
-  const [stripeCustomerId, setStripeCustomerId] = createSignal<string | null>(null);
-  const [refferalLink, setRefferalLink] = createSignal<RefferalLink | null>(null);
 
   const handleStripeCheckoutError = () => {
-    setState('initial')
+    transitionToError();
     addNotification({ type: 'error', header: 'Looks like something went wrong', subHeader: 'There was an error processing your payment. Please try again.' });
   };
 
-  // const handleLikeButtonClick = () => {
-  //   setUserLiked(true);
-  //   if (userState().user?.id && props.projectId) {
-  //     likeProject({ projectId: props.projectId, userId: userState().user?.id }).then(() => {
-  //       setState('logged_in_user_sees_stripe_checkout');
-  //     });
-  //   } else {
-  //     setState('not_logged_in_user_sees_stripe_checkout');
-  //   }
-  // };
 
-  // createEffect(() => {
-  //   const userId = userState().user?.id;
-  //   const email = customerEmail();
-  //   if (!userId && email) {
-  //     handleSignInWithEmailAuth(email);
-  //   }
-  // })
-
-  createEffect(() => {
-    const fetchStripeSession = async () => {
-      if (props.session_id) {
-        setSessionId(props.session_id);
-        const sessionData = await handleStripeSession(props.session_id);
-        if (sessionData) {
-          setStripeCustomerId(sessionData.customer);
-          handleUserUpdate(sessionData);
-          setCustomerEmail(sessionData.customer_details.email);
-        }
-      }
-    };
-    fetchStripeSession();
-  });
-
-  // createEffect(() => {
-  //   const userId = userState().user?.id;
-  //   const email = userState().user?.email;
-  //   const customerId = stripeCustomerId();
-  //   if (userId && email && customerId && props.projectId && refferalLink() === null) {
-  //     getOrCreateReferralLink({ stripeCustomerId: stripeCustomerId(), projectId: props.projectId, email: userState().user?.email, userId: userId }).then((response) => {
-  //       setState('logged_in_user_sees_thank_you');
-  //       setRefferalLink(response);
-  //     });
-  //   } else if (userId && props.projectId) {
-  //     checkLikeStatus({ projectId: props.projectId, userId: userId }).then((response) => {
-  //       setState(response ? 'logged_in_user_sees_stripe_checkout' : 'logged_in_user_sees_like_button');
-  //       setUserLiked(response);
-  //     });
-  //   }
-  // });
-
-  // createEffect(() => {
-  //   if (localState() === 'initial' && !userState().user) {
-  //     setState('not_logged_in_user_sees_like_button');
-  //   }
-  // });
 
   createEffect(() => {
     //* THIS IS FOR DEBUGGING

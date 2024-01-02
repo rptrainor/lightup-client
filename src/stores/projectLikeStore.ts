@@ -330,6 +330,29 @@ const getStripeSessionThenAuth = async () => {
   }
 };
 
+const handleUserLikeClick = () => {
+  const project_id = context.project_id;
+  if (!project_id) {
+    console.error('Project ID is not provided');
+    transitionToError();
+    return;
+  }
+  setContext('user_likes', project_id, true);
+  if (context.user.id) {
+    handleUpdateUserLikesInDB();
+  } else {
+    transitionToNotLoggedInUserHasUserLikeInContext();
+  }
+};
+
+const handleUserProjectDonationAmountChange = (amount: number) => {
+  setContext('project_donation_amount', amount);
+};
+
+const handleUserProjectDonationIsRecurringChange = (is_recurring: boolean) => {
+  setContext('project_donation_is_recurring', is_recurring);
+};
+
 const updateReferralLink = (stripe_customer_id: string) => {
   const project_id = context.project_id;
   const referring_id = formatRefferringIdFromStripeCustomerId(stripe_customer_id);
@@ -478,5 +501,9 @@ export {
   state,
   context,
   updateProjectIdAndResetContext,
-  addUserLike
+  addUserLike,
+  handleUserLikeClick,
+  handleUserProjectDonationAmountChange,
+  handleUserProjectDonationIsRecurringChange,
+  transitionToError,
 };
