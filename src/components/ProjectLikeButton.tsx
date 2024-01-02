@@ -3,7 +3,7 @@ import { createEffect, Switch, Match, onMount } from "solid-js";
 import StripeCheckout from "~/components/StripeCheckout";
 import ThankYou from "~/components/ThankYou";
 import { addNotification } from '~/stores/notificationStore';
-import { state, context, updateProjectIdAndResetContext, transitionToError, handleUserLikeClick } from '~/stores/projectLikeStore'
+import { state, context, updateProjectIdAndResetContext, transitionToError, handleUserLikeClick, handleStripeSessionIdSearchParamInURL } from '~/stores/projectLikeStore'
 
 type Area = {
   header: string,
@@ -61,6 +61,12 @@ const ProjectLikeButton = (props: Props) => {
   };
 
   createEffect(() => {
+    if (props.session_id) {
+      handleStripeSessionIdSearchParamInURL()
+    }
+  });
+
+  createEffect(() => {
     //* THIS IS FOR DEBUGGING
     //* MAKE SURE YOU COMMENT THIS OUT BEFORE COMMITING
     console.log('ProjectLikeButton MACHINE', {
@@ -70,12 +76,14 @@ const ProjectLikeButton = (props: Props) => {
       user_likes: context.user_likes[context.project_id ?? ''],
       referral_links: context.referral_links[context.project_id ?? ''],
       stripe_client_secret: context.stripe_client_secret,
+      stripe_session_id: context.stripe_session_id,
       referring_id: context.referring_id,
       project_id: context.project_id,
     });
   });
 
   onMount(() => {
+    console.log('ProjectLikeButton MOUNTED');
     updateProjectIdAndResetContext(props.projectId)
   });
 
@@ -99,7 +107,7 @@ const ProjectLikeButton = (props: Props) => {
           state() === 'LoggedInUserHasUserLikeInContext' ||
           state() === 'NotLoggedInUserHasStripeClientSecretInContext' ||
           state() === 'NotLoggedInUserHasUserLikeInContext'
-          }>
+        }>
           <StripeCheckout
             projectId={props.projectId}
             projectSlug={props.projectSlug}

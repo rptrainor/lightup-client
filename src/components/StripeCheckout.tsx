@@ -1,19 +1,7 @@
-import { createSignal, createResource, onMount, createEffect, Show } from "solid-js";
+import { createSignal, onMount, createEffect, Show } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 
-import { addNotification } from '~/stores/notificationStore';
-
-type StripePayload = {
-  amountValue: number;
-  isSustainingMembership: boolean;
-  projectId: string;
-  projectSlug: string;
-  sucessUrl: string;
-  projectBannerSrc: string;
-  projectCreatorName: string;
-  referredByOtherUserId: string | undefined;
-  isCheckingOut: boolean;
-};
+import { context, handleUserProjectDonationAmountChange, handleUserProjectDonationIsRecurringChange, handleDonateButtonClick } from "~/stores/projectLikeStore";
 
 type Props = {
   projectId: string;
@@ -25,64 +13,19 @@ type Props = {
   onError: () => void;
 };
 
-async function postCreateStripeCheckoutSession(stripePayload: StripePayload) {
-  if (!stripePayload.isCheckingOut) {
-    return;
-  }
-  const response = await fetch("/api/create-donation-session", {
-    method: "POST",
-    body: JSON.stringify(stripePayload),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  });
-  return await response.json();
-}
-
 const StripeCheckout = (props: Props) => {
   const [stripe, setStripe] = createSignal<Stripe | null>(null);
-  const [amountValue, setAmountValue] = createSignal(47);
-  const [isSustainingMembership, setIsSustainingMembership] = createSignal(false);
   const [customAmountSelected, setCustomAmountSelected] = createSignal(false);
-  const [stripePayload, setStripePayload] = createSignal<StripePayload>({
-    amountValue: amountValue(),
-    isSustainingMembership: isSustainingMembership(),
-    projectId: props.projectId,
-    projectSlug: props.projectSlug,
-    sucessUrl: props.sucessUrl,
-    projectBannerSrc: props.projectBannerSrc,
-    projectCreatorName: props.projectCreatorName,
-    referredByOtherUserId: props.referredByOtherUserId,
-    isCheckingOut: false,
-  });
-  const [response] = createResource(stripePayload, postCreateStripeCheckoutSession);
 
   let customAmountNumberInput: HTMLInputElement;
 
   const handleAmountChange = (amount: number, isCustom: boolean = false) => {
-    setAmountValue(amount);
+    handleUserProjectDonationAmountChange(amount);
     setCustomAmountSelected(isCustom);
     if (isCustom) {
       customAmountNumberInput?.focus();
     }
   };
-
-  function handleClick(e: MouseEvent) {
-    e.preventDefault();
-    addNotification({ type: 'success', header: 'You are the best!', subHeader: 'We are generating your checkout form now' })
-    const stripePayload: StripePayload = {
-      amountValue: amountValue(),
-      isSustainingMembership: isSustainingMembership(),
-      projectId: props.projectId,
-      projectSlug: props.projectSlug,
-      sucessUrl: props.sucessUrl,
-      projectBannerSrc: props.projectBannerSrc,
-      projectCreatorName: props.projectCreatorName,
-      referredByOtherUserId: props.referredByOtherUserId,
-      isCheckingOut: true,
-    };
-    setStripePayload(stripePayload);
-  }
 
   onMount(async () => {
     const stripeKey = import.meta.env.DEV
@@ -92,9 +35,8 @@ const StripeCheckout = (props: Props) => {
   });
 
   createEffect(() => {
-    const checkoutResponse = response();
-    if (checkoutResponse && checkoutResponse.clientSecret) {
-      stripe()?.initEmbeddedCheckout({ clientSecret: checkoutResponse.clientSecret })
+    if (context.stripe_client_secret) {
+      stripe()?.initEmbeddedCheckout({ clientSecret: context.stripe_client_secret })
         .then(checkout => checkout.mount('#checkout'))
         .catch(error => {
           console.error('Error initializing Stripe Checkout:', error);
@@ -106,7 +48,7 @@ const StripeCheckout = (props: Props) => {
 
   return (
     <div class='flex flex-col mx-auto gap-4 w-full'>
-      <Show when={!response()?.clientSecret}>
+      <Show when={!context.stripe_client_secret}>
         <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
           <label class="relative flex items-center justify-center">
@@ -230,12 +172,12 @@ const StripeCheckout = (props: Props) => {
         <fieldset class="grid grid-cols-2 gap-2">
           <legend class='py-2'>Make it monthly:</legend>
           <label class="relative flex items-center justify-center">
-            <input checked={isSustainingMembership()} onChange={() => setIsSustainingMembership(true)} type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
+            <input checked={context.project_donation_is_recurring} onChange={() => handleUserProjectDonationIsRecurringChange(true)} type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
             <span class="absolute z-10 text-brand_black text-center">Yes, Let's go!</span>
             <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
           <label class="relative flex items-center justify-center">
-            <input checked={!isSustainingMembership()} onChange={() => setIsSustainingMembership(false)} type="radio" id="no" name="sustaining_membership" role="radio" class="peer sr-only" value={"no"} />
+            <input checked={!context.project_donation_is_recurring} onChange={() => handleUserProjectDonationIsRecurringChange(false)} type="radio" id="no" name="sustaining_membership" role="radio" class="peer sr-only" value={"no"} />
             <span class="absolute z-10 text-brand_black text-center">No, give once</span>
             <div class="w-full h-12 bg-brand_white peer-checked:bg-brand_pink peer-focus:ring-2 peer-focus:ring-brand_pink peer-focus:ring-offset-2 peer-focus:ring-offset-brand_white peer-checked:border-solid peer-checked:border-4 border-brand_black flex items-center justify-center transition-colors"></div>
           </label>
@@ -243,9 +185,9 @@ const StripeCheckout = (props: Props) => {
 
         {/* Submit Button */}
         <button
-          onClick={handleClick}
+          onClick={handleDonateButtonClick}
           class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'
-          disabled={!amountValue() || !stripe()}
+          disabled={!context.project_donation_amount || !stripe()}
         >
           <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
             Donate

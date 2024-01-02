@@ -3,6 +3,7 @@ import { createStore } from 'solid-js/store';
 
 import { supabase } from '~/db/connection';
 import { type User, type UserMetadata } from "~/types/schema";
+import { addNotification } from '~/stores/notificationStore';
 
 export type ProjectLikeMachineStatesType =
   'Idle' |
@@ -42,7 +43,7 @@ type ProjectLikeMachineContext = {
   stripe_session_id: null | string;
   stripe_customer_id: null | string;
   project_donation_amount: number;
-  project_donation_is_recurring: null | boolean;
+  project_donation_is_recurring: boolean;
   error_retry_count: number;
 }
 
@@ -74,7 +75,7 @@ const initialContext: ProjectLikeMachineContext = {
   stripe_client_secret: null,
   stripe_session_id: null,
   stripe_customer_id: null,
-  project_donation_amount: 0,
+  project_donation_amount: 47,
   project_donation_is_recurring: false,
   error_retry_count: 0,
 };
@@ -82,12 +83,21 @@ const initialContext: ProjectLikeMachineContext = {
 type GuardType = () => boolean;
 type TransitionFunctionType = () => void;
 
+type CreateStripeCheckoutSessionPayload = {
+  project_id: string;
+  referring_id: string | null;
+  project_donation_amount: number;
+  project_donation_is_recurring: boolean;
+  sucess_url: string;
+}
+
 // State and context signals
 const [state, setState] = createSignal<ProjectLikeMachineStatesType>('Idle');
 const [context, setContext] = createStore<ProjectLikeMachineContext>(initialContext);
 
 // Function to update project_id and reset context
 const updateProjectIdAndResetContext = (newProjectId: string) => {
+  console.log('updateProjectIdAndResetContext', newProjectId);
   setContext('project_id', newProjectId);
   // Reset other parts of the context if needed
   setContext('stripe_client_secret', null);
@@ -116,6 +126,38 @@ const transitionToNotLoggedInUserHasNotLiked: TransitionFunctionType = () => set
 const transitionToError: TransitionFunctionType = () => setState('Error');
 
 // Async actions
+async function createStripeCheckoutSession() {
+  const project_id = context.project_id;
+  if (!project_id) {
+    console.error('Project ID is not provided');
+    transitionToError();
+    return;
+  }
+
+  const stripePayload: CreateStripeCheckoutSessionPayload = {
+    project_id,
+    referring_id: context.referring_id,
+    project_donation_amount: context.project_donation_amount,
+    project_donation_is_recurring: context.project_donation_is_recurring,
+    sucess_url: window.location.href,
+  };
+
+  const response = await fetch("/api/create-donation-session", {
+    method: "POST",
+    body: JSON.stringify(stripePayload),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+  const { clientSecret } = await response.json();
+  if (!clientSecret) {
+    console.error('Error creating Stripe checkout session:', response);
+    transitionToError();
+    return;
+  }
+  setContext('stripe_client_secret', clientSecret);
+}
+
 const getUserFromDB = async () => {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
@@ -270,8 +312,7 @@ const getStripeSession = async () => {
       state: stripe_session.customer_details.address.state,
     });
     updateReferralLinkInContext({ stripe_customer_id: stripe_session.customer, referring_id: undefined });
-
-    // handleUpdateUserLikesInDB();
+    createRefferalLinkInDB();
   } else if (stripe_session.status === 'expired') {
     transitionToError();
   } else {
@@ -312,6 +353,21 @@ const getStripeSessionThenAuth = async () => {
     return;
   }
 };
+
+const handleDonateButtonClick = () => {
+  createStripeCheckoutSession();
+}
+
+const handleStripeSessionIdSearchParamInURL = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const stripe_session_id = urlParams.get('session_id');
+  if (!stripe_session_id || stripe_session_id === context.stripe_session_id) {
+    return;
+  }
+
+  setContext('stripe_session_id', stripe_session_id);
+  return;
+}
 
 const handleUserLikeClick = () => {
   const project_id = context.project_id;
@@ -379,7 +435,14 @@ const handleErrorState = () => {
 };
 
 // Guard (should always return a boolean)
-const isProjectIdInContext: GuardType = () => context.project_id !== null;
+const isProjectIdInContext: GuardType = () => {
+  console.log('isProjectIdInContext', context.project_id);
+  const project_id = context.project_id;
+  if (!project_id) {
+    return false;
+  }
+  return true;
+};
 const isUserInContext: GuardType = () => context.user.id !== null;
 
 const isReferralLinkInContext: GuardType = () => {
@@ -491,6 +554,8 @@ createEffect(() => {
       // RENDER DONATION FORM
       if (isStripeClientSecretInContext()) {
         transitionToLoggedInUserHasStripeClientSecretInContext();
+      } else if (isStripeSessionIdInContext()) {
+        transitionToLoggedInUserHasStripeSessionIdInContext();
       }
       break;
     case 'LoggedInUserHasNotLiked':
@@ -525,5 +590,7 @@ export {
   handleUserLikeClick,
   handleUserProjectDonationAmountChange,
   handleUserProjectDonationIsRecurringChange,
+  handleStripeSessionIdSearchParamInURL,
+  handleDonateButtonClick,
   transitionToError,
 };
