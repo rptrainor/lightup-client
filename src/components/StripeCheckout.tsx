@@ -11,7 +11,7 @@ type StripePayload = {
   sucessUrl: string;
   projectBannerSrc: string;
   projectCreatorName: string;
-  referringUserId: string | undefined;
+  referredByOtherUserId: string | undefined;
   isCheckingOut: boolean;
 };
 
@@ -21,7 +21,7 @@ type Props = {
   sucessUrl: string;
   projectBannerSrc: string;
   projectCreatorName: string;
-  referringUserId: string | undefined;
+  referredByOtherUserId: string | undefined;
   onError: () => void;
 };
 
@@ -52,7 +52,7 @@ const StripeCheckout = (props: Props) => {
     sucessUrl: props.sucessUrl,
     projectBannerSrc: props.projectBannerSrc,
     projectCreatorName: props.projectCreatorName,
-    referringUserId: props.referringUserId,
+    referredByOtherUserId: props.referredByOtherUserId,
     isCheckingOut: false,
   });
   const [response] = createResource(stripePayload, postCreateStripeCheckoutSession);
@@ -78,7 +78,7 @@ const StripeCheckout = (props: Props) => {
       sucessUrl: props.sucessUrl,
       projectBannerSrc: props.projectBannerSrc,
       projectCreatorName: props.projectCreatorName,
-      referringUserId: props.referringUserId,
+      referredByOtherUserId: props.referredByOtherUserId,
       isCheckingOut: true,
     };
     setStripePayload(stripePayload);

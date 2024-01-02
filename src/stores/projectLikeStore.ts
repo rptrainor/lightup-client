@@ -3,16 +3,25 @@ import { createStore } from 'solid-js/store';
 
 import { supabase } from '~/db/connection';
 import { type User, type UserMetadata } from "~/types/schema";
-import createReferralLink from "~/utilities/createReferralLink";
-import createStripeCheckoutSession from "~/utilities/createStripeCheckoutSession";
-import createUserLike from "~/utilities/createUserLike";
-import getReferralLinkFromDB from "~/utilities/getReferralLinkFromDB";
-// import getStripeSession from "~/utilities/getStripeSession";
-// import getUserFromDB from "~/utilities/getUserFromDB";
-import getUserLikeFromDB from "~/utilities/getUserLikeFromDB";
-import { handleSignInWithEmailAuth } from '~/utilities/handleSignInWithEmailAuth';
-import signInOrCreateUser from "~/utilities/signInOrCreateUser";
-import updateUserInDB from "~/utilities/updateUserinDB";
+
+export type ProjectLikeMachineStatesType =
+  'Idle' |
+  'InitializingProjectLikeMachineContext' |
+  'LoggedInUserIsInContext' |
+  'UserIsNotInContext' |
+  'NotLoggedInUserIsNotInContext' |
+  'NotLoggedInUserHasReferralLinkInContext' |
+  'NotLoggedInUserHasUserLikeInContext' |
+  'NotLoggedInUserHasNotLiked' |
+  'NotLoggedInUserHasStripeClientSecretInContext' |
+  'NotLoggedInUserHasStripeSessionIdInContext' |
+  'NotLoggedInUserHasStripeSessionObjectInContext' |
+  'LoggedInUserHasReferralLinkInContext' |
+  'LoggedInUserHasUserLikeInContext' |
+  'LoggedInUserHasNotLiked' |
+  'LoggedInUserHasStripeClientSecretInContext' |
+  'LoggedInUserHasStripeSessionIdInContext' |
+  'Error';
 
 type UserLikes = {
   [key: string]: boolean | undefined;
@@ -74,7 +83,7 @@ type GuardType = () => boolean;
 type TransitionFunctionType = () => void;
 
 // State and context signals
-const [state, setState] = createSignal<String>('Idle');
+const [state, setState] = createSignal<ProjectLikeMachineStatesType>('Idle');
 const [context, setContext] = createStore<ProjectLikeMachineContext>(initialContext);
 
 // Function to update project_id and reset context
@@ -103,112 +112,59 @@ const transitionToLoggedInUserHasUserLikeInContext: TransitionFunctionType = () 
 const transitionToLoggedInUserHasStripeClientSecretInContext: TransitionFunctionType = () => setState('LoggedInUserHasStripeClientSecretInContext');
 const transitionToLoggedInUserHasStripeSessionIdInContext: TransitionFunctionType = () => setState('LoggedInUserHasStripeSessionIdInContext');
 const transitionToLoggedInUserHasNotLiked: TransitionFunctionType = () => setState('LoggedInUserHasNotLiked');
+const transitionToNotLoggedInUserHasNotLiked: TransitionFunctionType = () => setState('NotLoggedInUserHasNotLiked');
 const transitionToError: TransitionFunctionType = () => setState('Error');
 
 // Async actions
-const handleUpdateUserLikesInDB = async () => {
-  // Extract current user_likes from context
-  const currentUserLikes = context.user_likes;
-  const userId = context.user.id;
-
-  if (!userId) {
-    console.error('User ID is not set in context');
-    transitionToError();
-    return;
-  }
-
-  // Prepare data for batch insert
-  const userLikesData = Object.entries(currentUserLikes).map(([projectId, liked]) => ({
-    user_id: userId,
-    project_id: projectId,
-    liked_at: liked ? new Date().toISOString() : null
-  }));
-
-  // Insert data into Supabase
-  const { data, error } = await supabase
-    .from('user_likes')
-    .insert(userLikesData)
-    .select();
-
-  if (error) {
-    console.error('Error updating user likes in DB:', error);
-    transitionToError();
-    return;
-  }
-
-  console.log('User likes updated in DB:', data);
-};
-
-const handleUpdateReferralLinksInDB = async () => {
-  // Extract current referral_links from context
-  const currentReferralLinks = context.referral_links;
-  const userId = context.user.id;
-
-  if (!userId) {
-    console.error('User ID is not set in context');
-    transitionToError();
-    return;
-  }
-
-  // Prepare data for batch insert
-  const referralLinksData = Object.entries(currentReferralLinks).map(([projectId, stripeCustomerId]) => ({
-    user_id: userId,
-    project_id: projectId,
-    stripe_customer_id: stripeCustomerId,
-    // Add other necessary fields here
-  }));
-
-  // Insert data into Supabase
-  const { data, error } = await supabase
-    .from('referral_links')
-    .insert(referralLinksData)
-    .select();
-
-  if (error) {
-    console.error('Error updating referral links in DB:', error);
-    transitionToError();
-    return;
-  }
-
-  console.log('Referral links updated in DB:', data);
-};
-
-const handleUpdateUserInDB = async () => {
-  const user = context.user;
-  const user_metadata = context.user_metadata;
-  if (!user.email) {
-    console.error('User email is not set in context');
-    transitionToError();
-    return;
-  }
-  const { error } = await supabase.auth.updateUser({
-    email: user.email,
-    phone: user.phone ?? undefined,
-    data: { ...user_metadata, updated_at: new Date().toISOString() }
-  })
-  if (error) {
-    console.error('handleUpdateUserInDB error', error);
-    transitionToError();
-  };
-  return;
-};
-
 const getUserFromDB = async () => {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
     console.error('getUserFromDB error', error);
     return;
   }
-  const user = data.user;
 
+  const user = data.user;
   if (user && Object.keys(user).length > 0) {
     setContext('user', user);
     setContext('user_metadata', user.user_metadata);
-    handleUpdateUserLikesInDB();
-    handleUpdateReferralLinksInDB();
-    handleUpdateUserInDB();
+
+    const userLikesPromise = supabase
+      .from('user_likes')
+      .select('*')
+      .eq('user_id', user.id);
+
+    const referralLinksPromise = supabase
+      .from('referral_links')
+      .select('*')
+      .eq('user_id', user.id);
+
+    const results = await Promise.allSettled([userLikesPromise, referralLinksPromise]);
+
+    const userLikesResult = results[0];
+    const referralLinksResult = results[1];
+
+    if (userLikesResult.status === 'fulfilled' && userLikesResult.value.data) {
+      const userLikes = userLikesResult.value.data.reduce((acc, item) => {
+        acc[item.project_id] = item.is_liked;
+        return acc;
+      }, {});
+      setContext('user_likes', userLikes);
+    } else {
+      console.error('Error fetching user likes:', userLikesResult);
+    }
+
+    if (referralLinksResult.status === 'fulfilled' && referralLinksResult.value.data) {
+      const referralLinks = referralLinksResult.value.data.reduce((acc, item) => {
+        acc[item.project_id] = item.referring_id;
+        return acc;
+      }, {});
+      setContext('referral_links', referralLinks);
+    } else {
+      console.error('Error fetching referral links:', referralLinksResult);
+    }
+
     transitionToLoggedInUserIsInContext();
-  } else if (user === null) {
+  } else {
     transitionToNotLoggedInUserIsNotInContext();
   }
 }
@@ -235,6 +191,32 @@ const formatRefferringIdFromStripeCustomerId = (stripe_customer_id: string) => {
   return stripe_customer_id;
 };
 
+const createUserLikeInDB = async () => {
+  const project_id = context.project_id;
+  if (!project_id) {
+    console.error('Project ID is not provided');
+    transitionToError();
+    return;
+  }
+  const { error } = await supabase
+    .from('user_likes')
+    .insert([
+      {
+        user_id: context.user.id,
+        project_id: project_id,
+        is_liked: true,
+      },
+    ])
+
+  if (error) {
+    console.error('Error creating user like in DB:', error);
+    transitionToError();
+    return;
+  }
+  updateUserLikeInContext();
+  return;
+};
+
 const createRefferalLinkInDB = async () => {
   if (!context.stripe_customer_id) {
     console.error('Stripe customer ID is not set in context');
@@ -242,7 +224,7 @@ const createRefferalLinkInDB = async () => {
     return;
   }
   const referring_id = formatRefferringIdFromStripeCustomerId(context.stripe_customer_id);
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('referral_links')
     .insert([
       {
@@ -253,14 +235,13 @@ const createRefferalLinkInDB = async () => {
         referring_id: referring_id,
       },
     ])
-    .select()
 
   if (error) {
     console.error('Error creating referral link in DB:', error);
     transitionToError();
     return;
   }
-  updateReferralLink(context.stripe_customer_id);
+  updateReferralLinkInContext({ referring_id, stripe_customer_id: context.stripe_customer_id });
   return;
 };
 
@@ -288,8 +269,9 @@ const getStripeSession = async () => {
       postal_code: stripe_session.customer_details.address.postal_code,
       state: stripe_session.customer_details.address.state,
     });
-    updateReferralLink(stripe_session.customer);
-    handleUpdateUserLikesInDB();
+    updateReferralLinkInContext({ stripe_customer_id: stripe_session.customer, referring_id: undefined });
+
+    // handleUpdateUserLikesInDB();
   } else if (stripe_session.status === 'expired') {
     transitionToError();
   } else {
@@ -321,7 +303,8 @@ const getStripeSessionThenAuth = async () => {
       postal_code: stripe_session.customer_details.address.postal_code,
       state: stripe_session.customer_details.address.state,
     });
-    updateReferralLink(stripe_session.customer);
+    updateReferralLinkInContext({ stripe_customer_id: stripe_session.customer, referring_id: undefined });
+    createRefferalLinkInDB();
     handleAuthWithEmail(stripe_session.customer_details.email);
   } else if (stripe_session.status === 'expired') {
     transitionToError();
@@ -339,7 +322,7 @@ const handleUserLikeClick = () => {
   }
   setContext('user_likes', project_id, true);
   if (context.user.id) {
-    handleUpdateUserLikesInDB();
+    createUserLikeInDB();
   } else {
     transitionToNotLoggedInUserHasUserLikeInContext();
   }
@@ -353,23 +336,38 @@ const handleUserProjectDonationIsRecurringChange = (is_recurring: boolean) => {
   setContext('project_donation_is_recurring', is_recurring);
 };
 
-const updateReferralLink = (stripe_customer_id: string) => {
+type UpdateReferralLinkInContextProps = {
+  stripe_customer_id: string | undefined;
+  referring_id: string | undefined;
+}
+
+const updateReferralLinkInContext = (props: UpdateReferralLinkInContextProps) => {
   const project_id = context.project_id;
-  const referring_id = formatRefferringIdFromStripeCustomerId(stripe_customer_id);
-  if (project_id) {
-    setContext('referral_links', project_id, referring_id);
-  } else {
-    console.error('Project ID is not set in context');
+  let referring_id = '';
+  if (!project_id) {
+    console.error('Project ID is not provided');
+    transitionToError();
+    return;
   }
+  if (props.referring_id) {
+    referring_id = props.referring_id;
+  }
+  if (props.stripe_customer_id) {
+    referring_id = formatRefferringIdFromStripeCustomerId(props.stripe_customer_id);
+  }
+  setContext('referring_id', referring_id);
+  setContext('referral_links', project_id, referring_id);
+  return;
 };
 
-const addUserLike = () => {
+const updateUserLikeInContext = () => {
   const project_id = context.project_id;
-  if (project_id) {
-    setContext('user_likes', project_id, true);
-  } else {
+  if (!project_id) {
     console.error('Project ID is not provided');
+    transitionToError();
+    return;
   }
+  setContext('user_likes', project_id, true);
 };
 
 const handleErrorState = () => {
@@ -382,7 +380,8 @@ const handleErrorState = () => {
 
 // Guard (should always return a boolean)
 const isProjectIdInContext: GuardType = () => context.project_id !== null;
-const isUserInContext: GuardType = () => context.user.id !== '';
+const isUserInContext: GuardType = () => context.user.id !== null;
+
 const isReferralLinkInContext: GuardType = () => {
   const project_id = context.project_id;
   if (!project_id) {
@@ -394,6 +393,7 @@ const isReferralLinkInContext: GuardType = () => {
   }
   return true;
 };
+
 const isUserLikeInContext: GuardType = () => {
   const project_id = context.project_id;
   if (!project_id) {
@@ -405,6 +405,7 @@ const isUserLikeInContext: GuardType = () => {
   }
   return true;
 };
+
 const isStripeClientSecretInContext: GuardType = () => context.stripe_client_secret !== null;
 const isStripeSessionIdInContext: GuardType = () => context.stripe_session_id !== null;
 
@@ -414,14 +415,20 @@ createEffect(() => {
 
   switch (currentState) {
     case 'Idle':
+      // MACHINE HAS NOT RESET YET
       if (isProjectIdInContext()) {
         transitionToInitializingProjectLikeMachineContext();
       }
       break;
     case 'InitializingProjectLikeMachineContext':
+      // MACHINE HAS RESET WITH NEW PROJECT ID
       if (isUserInContext()) {
+        // USER IS LOGGED IN AND IN THE CONTEXT
+        // NEXT THING TO DO IS SYNC USER, USER METADATA, USER LIKES, AND REFERRAL LINKS FROM DB
         transitionToLoggedInUserIsInContext();
       } else {
+        // USER IS NOT IN CONTEXT
+        // NEXT THING TO DO IS CHECK IF USER IS LOGGED IN
         transitionToUserIsNotInContext();
       }
       break;
@@ -429,10 +436,15 @@ createEffect(() => {
       getUserFromDB();
       break;
     case 'NotLoggedInUserIsNotInContext':
+      // USER IS NOT LOGGED IN AND NOT IN CONTEXT
+      // NEXT THE BELOW GUARDS WILL BE CHECKED IN ORDER
+      // TO DETERMINE WHAT TO DO NEXT BASED ON THE LOCAL CONTEXT
       if (isReferralLinkInContext()) {
         transitionToNotLoggedInUserHasReferralLinkInContext();
       } else if (isUserLikeInContext()) {
         transitionToNotLoggedInUserHasUserLikeInContext();
+      } else {
+        transitionToNotLoggedInUserHasNotLiked();
       }
       break;
     case 'NotLoggedInUserHasReferralLinkInContext':
@@ -442,6 +454,12 @@ createEffect(() => {
       // RENDER DONATION FORM
       if (isStripeClientSecretInContext()) {
         transitionToNotLoggedInUserHasStripeClientSecretInContext();
+      }
+      break;
+    case 'NotLoggedInUserHasNotLiked':
+      // RENDER LIKE BUTTON
+      if (isUserLikeInContext()) {
+        transitionToNotLoggedInUserHasUserLikeInContext();
       }
       break;
     case 'NotLoggedInUserHasStripeClientSecretInContext':
@@ -455,6 +473,9 @@ createEffect(() => {
       getStripeSessionThenAuth();
       break;
     case 'LoggedInUserIsInContext':
+      // USER IS LOGGED IN, WITH USER, USER META DATA, USE LIKES, AND REFERRAL LINKS IN CONTEXT
+      // NEXT THE BELOW GUARDS WILL BE CHECKED IN ORDER
+      // TO DETERMINE WHAT TO DO NEXT BASED ON THE LOCAL CONTEXT
       if (isReferralLinkInContext()) {
         transitionToLoggedInUserHasReferralLinkInContext();
       } else if (isUserLikeInContext()) {
@@ -472,6 +493,12 @@ createEffect(() => {
         transitionToLoggedInUserHasStripeClientSecretInContext();
       }
       break;
+    case 'LoggedInUserHasNotLiked':
+      // RENDER LIKE BUTTON
+      if (isUserLikeInContext()) {
+        transitionToLoggedInUserHasUserLikeInContext();
+      }
+      break;
     case 'LoggedInUserHasStripeClientSecretInContext':
       // RENDER STRIPE CHECKOUT FORM
       if (isStripeSessionIdInContext()) {
@@ -481,12 +508,6 @@ createEffect(() => {
     case 'LoggedInUserHasStripeSessionIdInContext':
       // FETCH STRIPE SESSION OBJECT FROM STRIPE API VIA API ROUTE
       getStripeSession();
-      break;
-    case 'LoggedInUserHasNotLiked':
-      // RENDER LIKE BUTTON
-      if (isUserLikeInContext()) {
-        transitionToLoggedInUserHasUserLikeInContext();
-      }
       break;
     case 'Error':
       handleErrorState();
@@ -501,7 +522,6 @@ export {
   state,
   context,
   updateProjectIdAndResetContext,
-  addUserLike,
   handleUserLikeClick,
   handleUserProjectDonationAmountChange,
   handleUserProjectDonationIsRecurringChange,

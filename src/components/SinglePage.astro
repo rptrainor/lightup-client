@@ -8,6 +8,7 @@ import ProjectLikeButton from "~/components/ProjectLikeButton";
 import InterestsBox from "~/components/InterestsBox.astro";
 
 const DOMAIN = import.meta.env.DEV ? import.meta.env.PUBLIC_DOMAIN_DEV : import.meta.env.PUBLIC_DOMAIN_PROD;
+const referredByOtherUserId = Astro.params.referredByOtherUserId ?? undefined;
 ---
 
 <div class='flex flex-col items-start gap-4 max-w-6xl mx-auto mb-28'>
@@ -37,7 +38,7 @@ const DOMAIN = import.meta.env.DEV ? import.meta.env.PUBLIC_DOMAIN_DEV : import.
     sucessUrl={`${DOMAIN}/${project.slug}`}
     projectBannerSrc={project.banner.src}
     projectCreatorName={project.creator.name}
-    referringUserId={Astro.params.userId ?? undefined}
+    referredByOtherUserId={referredByOtherUserId}
     session_id={session_id}
     client:only="solid-js"
   />
