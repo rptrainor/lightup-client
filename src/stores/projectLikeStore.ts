@@ -14,7 +14,7 @@ import signInOrCreateUser from "~/utilities/signInOrCreateUser";
 import updateUserInDB from "~/utilities/updateUserinDB";
 
 type UserLikes = {
-  [key: string]: string | undefined;
+  [key: string]: boolean | undefined;
 };
 
 type ReferralLinks = {
@@ -84,7 +84,7 @@ const updateProjectIdAndResetContext = (newProjectId: string) => {
   setContext('stripe_session_id', null);
   setContext('error_retry_count', 0);
   // Reset to the initial state
-  setState('Idle');
+  transitionToIdle();
 };
 
 // State transition functions
@@ -97,7 +97,7 @@ const transitionToNotLoggedInUserHasReferralLinkInContext: TransitionFunctionTyp
 const transitionToNotLoggedInUserHasUserLikeInContext: TransitionFunctionType = () => setState('NotLoggedInUserHasUserLikeInContext');
 const transitionToNotLoggedInUserHasStripeClientSecretInContext: TransitionFunctionType = () => setState('NotLoggedInUserHasStripeClientSecretInContext');
 const transitionToNotLoggedInUserHasStripeSessionIdInContext: TransitionFunctionType = () => setState('NotLoggedInUserHasStripeSessionIdInContext');
-const transitionToStripeSessionObjectIsInContext: TransitionFunctionType = () => setState('StripeSessionObjectIsInContext');
+const transitionToNotLoggedInUserHasStripeSessionObjectInContext: TransitionFunctionType = () => setState('NotLoggedInUserHasStripeSessionObjectInContext');
 const transitionToError: TransitionFunctionType = () => setState('Error');
 // Async actions
 const getUserFromDB = async () => {
@@ -119,7 +119,7 @@ const getUserFromDB = async () => {
   }
 }
 
-const getStripeSession = async () => {
+const getStripeSessionThenAuth = async () => {
   const stripe_session_id = context.stripe_session_id;
   if (!stripe_session_id) {
     return;
@@ -127,30 +127,6 @@ const getStripeSession = async () => {
   const response = await fetch(`/api/session-status?session_id=${stripe_session_id}`);
   const stripe_session = await response.json();
   if (stripe_session.status === 'complete') {
-    // const user_updated_with_stripe_customer_data = {
-    //   ...context().user,
-    //   email: stripe_session.customer_details.email,
-    //   phone: stripe_session.customer_details.phone,
-    //   user_metadata: {
-    //     ...context().user.user_metadata,
-    //     stripe_customer_id: stripe_session.customer,
-    //     email: stripe_session.customer_details.email,
-    //     name: stripe_session.customer_details.name,
-    //     phone: stripe_session.customer_details.phone,
-    //     city: stripe_session.customer_details.address.city,
-    //     country: stripe_session.customer_details.address.country,
-    //     address_line1: stripe_session.customer_details.address.line1,
-    //     address_line2: stripe_session.customer_details.address.line2,
-    //     postal_code: stripe_session.customer_details.address.postal_code,
-    //     state: stripe_session.customer_details.address.state,
-    //   }
-    // };
-    // setContext(c => ({
-    //   ...c,
-    //   user: user_updated_with_stripe_customer_data,
-    //   stripe_customer_id,
-    //   stripe_session_id,
-    // }));
     setContext('stripe_customer_id', stripe_session.customer);
     setContext('stripe_session_id', stripe_session.id);
     setContext('user', {
@@ -167,13 +143,32 @@ const getStripeSession = async () => {
       postal_code: stripe_session.customer_details.address.postal_code,
       state: stripe_session.customer_details.address.state,
     });
-    transitionToStripeSessionObjectIsInContext();
+    updateReferralLink(stripe_session.customer);
+    transitionToNotLoggedInUserHasStripeSessionObjectInContext();
   } else if (stripe_session.status === 'expired') {
     transitionToError();
   } else {
     return;
   }
 
+};
+
+const updateReferralLink = (stripe_customer_id: string) => {
+  const project_id = context.project_id;
+  if (project_id) {
+    setContext('referral_links', project_id, stripe_customer_id);
+  } else {
+    console.error('Project ID is not set in context');
+  }
+};
+
+const addUserLike = () => {
+  const project_id = context.project_id;
+  if (project_id) {
+    setContext('user_likes', project_id, true);
+  } else {
+    console.error('Project ID is not provided');
+  }
 };
 
 const handleErrorState = () => {
@@ -256,9 +251,9 @@ createEffect(() => {
       break;
     case 'NotLoggedInUserHasStripeSessionIdInContext':
       // FETCH STRIPE SESSION OBJECT FROM STRIPE API VIA API ROUTE
-      getStripeSession();
+      getStripeSessionThenAuth();
       break;
-    case 'StripeSessionObjectIsInContext':
+    case 'NotLoggedInUserHasStripeSessionObjectInContext':
 
     case 'Error':
       handleErrorState();
@@ -269,4 +264,9 @@ createEffect(() => {
 });
 
 // Export state, context, and functions to be used in components
-export { state, context, updateProjectIdAndResetContext };
+export {
+  state,
+  context,
+  updateProjectIdAndResetContext,
+  addUserLike
+};

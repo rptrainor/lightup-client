@@ -6,7 +6,7 @@ import { addNotification } from '~/stores/notificationStore';
 import { handleUserUpdate } from "~/utilities/handleUserUpdate";
 import handleStripeSession from "~/utilities/handleStripeSession";
 import extractCustomerId from "~/utilities/extractCustomerId";
-import { state, context } from '~/stores/projectLikeStore'
+import { state, context, updateProjectIdAndResetContext } from '~/stores/projectLikeStore'
 type Area = {
   header: string,
   body: string
@@ -131,12 +131,13 @@ const ProjectLikeButton = (props: Props) => {
     //* THIS IS FOR DEBUGGING
     //* MAKE SURE YOU COMMENT THIS OUT BEFORE COMMITING
     console.log('ProjectLikeButton MACHINE', {
-
+      state: state(),
+      context: context
     });
   });
 
   onMount(() => {
-
+    updateProjectIdAndResetContext(props.projectId)
   });
 
   return (
@@ -161,7 +162,7 @@ const ProjectLikeButton = (props: Props) => {
           />
         </Match>
         <Match when={localState() === 'not_logged_in_user_sees_like_button' || localState() === 'logged_in_user_sees_like_button'}>
-          <button onClick={() => {}} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'>
+          <button onClick={() => { }} class='bg-brand_pink sm:px-6 border-4 border-brand_black to-brand_black w-full sm:mt-2 uppercase gap-2'>
             <h1 class="text-brand_black font-black bg-brand_pink animate-breath flex sm:flex-row-reverse flex-nowrap items-center justify-center gap-4">
               <span>Like</span>
               <div class="bg-brand_white rounded-full scale-75 p-2 flex flex-nowrap justify-center items-center border-solid border-4 border-brand_black group-hover:scale-125 transition-all">
