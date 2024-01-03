@@ -83,12 +83,14 @@ const initialContext: ProjectLikeMachineContext = {
 type GuardType = () => boolean;
 type TransitionFunctionType = () => void;
 
-type CreateStripeCheckoutSessionPayload = {
+export type CreateStripeCheckoutSessionPayload = {
   project_id: string;
   referring_id: string | null;
   project_donation_amount: number;
   project_donation_is_recurring: boolean;
   sucess_url: string;
+  stripe_customer_id: string | null;
+  email: string | null;
 }
 
 // State and context signals
@@ -139,6 +141,8 @@ async function createStripeCheckoutSession() {
     project_donation_amount: context.project_donation_amount,
     project_donation_is_recurring: context.project_donation_is_recurring,
     sucess_url: window.location.href,
+    stripe_customer_id: context.stripe_customer_id,
+    email: context.user.email,
   };
 
   const response = await fetch("/api/create-donation-session", {
@@ -160,7 +164,8 @@ async function createStripeCheckoutSession() {
 const getUserFromDB = async () => {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
-    console.error('getUserFromDB error', error);
+    console.warn(error);
+    transitionToNotLoggedInUserIsNotInContext();
     return;
   }
 
@@ -213,6 +218,11 @@ const getUserFromDB = async () => {
 const handleAuthWithEmail = async (email: string) => {
   let { error } = await supabase.auth.signInWithOtp({
     email
+  })
+  addNotification({
+    type: 'success',
+    header: 'Success',
+    subHeader: `We sent a one-time password to ${email}. Please check your inbox.`
   })
   if (error) {
     console.error('handleAuthWithEmail error', error);
@@ -344,7 +354,10 @@ const getStripeSessionThenAuth = async () => {
       state: stripe_session.customer_details.address.state,
     });
     updateReferralLinkInContext({ stripe_customer_id: stripe_session.customer, referring_id: undefined });
-    createRefferalLinkInDB();
+    const user_id = context.user.id;
+    if (user_id) {
+      createRefferalLinkInDB();
+    }
     handleAuthWithEmail(stripe_session.customer_details.email);
   } else if (stripe_session.status === 'expired') {
     transitionToError();
@@ -427,7 +440,7 @@ const updateUserLikeInContext = () => {
 
 const handleErrorState = () => {
   // Retry 3 times before giving up
-  setContext(c => ({ ...c, error_retry_count: c.error_retry_count + 1 }));
+  setContext('error_retry_count', context.error_retry_count + 1)
   if (context.error_retry_count < 3) {
     setState('Idle');
   }
@@ -467,8 +480,21 @@ const isUserLikeInContext: GuardType = () => {
   return true;
 };
 
-const isStripeClientSecretInContext: GuardType = () => context.stripe_client_secret !== null;
-const isStripeSessionIdInContext: GuardType = () => context.stripe_session_id !== null;
+const isStripeClientSecretInContext: GuardType = () => {
+  const stripe_client_secret = context.stripe_client_secret;
+  if (!stripe_client_secret) {
+    return false;
+  }
+  return true;
+};
+
+const isStripeSessionIdInContext: GuardType = () => {
+  const stripe_session_id = context.stripe_session_id;
+  if (!stripe_session_id) {
+    return false;
+  }
+  return true;
+};
 
 // Watch for state changes
 createEffect(() => {
@@ -500,7 +526,9 @@ createEffect(() => {
       // USER IS NOT LOGGED IN AND NOT IN CONTEXT
       // NEXT THE BELOW GUARDS WILL BE CHECKED IN ORDER
       // TO DETERMINE WHAT TO DO NEXT BASED ON THE LOCAL CONTEXT
-      if (isReferralLinkInContext()) {
+      if (isStripeSessionIdInContext()) {
+        transitionToNotLoggedInUserHasStripeSessionIdInContext();
+      } else if (isReferralLinkInContext()) {
         transitionToNotLoggedInUserHasReferralLinkInContext();
       } else if (isUserLikeInContext()) {
         transitionToNotLoggedInUserHasUserLikeInContext();
@@ -591,4 +619,5 @@ export {
   handleStripeSessionIdSearchParamInURL,
   handleDonateButtonClick,
   transitionToError,
+  formatRefferringIdFromStripeCustomerId
 };

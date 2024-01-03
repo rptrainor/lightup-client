@@ -1,19 +1,37 @@
-// import { createSignal, createResource, createEffect } from 'solid-js';
+import { createMemo } from 'solid-js';
 import ShareButtons from './ShareButtons';
-// import base64Encode from '~/utilities/base64Encode';
 import { addNotification } from '~/stores/notificationStore';
-// import { handleUserUpdate } from '~/utilities/handleUserUpdate';
+import { context, formatRefferringIdFromStripeCustomerId } from '~/stores/projectLikeStore';
 
 type Props = {
   projectSlug: string;
   projectBannerSrc: string;
-  refferalLinkId: string;
 }
 
 const ThankYou = (props: Props) => {
+
+  const refferreralLink = createMemo(() => {
+    const project_id = context.project_id;
+
+    if (!project_id) return `https://lightup.fyi/${props.projectSlug}/`
+
+    if (context.referral_links[project_id]) return `https://lightup.fyi/${props.projectSlug}/${context.referral_links[project_id]}`
+
+    if (context.stripe_customer_id) {
+      const refferalLinkId = formatRefferringIdFromStripeCustomerId(context.stripe_customer_id);
+      return `https://lightup.fyi/${props.projectSlug}/${refferalLinkId}`
+    }
+
+    if (context.user_metadata.stripe_customer_id) {
+      const refferalLinkId = formatRefferringIdFromStripeCustomerId(context.user_metadata.stripe_customer_id);
+      return `https://lightup.fyi/${props.projectSlug}/${refferalLinkId}`
+    }
+    return `https://lightup.fyi/${props.projectSlug}`
+  });
+
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(`https://lightup.fyi/${props.projectSlug}/${props.refferalLinkId}`);
+      await navigator.clipboard.writeText(refferreralLink());
       addNotification({
         type: 'success',
         header: 'Your link has been copied to your clipboard',
@@ -22,8 +40,8 @@ const ThankYou = (props: Props) => {
     } catch (error) {
       addNotification({
         type: 'error',
-        header: 'Something went wrong with copying your link',
-        subHeader: `https://lightup.fyi/${props.projectSlug}/${props.refferalLinkId}`
+        header: 'Something went wrong with copying your link:',
+        subHeader: refferreralLink()
       })
       console.error(error);
     }
@@ -52,7 +70,7 @@ const ThankYou = (props: Props) => {
       </button>
       <div class='flex flex-col gap-2'>
         <h3 class="font-semibold text-brand_black">Share referral link:</h3>
-        <ShareButtons text='I just donated to this project on LightUp. Join me in supporting this great cause!' url={`https://lightup.fyi/${props.projectSlug}/${props.refferalLinkId}`} image={props.projectBannerSrc} />
+        <ShareButtons text='I just donated to this project on LightUp. Join me in supporting this great cause!' url={refferreralLink()} image={props.projectBannerSrc} />
       </div>
     </div>
   );

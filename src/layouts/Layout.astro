@@ -113,16 +113,17 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
         }
       })();
     </script>
+    <link rel='sitemap' href='/sitemap-index.xml' />
   </head>
   <body>
     <header>
       <nav class='flex justify-between flex-nowrap p-4 mx-auto max-w-6xl z-50'>
-        <a href='/' aria-label="Lightup" data-astro-prefetch>
+        <a href='/' aria-label='Lightup' data-astro-prefetch>
           <h1 class='text-start text-4xl font-black text-brand_yellow'>
             Lightup
           </h1>
         </a>
-        <a href='/profile' aria-label="profile" data-astro-prefetch>
+        <a href='/profile' aria-label='profile' data-astro-prefetch>
           <ProfileButton client:only='solid-js' />
         </a>
       </nav>

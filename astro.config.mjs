@@ -6,7 +6,7 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://lightup-client.pages.dev/",
+  site: "https://lightup.fyi",
   output: "server",
   prefetch: true,
   image: {

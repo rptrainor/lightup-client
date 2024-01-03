@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import Stripe from 'stripe';
+import type { CreateStripeCheckoutSessionPayload } from '~/stores/projectLikeStore';
 
 const isDev = import.meta.env.DEV;
 const STRIPE_SECRET_KEY = isDev ? import.meta.env.STRIPE_SECRET_KEY_TEST : import.meta.env.STRIPE_SECRET_KEY_LIVE;
@@ -15,7 +16,9 @@ export const POST: APIRoute = async ({ request }) => {
       project_donation_amount,
       project_donation_is_recurring,
       sucess_url,
-    } = body;
+      stripe_customer_id,
+      email,
+    } = body as CreateStripeCheckoutSessionPayload;
 
     // Check for required fields
     if (!project_id || !sucess_url || !project_donation_amount) {
@@ -24,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
       }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const amount = parseFloat(project_donation_amount as string);
+    const amount = project_donation_amount;
     const currency = 'usd';
 
     if (isNaN(amount)) {
@@ -34,92 +37,56 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const sustainabilityContribution = amount * 0.20; // 20% of the donation
-    const amountString = amount.toFixed(2); // Convert to cents and to string
+    // const amountString = amount.toFixed(2); // Convert to cents and to string
 
     const amountInCents = Math.round(amount * 100); // Convert dollars to cents
     const sustainabilityContributionInCents = Math.round(sustainabilityContribution * 100); // Convert dollars to cents
 
-    const interval: Stripe.PriceCreateParams.Recurring.Interval = project_donation_is_recurring === 'yes' ? 'month' : 'day'; // or another appropriate value
-    const taxBehavior: Stripe.PriceCreateParams.TaxBehavior = 'exclusive'; // Or 'inclusive'/'unspecified' as per your requirement
-
-    const sustaining_contribution_payload: Stripe.PriceCreateParams = project_donation_is_recurring === 'yes' ? {
-      currency,
-      unit_amount_decimal: sustainabilityContributionInCents.toString(),
-      tax_behavior: taxBehavior,
-      recurring: {
-        interval
-      },
-      metadata: {
-        project_id,
-        sucess_url,
-        referring_id,
-        project_donation_amount,
-        project_donation_is_recurring
-      },
-      product_data: {
-        name: 'Sustainability contribution',
-        statement_descriptor: 'Sustainability Lightup',
-        tax_code: 'txcd_90000001',
-        metadata: {}
-      },
-    } : {
-      currency,
-      unit_amount_decimal: sustainabilityContributionInCents.toString(),
-      tax_behavior: taxBehavior,
-      metadata: {
-        project_id,
-        sucess_url,
-        referring_id,
-        project_donation_amount,
-        project_donation_is_recurring
-      },
-      product_data: {
-        name: 'Sustainability contribution',
-        statement_descriptor: 'Sustainability Lightup',
-        tax_code: 'txcd_90000001',
-        metadata: {}
-      },
-    }
-
     const metadata = {
-      donation_amount: amountString,
-      currency: currency,
       project_id,
       sucess_url,
       referring_id,
       project_donation_amount,
-      project_donation_is_recurring
+      project_donation_is_recurring: project_donation_is_recurring === true ? 'yes' : 'no'
     };
 
-    const pricePayload: Stripe.PriceCreateParams = project_donation_is_recurring === 'yes' ? {
+    const sustaining_contribution_payload: Stripe.PriceCreateParams = {
+      currency,
+      unit_amount_decimal: sustainabilityContributionInCents.toString(),
+      tax_behavior: 'exclusive',
+      recurring: project_donation_is_recurring === true ? {
+        interval: 'month'
+      } : undefined,
+      metadata: metadata,
+      product_data: {
+        name: 'Sustainability contribution',
+        statement_descriptor: 'Sustainability Lightup',
+        tax_code: 'txcd_90000001',
+        metadata: metadata,
+      },
+    }
+
+    const pricePayload: Stripe.PriceCreateParams = {
       currency,
       unit_amount_decimal: amountInCents.toString(),
-      tax_behavior: taxBehavior,
-      recurring: {
-        interval
-      },
+      tax_behavior: 'exclusive',
+      recurring: project_donation_is_recurring === true ? {
+        interval: 'month'
+      } : undefined,
       metadata: metadata,
       product_data: {
         name: 'Donation',
         statement_descriptor: 'Donation | Lightup',
         tax_code: 'txcd_90000001',
+        metadata: metadata,
       },
-    } : {
-      currency,
-      unit_amount_decimal: amountInCents.toString(),
-      tax_behavior: taxBehavior,
-      metadata: metadata,
-      product_data: {
-        name: 'Donation',
-        statement_descriptor: 'Donation via Lightup',
-        tax_code: 'txcd_90000001',
-      },
-    };
+    }
 
     const price = await stripe.prices.create(pricePayload);
     const sustainabilityContributionPrice = await stripe.prices.create(sustaining_contribution_payload);
+    const mode = project_donation_is_recurring ? 'subscription' : 'payment';
 
-    const session = await stripe.checkout.sessions.create({
+    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       currency,
       line_items: [
         {
@@ -131,19 +98,21 @@ export const POST: APIRoute = async ({ request }) => {
           quantity: 1,
         }
       ],
-      metadata: {
-        project_id,
-        sucess_url,
-        referring_id,
-        project_donation_amount,
-        project_donation_is_recurring
-      },
-      mode: project_donation_is_recurring === 'yes' ? 'subscription' : 'payment',
+      metadata: metadata,
+      customer: stripe_customer_id ?? undefined,
+      customer_email: email ?? undefined,
+      mode: mode,
       ui_mode: 'embedded',
-      customer_creation: 'always',
       return_url: `${sucess_url}?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
       automatic_tax: { enabled: true },
-    });
+    };
+
+    // Only include customer_creation for 'payment' mode
+    if (mode === 'payment') {
+      sessionConfig.customer_creation = 'always';
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     // Return the client secret for Stripe's frontend use
     return new Response(JSON.stringify({ ok: true, clientSecret: session.client_secret }), {
