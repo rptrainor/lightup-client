@@ -1,4 +1,5 @@
 import { addNotification } from '~/stores/notificationStore';
+import { recordErrorInPosthog } from '~/utilities/recordErrorInPosthog';
 
 type Props = {
   text: string;
@@ -15,12 +16,16 @@ const CopyShareButton = (props: Props) => {
         subHeader: 'You can now paste it anywhere you like!'
       })
     } catch (error) {
+      recordErrorInPosthog({
+        errorMessage: 'navigator.clipboard.writeText returned an error', errorDetails: {
+          context: 'CopyShareButton.tsx', error
+        }
+      });
       addNotification({
         type: 'error',
         header: 'Something went wrong',
         subHeader: 'Please try again'
       })
-      console.error(error);
     }
   };
 

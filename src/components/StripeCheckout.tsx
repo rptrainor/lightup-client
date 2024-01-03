@@ -2,6 +2,7 @@ import { createSignal, onMount, createEffect, Show } from "solid-js";
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 
 import { context, handleUserProjectDonationAmountChange, handleUserProjectDonationIsRecurringChange, handleDonateButtonClick } from "~/stores/projectLikeStore";
+import { recordErrorInPosthog } from "~/utilities/recordErrorInPosthog";
 
 type Props = {
   projectId: string;
@@ -39,7 +40,7 @@ const StripeCheckout = (props: Props) => {
       stripe()?.initEmbeddedCheckout({ clientSecret: context.stripe_client_secret })
         .then(checkout => checkout.mount('#checkout'))
         .catch(error => {
-          console.error('Error initializing Stripe Checkout:', error);
+          recordErrorInPosthog({ errorMessage: 'stripe().initEmbeddedCheckout returned an error', errorDetails: { context: 'StripeCheckout.tsx', error } });
           setStripe(null);
           props.onError();
         });

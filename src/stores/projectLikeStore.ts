@@ -155,7 +155,7 @@ async function createStripeCheckoutSession() {
   });
   const { clientSecret } = await response.json();
   if (!clientSecret) {
-    console.error('Error creating Stripe checkout session:', response);
+    recordErrorInPosthog({ errorMessage: 'Error creating Stripe checkout session', errorDetails: { context: 'createStripeCheckoutSession', response } });
     transitionToError();
     return;
   }
@@ -166,10 +166,9 @@ const getUserFromDB = async () => {
   // const { data, error } = await supabase.auth.getUser();
   // const { data, error } = await supabase.auth.getSession()
   const { data, error } = await supabase.auth.refreshSession()
-  const { session, user } = data
-  console.log('getUserFromDB', { data, error });
+  const { user } = data
   if (error) {
-    console.warn(error);
+    recordErrorInPosthog({ errorMessage: 'Error fetching user from DB', errorDetails: { context: 'getUserFromDB', error } });
     transitionToNotLoggedInUserIsNotInContext();
     return;
   }
@@ -203,7 +202,7 @@ const getUserFromDB = async () => {
       }, {});
       setContext('user_likes', userLikes);
     } else {
-      console.error('Error fetching user likes:', userLikesResult);
+      recordErrorInPosthog({ errorMessage: 'Error fetching user likes', errorDetails: { context: 'getUserFromDB', userLikesResult } });
     }
 
     if (referralLinksResult.status === 'fulfilled' && referralLinksResult.value.data) {
@@ -213,7 +212,7 @@ const getUserFromDB = async () => {
       }, {});
       setContext('referral_links', referralLinks);
     } else {
-      console.error('Error fetching referral links:', referralLinksResult);
+      recordErrorInPosthog({ errorMessage: 'Error fetching referral links', errorDetails: { context: 'getUserFromDB', referralLinksResult } });
     }
 
     transitionToLoggedInUserIsInContext();
@@ -235,7 +234,7 @@ const handleAuthWithEmail = async (email: string) => {
     subHeader: `We sent a one-time password to ${email}. Please check your inbox.`
   })
   if (error) {
-    console.error('handleAuthWithEmail error', error);
+    recordErrorInPosthog({ errorMessage: 'Error sending OTP', errorDetails: { context: 'handleAuthWithEmail', error } });
     transitionToError();
   };
   return;
@@ -255,7 +254,7 @@ const formatRefferringIdFromStripeCustomerId = (stripe_customer_id: string) => {
 const createUserLikeInDB = async () => {
   const project_id = context.project_id;
   if (!project_id) {
-    console.error('Project ID is not provided');
+    recordErrorInPosthog({ errorMessage: 'Project ID is not provided', errorDetails: { context: 'createUserLikeInDB', project_id: context.project_id } });
     transitionToError();
     return;
   }
@@ -270,7 +269,7 @@ const createUserLikeInDB = async () => {
     ])
 
   if (error) {
-    console.error('Error creating user like in DB:', error);
+    recordErrorInPosthog({ errorMessage: 'Error creating user like in DB', errorDetails: { context: 'createUserLikeInDB', error } });
     transitionToError();
     return;
   }
@@ -280,7 +279,7 @@ const createUserLikeInDB = async () => {
 
 const createRefferalLinkInDB = async () => {
   if (!context.stripe_customer_id) {
-    console.error('Stripe customer ID is not set in context');
+    recordErrorInPosthog({ errorMessage: 'Stripe customer ID is not set in context', errorDetails: { context: 'createRefferalLinkInDB', stripe_customer_id: context.stripe_customer_id } });
     transitionToError();
     return;
   }
@@ -298,7 +297,7 @@ const createRefferalLinkInDB = async () => {
     ])
 
   if (error) {
-    console.error('Error creating referral link in DB:', error);
+    recordErrorInPosthog({ errorMessage: 'Error creating referral link in DB', errorDetails: { context: 'createRefferalLinkInDB', error } });
     transitionToError();
     return;
   }
@@ -310,7 +309,7 @@ const getStripeSession = async () => {
   const stripe_session_id = context.stripe_session_id;
   const project_id = context.project_id;
   if (!project_id) {
-    console.error('Project ID is not provided');
+    recordErrorInPosthog({ errorMessage: 'Project ID is not provided', errorDetails: { context: 'getStripeSession', project_id: context.project_id } });
     transitionToError();
     return;
   }
@@ -320,7 +319,7 @@ const getStripeSession = async () => {
     return;
   }
   if (!stripe_session_id) {
-    console.error('Stripe session ID is not provided');
+    recordErrorInPosthog({ errorMessage: 'Stripe session ID is not provided', errorDetails: { context: 'getStripeSession', stripe_session_id: context.stripe_session_id } });
     transitionToError();
     return;
   }
@@ -348,6 +347,7 @@ const getStripeSession = async () => {
     }
     updateReferralLinkInContext({ stripe_customer_id: stripe_session.customer, referring_id: undefined });
   } else if (stripe_session.status === 'expired') {
+    recordErrorInPosthog({ errorMessage: 'Stripe session has expired', errorDetails: { context: 'getStripeSession', stripe_session } });
     transitionToError();
   } else {
     return;
@@ -385,6 +385,7 @@ const getStripeSessionThenAuth = async () => {
     }
     handleAuthWithEmail(stripe_session.customer_details.email);
   } else if (stripe_session.status === 'expired') {
+    recordErrorInPosthog({ errorMessage: 'Stripe session has expired', errorDetails: { context: 'getStripeSessionThenAuth', stripe_session } });
     transitionToError();
   } else {
     return;
@@ -409,7 +410,7 @@ const handleStripeSessionIdSearchParamInURL = () => {
 const handleUserLikeClick = () => {
   const project_id = context.project_id;
   if (!project_id) {
-    console.error('Project ID is not provided');
+    recordErrorInPosthog({ errorMessage: 'Project ID is not provided', errorDetails: { context: 'handleUserLikeClick', project_id: context.project_id } });
     transitionToError();
     return;
   }
@@ -438,7 +439,7 @@ const updateReferralLinkInContext = (props: UpdateReferralLinkInContextProps) =>
   const project_id = context.project_id;
   let referring_id = '';
   if (!project_id) {
-    console.error('Project ID is not provided');
+    recordErrorInPosthog({ errorMessage: 'Project ID is not provided', errorDetails: { context: 'updateReferralLinkInContext', project_id: context.project_id } });
     transitionToError();
     return;
   }
@@ -456,7 +457,7 @@ const updateReferralLinkInContext = (props: UpdateReferralLinkInContextProps) =>
 const updateUserLikeInContext = () => {
   const project_id = context.project_id;
   if (!project_id) {
-    console.error('Project ID is not provided');
+    recordErrorInPosthog({ errorMessage: 'Project ID is not provided', errorDetails: { context: 'updateUserLikeInContext', project_id: context.project_id } });
     transitionToError();
     return;
   }
@@ -464,6 +465,7 @@ const updateUserLikeInContext = () => {
 };
 
 const handleErrorState = () => {
+  recordErrorInPosthog({ errorMessage: 'Error state reached', errorDetails: { context: 'handleErrorState' } });
   // Retry 3 times before giving up
   setContext('error_retry_count', context.error_retry_count + 1)
   if (context.error_retry_count < 3) {

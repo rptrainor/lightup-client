@@ -2,6 +2,7 @@ import { createMemo } from 'solid-js';
 import ShareButtons from './ShareButtons';
 import { addNotification } from '~/stores/notificationStore';
 import { context, formatRefferringIdFromStripeCustomerId } from '~/stores/projectLikeStore';
+import { recordErrorInPosthog } from '~/utilities/recordErrorInPosthog';
 
 type Props = {
   projectSlug: string;
@@ -43,7 +44,7 @@ const ThankYou = (props: Props) => {
         header: 'Something went wrong with copying your link:',
         subHeader: refferreralLink()
       })
-      console.error(error);
+      recordErrorInPosthog({ errorMessage: 'navigator.clipboard.writeText returned an error', errorDetails: { context: 'ThankYou.tsx', error } });
     }
   };
 
