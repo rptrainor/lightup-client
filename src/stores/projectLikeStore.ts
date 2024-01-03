@@ -163,13 +163,18 @@ async function createStripeCheckoutSession() {
 
 const getUserFromDB = async () => {
   const { data, error } = await supabase.auth.getUser();
+  // const { data, error } = await supabase.auth.getSession()
+  
+  console.log('getUserFromDB', { data, error });
   if (error) {
     console.warn(error);
     transitionToNotLoggedInUserIsNotInContext();
     return;
   }
 
-  const user = data.user;
+  // const user = data.session?.user
+  const user = data.user
+
   if (user && Object.keys(user).length > 0) {
     setContext('user', user);
     setContext('user_metadata', user.user_metadata);
@@ -217,7 +222,10 @@ const getUserFromDB = async () => {
 
 const handleAuthWithEmail = async (email: string) => {
   let { error } = await supabase.auth.signInWithOtp({
-    email
+    email,
+    options: {
+      emailRedirectTo: window.location.href,
+    }
   })
   addNotification({
     type: 'success',
@@ -565,7 +573,9 @@ createEffect(() => {
       // USER IS LOGGED IN, WITH USER, USER META DATA, USE LIKES, AND REFERRAL LINKS IN CONTEXT
       // NEXT THE BELOW GUARDS WILL BE CHECKED IN ORDER
       // TO DETERMINE WHAT TO DO NEXT BASED ON THE LOCAL CONTEXT
-      if (isReferralLinkInContext()) {
+      if (isStripeSessionIdInContext()) {
+        transitionToLoggedInUserHasStripeSessionIdInContext();
+      } else if (isReferralLinkInContext()) {
         transitionToLoggedInUserHasReferralLinkInContext();
       } else if (isUserLikeInContext()) {
         transitionToLoggedInUserHasUserLikeInContext();

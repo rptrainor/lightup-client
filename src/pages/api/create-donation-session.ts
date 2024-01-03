@@ -99,13 +99,18 @@ export const POST: APIRoute = async ({ request }) => {
         }
       ],
       metadata: metadata,
-      customer: stripe_customer_id ?? undefined,
-      customer_email: email ?? undefined,
       mode: mode,
       ui_mode: 'embedded',
       return_url: `${sucess_url}?session_id={CHECKOUT_SESSION_ID}`, // Adjust the domain as needed
       automatic_tax: { enabled: true },
     };
+
+    // Conditionally set 'customer' or 'customer_email'
+    if (stripe_customer_id) {
+      sessionConfig.customer = stripe_customer_id;
+    } else if (email) {
+      sessionConfig.customer_email = email;
+    }
 
     // Only include customer_creation for 'payment' mode
     if (mode === 'payment') {
