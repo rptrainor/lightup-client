@@ -162,10 +162,10 @@ async function createStripeCheckoutSession() {
 }
 
 const getUserFromDB = async () => {
-  const { data, error } = await supabase.auth.getUser();
+  // const { data, error } = await supabase.auth.getUser();
   // const { data, error } = await supabase.auth.getSession()
-  
-  console.log('getUserFromDB', { data, error });
+  const { data, error } = await supabase.auth.refreshSession()
+  const { user } = data
   if (error) {
     console.warn(error);
     transitionToNotLoggedInUserIsNotInContext();
@@ -173,7 +173,7 @@ const getUserFromDB = async () => {
   }
 
   // const user = data.session?.user
-  const user = data.user
+  // const user = data.user
 
   if (user && Object.keys(user).length > 0) {
     setContext('user', user);
@@ -307,6 +307,8 @@ const createRefferalLinkInDB = async () => {
 const getStripeSession = async () => {
   const stripe_session_id = context.stripe_session_id;
   if (!stripe_session_id) {
+    console.error('Stripe session ID is not provided');
+    transitionToError();
     return;
   }
   const response = await fetch(`/api/session-status?session_id=${stripe_session_id}`);
@@ -328,8 +330,10 @@ const getStripeSession = async () => {
       postal_code: stripe_session.customer_details.address.postal_code,
       state: stripe_session.customer_details.address.state,
     });
+    if (context.user.id) {
+      createRefferalLinkInDB();
+    }
     updateReferralLinkInContext({ stripe_customer_id: stripe_session.customer, referring_id: undefined });
-    createRefferalLinkInDB();
   } else if (stripe_session.status === 'expired') {
     transitionToError();
   } else {

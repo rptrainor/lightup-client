@@ -54,7 +54,7 @@ type Props = {
 }
 
 const ProjectLikeButton = (props: Props) => {
-
+  const isDev = import.meta.env.DEV;
   const handleStripeCheckoutError = () => {
     transitionToError();
     addNotification({ type: 'error', header: 'Looks like something went wrong', subHeader: 'There was an error processing your payment. Please try again.' });
@@ -66,23 +66,24 @@ const ProjectLikeButton = (props: Props) => {
     }
   });
 
-  // createEffect(() => {
-  //   //* THIS IS FOR DEBUGGING
-  //   //* MAKE SURE YOU COMMENT THIS OUT BEFORE COMMITING
-  //   console.log('ProjectLikeButton MACHINE', {
-  //     state: state(),
-  //     user_id: context.user.id,
-  //     email: context.user.email,
-  //     user_likes: context.user_likes[context.project_id ?? ''],
-  //     referral_links: context.referral_links[context.project_id ?? ''],
-  //     stripe_client_secret: context.stripe_client_secret,
-  //     stripe_session_id: context.stripe_session_id,
-  //     referring_id: context.referring_id,
-  //     project_id: context.project_id,
-  //     stripe_customer_id: context.stripe_customer_id,
-  //     user_metadata: context.user_metadata.updated_at,
-  //   });
-  // });
+  createEffect(() => {
+    //* THIS IS FOR DEBUGGING
+    if (isDev) {
+      console.log('ProjectLikeButton MACHINE', {
+        state: state(),
+        user_id: context.user.id,
+        email: context.user.email,
+        user_likes: context.user_likes[context.project_id ?? ''],
+        referral_links: context.referral_links[context.project_id ?? ''],
+        stripe_client_secret: context.stripe_client_secret,
+        stripe_session_id: context.stripe_session_id,
+        referring_id: context.referring_id,
+        project_id: context.project_id,
+        stripe_customer_id: context.stripe_customer_id,
+        user_metadata: context.user_metadata.updated_at,
+      });
+    }
+  });
 
   onMount(() => {
     // console.log('ProjectLikeButton MOUNTED');
