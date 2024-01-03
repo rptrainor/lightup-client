@@ -165,7 +165,8 @@ const getUserFromDB = async () => {
   // const { data, error } = await supabase.auth.getUser();
   // const { data, error } = await supabase.auth.getSession()
   const { data, error } = await supabase.auth.refreshSession()
-  const { user } = data
+  const { session, user } = data
+  console.log('getUserFromDB', { data, error });
   if (error) {
     console.warn(error);
     transitionToNotLoggedInUserIsNotInContext();
@@ -306,6 +307,17 @@ const createRefferalLinkInDB = async () => {
 
 const getStripeSession = async () => {
   const stripe_session_id = context.stripe_session_id;
+  const project_id = context.project_id;
+  if (!project_id) {
+    console.error('Project ID is not provided');
+    transitionToError();
+    return;
+  }
+  const exisiting_referral_link = context.referral_links[project_id];
+  if (exisiting_referral_link) {
+    transitionToLoggedInUserHasReferralLinkInContext();
+    return;
+  }
   if (!stripe_session_id) {
     console.error('Stripe session ID is not provided');
     transitionToError();
