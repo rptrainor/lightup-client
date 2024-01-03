@@ -4,6 +4,7 @@ import { createStore } from 'solid-js/store';
 import { supabase } from '~/db/connection';
 import { type User, type UserMetadata } from "~/types/schema";
 import { addNotification } from '~/stores/notificationStore';
+import { recordErrorInPosthog } from '~/utilities/recordErrorInPosthog';
 
 export type ProjectLikeMachineStatesType =
   'Idle' |
@@ -130,7 +131,7 @@ const transitionToError: TransitionFunctionType = () => setState('Error');
 async function createStripeCheckoutSession() {
   const project_id = context.project_id;
   if (!project_id) {
-    console.error('Project ID is not provided');
+    recordErrorInPosthog({ errorMessage: 'Project ID is not provided', errorDetails: { context: 'createStripeCheckoutSession' } });
     transitionToError();
     return;
   }

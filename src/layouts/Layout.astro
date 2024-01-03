@@ -8,6 +8,7 @@ import "~/styles/global.css";
 
 declare global {
   interface Window {
+    posthog: any; // Add this line for postHog
     Intercom: any; // Existing declaration
     intercomSettings: {
       // Adding the intercomSettings property
