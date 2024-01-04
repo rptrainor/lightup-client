@@ -1,3 +1,4 @@
+export const prerender = true;
 
 const ProfileButton = () => {
   return (
