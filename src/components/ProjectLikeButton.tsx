@@ -1,7 +1,8 @@
-import { createEffect, Switch, Match, onMount } from "solid-js";
+import { createEffect, Switch, Match, onMount, lazy } from "solid-js";
 
-import StripeCheckout from "~/components/StripeCheckout";
-import ThankYou from "~/components/ThankYou";
+const StripeCheckout = lazy(() => import("~/components/StripeCheckout"));
+const ThankYou = lazy(() => import("~/components/ThankYou"));
+
 import { addNotification } from '~/stores/notificationStore';
 import { state, context, updateProjectIdAndResetContext, transitionToError, handleUserLikeClick, handleStripeSessionIdSearchParamInURL } from '~/stores/projectLikeStore'
 

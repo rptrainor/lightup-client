@@ -356,6 +356,21 @@ const getStripeSession = async () => {
 
 const getStripeSessionThenAuth = async () => {
   const stripe_session_id = context.stripe_session_id;
+  const project_id = context.project_id;
+  if (!project_id) {
+    recordErrorInPosthog({ errorMessage: 'Project ID is not provided', errorDetails: { context: 'getStripeSessionThenAuth', project_id: context.project_id } });
+    transitionToError();
+    return;
+  }
+  const exisiting_referral_link = context.referral_links[project_id];
+  if (exisiting_referral_link && context.user.id) {
+    transitionToLoggedInUserHasReferralLinkInContext();
+    return;
+  }
+  if (exisiting_referral_link && !context.user.id) {
+    transitionToNotLoggedInUserHasReferralLinkInContext();
+    return;
+  }
   if (!stripe_session_id) {
     return;
   }
