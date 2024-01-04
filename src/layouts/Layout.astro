@@ -69,25 +69,7 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
     <PostHog />
     <script defer src='https://js.stripe.com/v3/'></script>
     <link rel='sitemap' href='/sitemap-index.xml' />
-  </head>
-  <body>
-    <header>
-      <nav class='flex justify-between flex-nowrap p-4 mx-auto max-w-6xl z-50'>
-        <a href='/' aria-label='Lightup' data-astro-prefetch>
-          <h1 class='text-start text-4xl font-black text-brand_yellow'>
-            Lightup
-          </h1>
-        </a>
-        <a href='/profile' aria-label='profile' data-astro-prefetch>
-          <ProfileButton client:only='solid-js' />
-        </a>
-      </nav>
-      <NotificationContainer client:only='solid-js' />
-    </header>
-    <main>
-      <slot />
-    </main>
-    <!-- <script async>
+    <script type="text/partytown" >
       window.intercomSettings = {
         api_base: "https://api-iam.intercom.io",
         app_id: "t6yyzmj6",
@@ -96,9 +78,9 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
         // email: user.email, // the email for your user
         // created_at: user.createdAt, // Signup date as a Unix timestamp
       };
-    </script> -->
+    </script>
 
-    <!-- <script async>
+    <script type="text/partytown" >
       // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/t6yyzmj6'
       (function () {
         var w = window;
@@ -133,6 +115,24 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
           }
         }
       })();
-    </script> -->
+    </script>
+  </head>
+  <body>
+    <header>
+      <nav class='flex justify-between flex-nowrap p-4 mx-auto max-w-6xl z-50'>
+        <a href='/' aria-label='Lightup' data-astro-prefetch>
+          <h1 class='text-start text-4xl font-black text-brand_yellow'>
+            Lightup
+          </h1>
+        </a>
+        <a href='/profile' aria-label='profile' data-astro-prefetch>
+          <ProfileButton client:only='solid-js' />
+        </a>
+      </nav>
+      <NotificationContainer client:only='solid-js' />
+    </header>
+    <main>
+      <slot />
+    </main>
   </body>
 </html>
