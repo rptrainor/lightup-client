@@ -51,7 +51,7 @@ const StripeCheckout = (props: Props) => {
     <div class='flex flex-col mx-auto gap-4 w-full'>
       <Show when={!context.stripe_client_secret}>
         <fieldset class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <legend class="py-2">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
+          <legend class="py-2 sm:py-4">100% Direct Impact: Your chosen amount goes entirely to the cause</legend>
           <label class="relative flex items-center justify-center">
             <input
               checked
@@ -171,7 +171,7 @@ const StripeCheckout = (props: Props) => {
           </label>
         </fieldset>
         <fieldset class="grid grid-cols-2 gap-2">
-          <legend class='py-2'>Make it monthly:</legend>
+          <legend class="py-2 sm:py-4">Make it monthly:</legend>
           <label class="relative flex items-center justify-center">
             <input checked={context.project_donation_is_recurring} onChange={() => handleUserProjectDonationIsRecurringChange(true)} type="radio" id="yes" name="sustaining_membership" role="radio" class="peer sr-only" value="yes" />
             <span class="absolute z-10 text-brand_black text-center">Yes, Let's go!</span>
