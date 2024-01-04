@@ -4,8 +4,6 @@ import solidJs from "@astrojs/solid-js";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 
-import partytown from "@astrojs/partytown";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://lightup.fyi",
@@ -17,15 +15,5 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: "passthrough",
   }),
-  integrations: [
-    solidJs(),
-    sitemap(),
-    tailwind(),
-    partytown({
-      config: {
-        debug: true,
-        forward: ['Intercom', 'intercomSettings', 'attachEvent', 'addEventListener'],
-      },
-    }),
-  ],
+  integrations: [solidJs(), sitemap(), tailwind()],
 });
