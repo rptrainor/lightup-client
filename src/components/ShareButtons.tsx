@@ -1,13 +1,13 @@
-import FacebookShareButton from "./FacebookShareButton";
-import TwitterShareButton from "./TwitterShareButton";
-import MessageShareButton from "./MessageShareButton";
-import WhatsAppShareButton from "./WhatsAppShareButton";
-import LinkedInShareButton from "./LinkedInShareButton";
-import TelegramShareButton from "./TelegramShareButton";
-import PinterestShareButton from "./PinterestShareButton";
-import RedditShareButton from "./RedditShareButton";
-import EmailShareButton from "./EmailShareButton";
-import CopyShareButton from "./CopyShareButton";
+import FacebookShareButton from "~/components/Buttons/FacebookShareButton";
+import TwitterShareButton from "~/components/Buttons/TwitterShareButton";
+import MessageShareButton from "~/components/Buttons/MessageShareButton";
+import WhatsAppShareButton from "~/components/Buttons/WhatsAppShareButton";
+import LinkedInShareButton from "~/components/Buttons/LinkedInShareButton";
+import TelegramShareButton from "~/components/Buttons/TelegramShareButton";
+import PinterestShareButton from "~/components/Buttons/PinterestShareButton";
+import RedditShareButton from "~/components/Buttons/RedditShareButton";
+import EmailShareButton from "~/components/Buttons/EmailShareButton";
+import CopyShareButton from "~/components/Buttons/CopyShareButton";
 
 type Props = {
   text: string;

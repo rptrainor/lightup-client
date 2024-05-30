@@ -1,10 +1,10 @@
 ---
 export const prerender = true;
 
-import type { Project } from "~/components/ProjectLikeButton";
+import type { Project } from "~/components/Buttons/ProjectLikeButton";
 const project = Astro.props.project as Project;
 const session_id = Astro.props.session_id;
-import ProjectLikeButton from "~/components/ProjectLikeButton";
+import ProjectLikeButton from "~/components/Buttons/ProjectLikeButton";
 import InterestsBox from "~/components/InterestsBox.astro";
 
 const DOMAIN = import.meta.env.DEV ? import.meta.env.PUBLIC_DOMAIN_DEV : import.meta.env.PUBLIC_DOMAIN_PROD;

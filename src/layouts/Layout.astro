@@ -27,7 +27,7 @@ interface Props {
   image?: string;
 }
 
-import PostHog from "~/components/posthog.astro";
+import Posthog from '~/layouts/Posthog.astro'
 import NotificationContainer from "~/components/Notifications/NotificationContainer";
 ---
 
@@ -66,8 +66,8 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
       }
     </title>
     <ViewTransitions />
-    {import.meta.env.DEV ? null : <PostHog />}
-    <script async src='https://js.stripe.com/v3/'></script>
+    {import.meta.env.DEV ? null : <Posthog />}
+    <script is:inline src='https://js.stripe.com/v3/'></script>
     <link rel='sitemap' href='/sitemap-index.xml' />
   </head>
   <body>

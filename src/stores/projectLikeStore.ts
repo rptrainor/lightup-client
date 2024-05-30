@@ -172,10 +172,7 @@ const getUserFromDB = async () => {
     transitionToNotLoggedInUserIsNotInContext();
     return;
   }
-
-  // const user = data.session?.user
-  // const user = data.user
-
+  
   if (user && Object.keys(user).length > 0) {
     setContext('user', user);
     setContext('user_metadata', user.user_metadata);
