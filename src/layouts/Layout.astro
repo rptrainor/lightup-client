@@ -9,16 +9,6 @@ import "~/styles/global.css";
 declare global {
   interface Window {
     posthog: any; // Add this line for postHog
-    Intercom: any; // Existing declaration
-    intercomSettings: {
-      // Adding the intercomSettings property
-      api_base: string;
-      app_id: string;
-      name?: string;
-      user_id?: string;
-      email?: string;
-      created_at?: number;
-    };
   }
 }
 interface Props {
@@ -27,7 +17,7 @@ interface Props {
   image?: string;
 }
 
-import Posthog from '~/layouts/Posthog.astro'
+import PostHog from '~/layouts/Posthog.astro';
 import NotificationContainer from "~/components/Notifications/NotificationContainer";
 ---
 
@@ -66,7 +56,7 @@ import NotificationContainer from "~/components/Notifications/NotificationContai
       }
     </title>
     <ViewTransitions />
-    {import.meta.env.DEV ? null : <Posthog />}
+    {import.meta.env.DEV ? null : <PostHog />}
     <script is:inline src='https://js.stripe.com/v3/'></script>
     <link rel='sitemap' href='/sitemap-index.xml' />
   </head>

@@ -1,5 +1,5 @@
 import { createMemo } from 'solid-js';
-import ShareButtons from './ShareButtons';
+import ShareButtons from '~/components/ShareButtons';
 import { addNotification } from '~/stores/notificationStore';
 import { context, formatRefferringIdFromStripeCustomerId } from '~/stores/projectLikeStore';
 import { recordErrorInPosthog } from '~/utilities/recordErrorInPosthog';
